@@ -1,6 +1,6 @@
-# `package-name`
+# `astro-kit`
 
-This is an [Astro integration](https://docs.astro.build/en/guides/integrations-guide/) that TODO:description
+This is a package that contains utilities to help you build Astro integrations.
 
 ## Usage
 
@@ -13,15 +13,15 @@ TODO:
 Install the integration **automatically** using the Astro CLI:
 
 ```bash
-pnpm astro add package-name
+pnpm astro add astro-kit
 ```
 
 ```bash
-npm astro add package-name
+npm astro add astro-kit
 ```
 
 ```bash
-yarn astro add package-name
+yarn astro add astro-kit
 ```
 
 Or install it **manually**:
@@ -29,21 +29,21 @@ Or install it **manually**:
 1. Install the required dependencies
 
 ```bash
-pnpm add package-name
+pnpm add astro-kit
 ```
 
 ```bash
-npm install package-name
+npm install astro-kit
 ```
 
 ```bash
-yarn add package-name
+yarn add astro-kit
 ```
 
 2. Add the integration to your astro config
 
 ```diff
-+import integration from "package-name";
++import integration from "astro-kit";
 
 export default defineConfig({
   integrations: [
@@ -79,8 +79,4 @@ You can now edit files in `package`. Please note that making changes to those fi
 
 ## Licensing
 
-[MIT Licensed](https://github.com/TODO:/blob/main/LICENSE). Made with ❤️ by [TODO:](https://github.com/TODO:).
-
-## Acknowledgements
-
-TODO:
+[MIT Licensed](https://github.com/florian-lefebvre/astro-kit/blob/main/LICENSE). Made with ❤️ by [Florian Lefebvre](https://github.com/florian-lefebvre).

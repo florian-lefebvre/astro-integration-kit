@@ -1,5 +1,5 @@
 import tailwind from "@astrojs/tailwind";
-import packageName from "package-name";
+import packageName from "astro-kit";
 import { defineConfig } from "astro/config";
 
 // https://astro.build/config

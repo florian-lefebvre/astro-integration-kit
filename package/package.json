@@ -1,21 +1,20 @@
 {
-  "name": "package-name",
+  "name": "astro-kit",
   "version": "0.0.0",
-  "description": "TODO:",
+  "description": "A package that contains utilities to help you build Astro integrations.",
   "author": {
-    "email": "TODO:",
-    "name": "TODO:",
-    "url": "TODO:"
+    "email": "contact@florian-lefebvre.dev",
+    "name": "Florian Lefebvre",
+    "url": "https://florian-lefebvre.dev"
   },
   "license": "MIT",
   "keywords": [
-    "astro-integration",
-    "astro-component",
     "withastro",
     "astro",
-    "TODO:"
+    "utils",
+    "utilities"
   ],
-  "homepage": "TODO:",
+  "homepage": "https://github.com/florian-lefebvre/astro-kit",
   "publishConfig": {
     "access": "public"
   },
