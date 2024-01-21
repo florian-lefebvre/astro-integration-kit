@@ -6,7 +6,7 @@ export default defineConfig({
 	site: "https://astro-integration-kit.netlify.app",
 	integrations: [
 		starlight({
-			title: "Astro Kit",
+			title: "Astro Integration Kit",
 			logo: {
 				src: "./src/assets/houston.webp",
 			},
@@ -24,6 +24,10 @@ export default defineConfig({
 						{
 							label: "Installation",
 							link: "/getting-started/installation/",
+						},
+						{
+							label: "Showcase",
+							link: "/getting-started/showcase/",
 						},
 					],
 				},

@@ -4,7 +4,7 @@ This is a package that contains utilities to help you build Astro integrations.
 
 ## Documentation
 
-Read the [Astro Kit docs](https://astro-integration-kit.netlify.app).
+Read the [Astro Integration Kit docs](https://astro-integration-kit.netlify.app).
 
 ## Contributing
 
