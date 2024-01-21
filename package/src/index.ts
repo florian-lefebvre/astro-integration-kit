@@ -1,3 +1,1 @@
-import { integration } from "./integration";
-
-export default integration;
+export { createResolver } from "./utils/create-resolver"
