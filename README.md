@@ -1,4 +1,4 @@
-# astro-kit
+# astro-integration-kit
 
 A package that contains utilities to help you build Astro integrations.
 

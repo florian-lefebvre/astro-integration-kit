@@ -1,10 +1,10 @@
-# `astro-kit`
+# `astro-integration-kit`
 
 This is a package that contains utilities to help you build Astro integrations.
 
 ## Documentation
 
-Read the [Astro Kit docs](https://astro-kit.netlify.app).
+Read the [Astro Kit docs](https://astro-integration-kit.netlify.app).
 
 ## Contributing
 
@@ -29,4 +29,4 @@ You can now edit files in `package`. Please note that making changes to those fi
 
 ## Licensing
 
-[MIT Licensed](https://github.com/florian-lefebvre/astro-kit/blob/main/LICENSE). Made with ❤️ by [Florian Lefebvre](https://github.com/florian-lefebvre).
+[MIT Licensed](https://github.com/florian-lefebvre/astro-integration-kit/blob/main/LICENSE). Made with ❤️ by [Florian Lefebvre](https://github.com/florian-lefebvre).

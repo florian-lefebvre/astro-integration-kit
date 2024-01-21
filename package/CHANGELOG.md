@@ -1,4 +1,4 @@
-# astro-kit
+# astro-integration-kit
 
 ## 0.0.1
 

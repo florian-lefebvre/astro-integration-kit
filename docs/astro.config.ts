@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://astro-kit.netlify.app",
+	site: "https://astro-integration-kit.netlify.app",
 	integrations: [
 		starlight({
 			title: "Astro Kit",
@@ -11,11 +11,11 @@ export default defineConfig({
 				src: "./src/assets/houston.webp",
 			},
 			social: {
-				github: "https://github.com/florian-lefebvre/astro-kit",
+				github: "https://github.com/florian-lefebvre/astro-integration-kit",
 			},
 			editLink: {
 				baseUrl:
-					"https://github.com/florian-lefebvre/astro-kit/edit/main/docs/",
+					"https://github.com/florian-lefebvre/astro-integration-kit/edit/main/docs/",
 			},
 			sidebar: [
 				{

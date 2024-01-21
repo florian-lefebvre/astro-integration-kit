@@ -1,5 +1,5 @@
 {
-  "name": "astro-kit",
+  "name": "astro-integration-kit",
   "version": "0.0.1",
   "description": "A package that contains utilities to help you build Astro integrations.",
   "author": {
@@ -14,7 +14,7 @@
     "utils",
     "utilities"
   ],
-  "homepage": "https://github.com/florian-lefebvre/astro-kit",
+  "homepage": "https://github.com/florian-lefebvre/astro-integration-kit",
   "publishConfig": {
     "access": "public"
   },

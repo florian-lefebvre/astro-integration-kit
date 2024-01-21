@@ -1,5 +1,5 @@
 import type { AstroIntegration } from "astro";
-import { createResolver } from "astro-kit";
+import { createResolver } from "astro-integration-kit";
 
 const testIntegration = (): AstroIntegration => {
 	const { resolve } = createResolver(import.meta.url);
