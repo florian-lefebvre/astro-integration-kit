@@ -5,10 +5,10 @@
 - [x] Add a LICENSE.md at the root
 - [x] Have gh cli installed
 - [x] Work on the integration logic
-- [ ] Work on docs
-  - [ ] JSDoc
-  - [ ] Package README
-  - [ ] Starlight site
+- [x] Work on docs
+  - [x] JSDoc
+  - [x] Package README
+  - [x] Starlight site
 - [ ] Format/lint (`pnpm lint:fix`)
 - [ ] Setup GitHub repository
 - [ ] Release (see below)

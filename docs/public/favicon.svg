@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+    <g id="base" transform="translate(0 16)">
+        <clipPath id="bg">
+            <path d="M0 17A17 17 0 0 1 17 0h94a17 17 0 0 1 17 17v62a17 17 0 0 1-17 17H17A17 17 0 0 1 0 79V17Z"/>
+        </clipPath>
+        <foreignObject width="128" height="96" clip-path="url(#bg)">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="height:100%;background:conic-gradient(#3245ff,#bc52ee 103deg,#4af2c8 150deg,#4af2c8 200deg,#3245ff)"/>
+        </foreignObject>
+        <path fill="url(#face)" d="M5 18.6C5 11.1 11.1 5 18.7 5h90.6c7.6 0 13.7 6.1 13.7 13.6v58.8c0 7.5-6.1 13.6-13.7 13.6H18.7C11.1 91 5 84.9 5 77.4V18.6Z"/>
+        <defs>
+            <radialGradient id="face" cx="0" cy="0" r="1" gradientTransform="matrix(0 70 -96 0 64 37.3)" gradientUnits="userSpaceOnUse">
+                <stop offset=".33" stop-color="#191C24"/>
+                <stop offset=".67" stop-color="#111218"/>
+                <stop offset="1" stop-color="#040506"/>
+            </radialGradient>
+        </defs>
+    </g>
+    <path d="M40.625 74c0 5.868-4.757 10.625-10.625 10.625-5.868 0-10.625-4.757-10.625-10.625 0-5.868 4.757-10.625 10.625-10.625 5.868 0 10.625 4.757 10.625 10.625ZM64 80.375A6.375 6.375 0 0 0 70.375 74h4.25c0 5.868-4.757 10.625-10.625 10.625-5.868 0-10.625-4.757-10.625-10.625h4.25A6.375 6.375 0 0 0 64 80.375ZM87.375 71.875c0-.587.476-1.063 1.063-1.063h19.124c.587 0 1.063.476 1.063 1.063v4.25c0 .587-.476 1.063-1.063 1.063H88.438a1.063 1.063 0 0 1-1.063-1.063v-4.25Z" fill="#fff"/>
+</svg>

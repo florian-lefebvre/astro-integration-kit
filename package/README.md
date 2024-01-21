@@ -2,59 +2,9 @@
 
 This is a package that contains utilities to help you build Astro integrations.
 
-## Usage
+## Documentation
 
-### Prerequisites
-
-TODO:
-
-### Installation
-
-Install the integration **automatically** using the Astro CLI:
-
-```bash
-pnpm astro add astro-kit
-```
-
-```bash
-npm astro add astro-kit
-```
-
-```bash
-yarn astro add astro-kit
-```
-
-Or install it **manually**:
-
-1. Install the required dependencies
-
-```bash
-pnpm add astro-kit
-```
-
-```bash
-npm install astro-kit
-```
-
-```bash
-yarn add astro-kit
-```
-
-2. Add the integration to your astro config
-
-```diff
-+import integration from "astro-kit";
-
-export default defineConfig({
-  integrations: [
-+    integration(),
-  ],
-});
-```
-
-### Configuration
-
-TODO:configuration
+Read the [Astro Kit docs](https://astro-kit.netlify.app).
 
 ## Contributing
 

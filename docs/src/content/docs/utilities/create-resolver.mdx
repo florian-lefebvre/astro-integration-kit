@@ -1,0 +1,25 @@
+---
+title: createResolver
+description: Allows resolving paths relatively to the integration folder easily.
+---
+
+`createResolver` allows you to resolve paths relatively to the integration folder easily. For example:
+
+```ts title="integration/index.ts"
+import type { AstroIntegration } from "astro"
+
+export default function myIntegration(): AstroIntegration {
+    const { resolve } = createResolver(import.meta.url);
+
+    return {
+        name: "my-integration",
+        hooks: {
+            "astro:config:setup": ({ addDevToolbarApp }) => {
+                addDevToolbarApp(resolve("./plugin.ts"));
+            }
+        }
+    }
+}
+```
+
+This way, you do not have to add your plugin to your package.json `exports`.
