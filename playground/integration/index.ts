@@ -1,5 +1,5 @@
 import type { AstroIntegration } from "astro";
-import { createResolver } from "astro-integration-kit";
+import { createResolver, watchIntegration } from "astro-integration-kit";
 
 const testIntegration = (): AstroIntegration => {
 	const { resolve } = createResolver(import.meta.url);
@@ -9,7 +9,16 @@ const testIntegration = (): AstroIntegration => {
 
 	return {
 		name: "test-integration",
-		hooks: {},
+		hooks: {
+			"astro:config:setup": async ({ addWatchFile, command, updateConfig }) => {
+				await watchIntegration({
+					addWatchFile,
+					command,
+					dir: resolve(),
+					updateConfig,
+				});
+			},
+		},
 	};
 };
 

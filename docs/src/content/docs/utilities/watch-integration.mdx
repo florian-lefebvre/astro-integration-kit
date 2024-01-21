@@ -1,0 +1,29 @@
+---
+title: watchIntegration
+description: In development, will reload the Astro dev server if any files within the integration directory has changed. Must be called inside `astro:config:setup`.
+---
+
+In development, `watchIntegration` will reload the Astro dev server if any files within
+the integration directory has changed. It must be called inside `astro:config:setup`:
+
+```ts title="integration/index.ts"
+import type { AstroIntegration } from "astro"
+
+export default function myIntegration(): AstroIntegration {
+    const { resolve } = createResolver(import.meta.url);
+
+    return {
+        name: "my-integration",
+        hooks: {
+			"astro:config:setup": async ({ addWatchFile, command, updateConfig }) => {
+				await watchIntegration({
+					addWatchFile,
+					command,
+					dir: resolve(),
+					updateConfig,
+				});
+			},
+        }
+    }
+}
+```
