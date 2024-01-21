@@ -6,7 +6,8 @@ description: Allows resolving paths relatively to the integration folder easily.
 `createResolver` allows you to resolve paths relatively to the integration folder easily. For example:
 
 ```ts title="integration/index.ts"
-import type { AstroIntegration } from "astro"
+import type { AstroIntegration } from "astro";
+import { createResolver } from "astro-integration-kit";
 
 export default function myIntegration(): AstroIntegration {
     const { resolve } = createResolver(import.meta.url);

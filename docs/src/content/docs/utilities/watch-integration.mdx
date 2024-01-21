@@ -7,7 +7,8 @@ In development, `watchIntegration` will reload the Astro dev server if any files
 the integration directory has changed. It must be called inside `astro:config:setup`:
 
 ```ts title="integration/index.ts"
-import type { AstroIntegration } from "astro"
+import type { AstroIntegration } from "astro";
+import { createResolver, watchIntegration } from "astro-integration-kit";
 
 export default function myIntegration(): AstroIntegration {
     const { resolve } = createResolver(import.meta.url);
