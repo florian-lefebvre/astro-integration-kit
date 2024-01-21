@@ -9,7 +9,7 @@
   - [x] JSDoc
   - [x] Package README
   - [x] Starlight site
-- [ ] Format/lint (`pnpm lint:fix`)
+- [x] Format/lint (`pnpm lint:fix`)
 - [ ] Setup GitHub repository
 - [ ] Release (see below)
 - [ ] Share!

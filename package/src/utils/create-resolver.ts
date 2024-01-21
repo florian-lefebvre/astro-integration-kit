@@ -3,12 +3,12 @@ import { fileURLToPath } from "node:url";
 
 /**
  * Allows resolving paths relatively to the integration folder easily. Call it like this:
- * 
+ *
  * ```ts
  * const { resolve } = createResolver(import.meta.url);
  * const pluginPath = resolve("./plugin.ts");
  * ```
- * 
+ *
  * This way, you do not have to add your plugin to your package.json `exports`.
  */
 export const createResolver = (_base: string) => {

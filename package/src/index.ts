@@ -1,1 +1,1 @@
-export { createResolver } from "./utils/create-resolver"
+export { createResolver } from "./utils/create-resolver";
