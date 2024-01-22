@@ -1,8 +1,8 @@
 import type { AstroIntegration } from "astro";
 import {
+	addVirtualImport,
 	createResolver,
 	watchIntegration,
-	addVirtualImport
 } from "astro-integration-kit";
 
 const testIntegration = (): AstroIntegration => {
@@ -23,9 +23,9 @@ const testIntegration = (): AstroIntegration => {
 				});
 
 				addVirtualImport({
-					name: 'virtual:astro-integration-kit-playground/config',
+					name: "virtual:astro-integration-kit-playground/config",
 					content: `
-						export default ${ JSON.stringify({foo: 'bar'}) }
+						export default ${JSON.stringify({ foo: "bar" })}
 					`,
 					updateConfig,
 				});
