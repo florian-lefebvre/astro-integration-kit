@@ -24,9 +24,7 @@ const testIntegration = (): AstroIntegration => {
 
 				addVirtualImport({
 					name: "virtual:astro-integration-kit-playground/config",
-					content: `
-						export default ${JSON.stringify({ foo: "bar" })}
-					`,
+					content: `export default ${JSON.stringify({ foo: "bar" })}`,
 					updateConfig,
 				});
 			},

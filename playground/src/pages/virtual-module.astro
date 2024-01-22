@@ -1,11 +1,11 @@
 ---
-import config from 'virtual:astro-integration-kit-playground/config'
+import config from "virtual:astro-integration-kit-playground/config"
 
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Testing Virtual Module">
-    <p>Virtual Module: { config.foo }</p>
+    <p>Virtual Module: { config.foo } should be equal to "bar"</p>
 </Layout>
 
 <style is:global>

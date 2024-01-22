@@ -3,7 +3,7 @@ title: addVirtualImport
 description: Allows adding Vite Virtual Modules easily to access data across your integration.
 ---
 
-`addVirtualImport` allows you to create modules and store state across your integration. For example:
+`addVirtualImport` allows you to create virtual modules and share data from your integration. For example:
 
 ```ts title="integration/index.ts"
 import type { AstroIntegration } from "astro";
@@ -15,8 +15,8 @@ export default function myIntegration(): AstroIntegration {
         hooks: {
             "astro:config:setup": ({ updateConfig }) => {
                 addVirtualImport({
-                    name: 'virtual:my-integration/config', // this will now be importable with `virtual:my-integration/config`
-                    content: `export default ${ JSON.stringify({foo: 'bar'}) }`,
+                    name: 'virtual:my-integration/config',
+                    content: `export default ${ JSON.stringify({ foo: "bar" }) }`,
                     updateConfig,
                 })
             }
@@ -25,34 +25,39 @@ export default function myIntegration(): AstroIntegration {
 }
 ```
 
-So to read this config anywhere else in your integration is easy:
+:::note
+Whilst you can choose any name for your virtual module, it's a good idea to stick to this convention as much as possible:
+
+- If the module is an "internal" module, as in it will only be used by you in your integration, then follow this pattern: `virtual:${ integrationName }/${ moduleName }`
+- If you want your module to be used by your end user, in other words someone who will install your integration, follow this pattern: `${ integrationName }/${ moduleName }`
+::: 
+
+You can now access the config somewhere else, for example inside a page injected by your integration:
 
 ```ts title="my-integration/src/pages/index.astro"
 ---
-import config from 'virtual:my-integration/config',
+import config from "virtual:my-integration/config",
 
-console.log(config.foo) // 'bar'
+console.log(config.foo) // "bar"
 ---
 ```
 
-Now you can easily share state across your integration 🎉!
-
 :::caution
-Virtual Modules defined with `addVirtualImport` cannot be referenced inside the `astro-integration-kit` integration utils.
+Virtual modules defined with `addVirtualImport` cannot be referenced inside your integration code, for example inside `integration/index.ts`. That's because integration code is running before vite injects the virtual imports.
 :::
 
-## Creating a `virtual.d.ts`
+## Typing your virtual module
 
-In order to get the types for your virtual modules you'll need to manually declare a virtual module.
+In order to get the types for your virtual modules while developing your integration, you'll need to manually declare a virtual module.
 
-First create a `virtual.d.ts` file in your integration root.
-
-Then you can define your virtual modules as global TypeScript modules:
+First create a `virtual.d.ts` file in your integration root. Then you can define your virtual modules as global TypeScript modules:
 
 ```ts title="my-integration/virtual.d.ts"
-declare module 'virtual:astro-integration-kit-playground/config' {
+declare module "virtual:my-integration/config" {
     export default { foo: string };
 }
 ```
 
-Now you'll have perfect typing when importing your virtual modules 👏!
+:::note
+Types defined in your `virtual.d.ts` are not accessible to end-users. They are only used whilst developing your integration.
+:::
