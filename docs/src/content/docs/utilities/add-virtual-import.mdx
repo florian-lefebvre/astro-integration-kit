@@ -1,6 +1,6 @@
 ---
 title: addVirtualImport
-description: Allows adding Vite Virtual Modules easily to access data across your integration.
+description: Allows adding Vite virtual modules easily to access data across your integration.
 ---
 
 `addVirtualImport` allows you to create virtual modules and share data from your integration. For example:
@@ -26,10 +26,10 @@ export default function myIntegration(): AstroIntegration {
 ```
 
 :::note
-Whilst you can choose any name for your virtual module, it's a good idea to stick to this convention as much as possible:
+While you can choose any name for your virtual module, it's a good idea to stick to this convention as much as possible:
 
-- If the module is an "internal" module, as in it will only be used by you in your integration, then follow this pattern: `virtual:${ integrationName }/${ moduleName }`
-- If you want your module to be used by your end user, in other words someone who will install your integration, follow this pattern: `${ integrationName }/${ moduleName }`
+- If the module is an "internal" module (ie. only supposed to be used by other parts of your integration), follow this pattern: `virtual:${integrationName}/${moduleName}`
+- If you want your module to be used by your end user, in other words someone who will install your integration, follow this pattern: `${integrationName}/${moduleName}`
 ::: 
 
 You can now access the config somewhere else, for example inside a page injected by your integration:
