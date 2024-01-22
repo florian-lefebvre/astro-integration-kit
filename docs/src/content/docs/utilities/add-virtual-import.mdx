@@ -16,7 +16,7 @@ export default function myIntegration(): AstroIntegration {
             "astro:config:setup": ({ updateConfig }) => {
                 addVirtualImport({
                     name: 'virtual:my-integration/config',
-                    content: `export default ${ JSON.stringify({ foo: "bar" }) }`,
+                    content: `export default ${JSON.stringify({ foo: "bar" })}`,
                     updateConfig,
                 })
             }
