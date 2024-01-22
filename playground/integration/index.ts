@@ -23,10 +23,10 @@ const testIntegration = (): AstroIntegration => {
 				});
 
 				addVirtualImport({
-					name: 'astro-integration-kit-playground/config',
-					content: {
-						foo: 'bar',
-					},
+					name: 'virtual:astro-integration-kit-playground/config',
+					content: `
+						export default ${ JSON.stringify({foo: 'bar'}) }
+					`,
 					updateConfig,
 				});
 			},
