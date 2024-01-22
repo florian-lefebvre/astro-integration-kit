@@ -1,5 +1,9 @@
 import type { AstroIntegration } from "astro";
-import { createResolver, watchIntegration } from "astro-integration-kit";
+import {
+	createResolver,
+	watchIntegration,
+	addVirtualImport
+} from "astro-integration-kit";
 
 const testIntegration = (): AstroIntegration => {
 	const { resolve } = createResolver(import.meta.url);
@@ -15,6 +19,14 @@ const testIntegration = (): AstroIntegration => {
 					addWatchFile,
 					command,
 					dir: resolve(),
+					updateConfig,
+				});
+
+				addVirtualImport({
+					name: 'astro-integration-kit-playground/config',
+					content: {
+						foo: 'bar',
+					},
 					updateConfig,
 				});
 			},

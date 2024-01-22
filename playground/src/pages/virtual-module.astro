@@ -1,0 +1,15 @@
+---
+import config from 'virtual:astro-integration-kit-playground/config'
+
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Testing Virtual Module">
+    <p>Virtual Module: { config.foo }</p>
+</Layout>
+
+<style is:global>
+    body {
+        color: #eee;
+    }
+</style>
