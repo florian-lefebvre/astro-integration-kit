@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.0.3
+
+### Patch Changes
+
+- 7ce3b82: Improves imports
+
 ## 0.0.2
 
 ### Patch Changes
