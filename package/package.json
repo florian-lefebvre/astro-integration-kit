@@ -1,34 +1,37 @@
 {
-  "name": "astro-integration-kit",
-  "version": "0.0.4",
-  "description": "A package that contains utilities to help you build Astro integrations.",
-  "author": {
-    "email": "contact@florian-lefebvre.dev",
-    "name": "Florian Lefebvre",
-    "url": "https://florian-lefebvre.dev"
-  },
-  "license": "MIT",
-  "keywords": [
-    "withastro",
-    "astro",
-    "utils",
-    "utilities"
-  ],
-  "homepage": "https://github.com/florian-lefebvre/astro-integration-kit",
-  "publishConfig": {
-    "access": "public"
-  },
-  "sideEffects": false,
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "scripts": {},
-  "type": "module",
-  "peerDependencies": {
-    "astro": "^4.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.0",
-    "vite": "^5.0.11"
-  }
+	"name": "astro-integration-kit",
+	"version": "0.0.4",
+	"description": "A package that contains utilities to help you build Astro integrations.",
+	"author": {
+		"email": "contact@florian-lefebvre.dev",
+		"name": "Florian Lefebvre",
+		"url": "https://florian-lefebvre.dev"
+	},
+	"license": "MIT",
+	"keywords": ["withastro", "astro", "utils", "utilities"],
+	"homepage": "https://github.com/florian-lefebvre/astro-integration-kit",
+	"publishConfig": {
+		"access": "public"
+	},
+	"sideEffects": false,
+	"main": "dist/index.js",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+  "files": ["dist"],
+	"scripts": {
+		"build": "tsc && vite build"
+	},
+	"type": "module",
+	"peerDependencies": {
+		"astro": "^4.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.0",
+		"typescript": "^5.3.3",
+		"vite": "^5.0.11",
+		"vite-plugin-dts": "^3.7.1"
+	},
+	"dependencies": {
+		"unctx": "^2.3.1"
+	}
 }

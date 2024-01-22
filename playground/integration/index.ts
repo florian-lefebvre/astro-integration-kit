@@ -2,6 +2,7 @@ import {
 	addVirtualImport,
 	createResolver,
 	defineIntegration,
+	useHookParams,
 	watchIntegration,
 } from "astro-integration-kit";
 import { z } from "astro/zod";
@@ -22,6 +23,9 @@ const testIntegration = defineIntegration({
 
 		return {
 			"astro:config:setup": async ({ addWatchFile, command, updateConfig }) => {
+				const testCtx = useHookParams("astro:config:setup")
+				console.log({ testCtx })
+
 				await watchIntegration({
 					addWatchFile,
 					command,

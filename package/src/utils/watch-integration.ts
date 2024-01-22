@@ -2,6 +2,28 @@ import { readdir, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
 import type { HookParameters } from "astro";
 
+	const getFilesRecursively = async (dir: string, baseDir = dir) => {
+		const files = await readdir(dir);
+		let filepaths: Array<string> = [];
+
+		for (const file of files) {
+			const filepath = join(dir, file);
+			const _stat = await stat(filepath);
+
+			if (_stat.isDirectory()) {
+				// Recursively get files from subdirectories
+				const subDirectoryFiles = await getFilesRecursively(filepath, baseDir);
+				filepaths = filepaths.concat(subDirectoryFiles);
+			} else {
+				// Calculate relative path and add it to the array
+				const relativePath = relative(baseDir, filepath);
+				filepaths.push(relativePath);
+			}
+		}
+
+		return filepaths;
+	};
+
 /**
  * In development, will reload the Astro dev server if any files within
  * the integration directory has changed. Must be called inside `astro:config:setup`.
@@ -24,28 +46,6 @@ export const watchIntegration = async ({
 	if (command !== "dev") {
 		return;
 	}
-
-	const getFilesRecursively = async (dir: string, baseDir = dir) => {
-		const files = await readdir(dir);
-		let filepaths: Array<string> = [];
-
-		for (const file of files) {
-			const filepath = join(dir, file);
-			const _stat = await stat(filepath);
-
-			if (_stat.isDirectory()) {
-				// Recursively get files from subdirectories
-				const subDirectoryFiles = await getFilesRecursively(filepath, baseDir);
-				filepaths = filepaths.concat(subDirectoryFiles);
-			} else {
-				// Calculate relative path and add it to the array
-				const relativePath = relative(baseDir, filepath);
-				filepaths.push(relativePath);
-			}
-		}
-
-		return filepaths;
-	};
 
 	const paths = (await getFilesRecursively(dir)).map((p) => resolve(dir, p));
 
