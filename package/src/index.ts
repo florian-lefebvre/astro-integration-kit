@@ -1,2 +1,2 @@
-export { createResolver } from "./utils/create-resolver";
-export { watchIntegration } from "./utils/watch-integration";
+export { createResolver } from "./utils/create-resolver.js";
+export { watchIntegration } from "./utils/watch-integration.js";
