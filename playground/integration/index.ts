@@ -1,26 +1,27 @@
-import type { AstroIntegration } from "astro";
 import {
-	addVirtualImport,
 	createResolver,
+	defineIntegration,
 	watchIntegration,
 } from "astro-integration-kit";
+import { addVirtualImport } from "astro-integration-kit/vanilla";
+import { z } from "astro/zod";
 
-const testIntegration = (): AstroIntegration => {
-	const { resolve } = createResolver(import.meta.url);
+const testIntegration = defineIntegration({
+	name: "test-integration",
+	options: z
+		.object({
+			name: z.string().optional().default("abc"),
+		})
+		.default({ name: "abc" }),
+	setup: (options) => {
+		const { resolve } = createResolver(import.meta.url);
 
-	const pluginPath = resolve("./plugin.ts");
-	console.log({ pluginPath });
+		const pluginPath = resolve("./plugin.ts");
+		console.log({ options, pluginPath });
 
-	return {
-		name: "test-integration",
-		hooks: {
-			"astro:config:setup": async ({ addWatchFile, command, updateConfig }) => {
-				await watchIntegration({
-					addWatchFile,
-					command,
-					dir: resolve(),
-					updateConfig,
-				});
+		return {
+			"astro:config:setup": async ({ updateConfig }) => {
+				await watchIntegration(resolve());
 
 				addVirtualImport({
 					name: "virtual:astro-integration-kit-playground/config",
@@ -28,8 +29,8 @@ const testIntegration = (): AstroIntegration => {
 					updateConfig,
 				});
 			},
-		},
-	};
-};
+		};
+	},
+});
 
 export default testIntegration;

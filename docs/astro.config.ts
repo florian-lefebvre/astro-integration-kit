@@ -26,6 +26,10 @@ export default defineConfig({
 							link: "/getting-started/installation/",
 						},
 						{
+							label: "Usage",
+							link: "/getting-started/usage/",
+						},
+						{
 							label: "Showcase",
 							link: "/getting-started/showcase/",
 						},

@@ -2,28 +2,54 @@
 title: addVirtualImport
 description: Allows adding Vite virtual modules easily to access data across your integration.
 ---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `addVirtualImport` allows you to create virtual modules and share data from your integration. For example:
 
-```ts title="integration/index.ts"
-import type { AstroIntegration } from "astro";
-import { addVirtualImport } from "astro-integration-kit";
+<Tabs>
+    <TabItem label="All-in">
+    ```ts title="my-integration/index.ts"
+    import { addVirtualImport, defineIntegration } from "astro-integration-kit";
+    import { z } from "astro/zod"
 
-export default function myIntegration(): AstroIntegration {
-    return {
+    export default defineIntegration({
         name: "my-integration",
-        hooks: {
-            "astro:config:setup": ({ updateConfig }) => {
-                addVirtualImport({
-                    name: 'virtual:my-integration/config',
-                    content: `export default ${JSON.stringify({ foo: "bar" })}`,
-                    updateConfig,
-                })
+        options: z.object({}).default({}),
+        setup(options) {
+            return {
+                "astro:config:setup": () => {
+                    addVirtualImport({
+                        name: 'virtual:my-integration/config',
+                        content: `export default ${JSON.stringify({ foo: "bar" })}`,
+                    })
+                }
+            }
+        }
+    })
+    ```
+    </TabItem>
+    <TabItem label="Vanilla">
+    ```ts title="integration/index.ts"
+    import type { AstroIntegration } from "astro";
+    import { addVirtualImport } from "astro-integration-kit/vanilla";
+
+    export default function myIntegration(): AstroIntegration {
+        return {
+            name: "my-integration",
+            hooks: {
+                "astro:config:setup": ({ updateConfig }) => {
+                    addVirtualImport({
+                        name: 'virtual:my-integration/config',
+                        content: `export default ${JSON.stringify({ foo: "bar" })}`,
+                        updateConfig,
+                    })
+                }
             }
         }
     }
-}
-```
+    ```
+    </TabItem>
+</Tabs>
 
 :::note
 While you can choose any name for your virtual module, it's a good idea to stick to this convention as much as possible:
