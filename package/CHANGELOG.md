@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.0.5
+
+### Patch Changes
+
+- ce17a1e: Adds the `defineIntegration` utility and all-in/vanilla modes
+
 ## 0.0.4
 
 ### Patch Changes
