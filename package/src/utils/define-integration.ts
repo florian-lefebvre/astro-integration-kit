@@ -3,6 +3,9 @@ import { z } from "astro/zod";
 import { DEFAULT_HOOKS_NAMES } from "../internal/constants.js";
 import { hookContext } from "../internal/context.js";
 
+/**
+ * Makes creating integrations easier, and adds a few goodies!
+ */
 export const defineIntegration = <
 	TOptionsSchema extends z.ZodDefault<z.AnyZodObject>,
 	TOptions = z.infer<TOptionsSchema>,

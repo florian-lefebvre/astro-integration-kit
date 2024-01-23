@@ -1,0 +1,49 @@
+---
+title: defineIntegration
+description: Makes creating integrations easier, and adds a few goodies!
+---
+
+`defineIntegration` makes creating integrations easier, and adds a few goodies!
+
+:::caution
+`definIntegration` is required for All-in mode.
+:::
+
+```ts title="my-integration/index.ts"
+import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
+import { z } from "astro/zod"
+
+export default defineIntegration({
+    name: "my-integration",
+    options: z.object({
+        foo: z.string().optional().default("bar")
+    }).default({ foo: "bar" }),
+    setup(options) {
+        const { resolve } = createResolver(import.meta.url);
+
+        return {
+            "astro:config:setup": async () => {
+                await watchIntegration(resolve())
+            }
+        }
+    }
+})
+```
+
+## Features
+
+### Options
+
+The `options` configuration accepts a zod schema with a default. This way, the integration
+options are both type-safe and runtime-safe. Those options are accessible in the `setup`
+function.
+
+### Context & All-in mode
+
+Using `defineIntegration` allows to go [All-in](/getting-started/usage/#all-in). It means
+that Astro hooks parameters are passed to our utilities through Context and you don't need
+to pass them manually.
+
+:::note
+If you're curious, we're using [`unctx`](https://github.com/unjs/unctx) for this dark magic!
+:::

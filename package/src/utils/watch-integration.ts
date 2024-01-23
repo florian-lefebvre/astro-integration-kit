@@ -1,7 +1,7 @@
 import { readdir, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
 import type { HookParameters } from "astro";
-import { useHookParams } from "./use-hook-params";
+import { useHookParams } from "../internal/use-hook-params.js";
 
 const getFilesRecursively = async (dir: string, baseDir = dir) => {
 	const files = await readdir(dir);

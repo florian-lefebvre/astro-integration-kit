@@ -1,0 +1,66 @@
+---
+title: Usage
+description: Learn how to use astro-integration-kit in your project.
+---
+
+Astro Integration Kit can be used in 2 ways: "all-in" and "vanilla".
+
+## All-in
+
+To define your integration, use the `defineIntegration` utility:
+
+```ts title="my-integration/index.ts"
+import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
+import { z } from "astro/zod"
+
+export default defineIntegration({
+    name: "my-integration",
+    options: z.object({
+        foo: z.string().optional().default("bar")
+    }).default({ foo: "bar" }),
+    setup(options) {
+        const { resolve } = createResolver(import.meta.url);
+
+        return {
+            "astro:config:setup": async () => {
+                await watchIntegration(resolve())
+            }
+        }
+    }
+})
+```
+
+## Vanilla
+
+Use utilities exported from `astro-integration-kit/vanilla`:
+
+```ts title="integration/index.ts"
+import type { AstroIntegration } from "astro";
+import { createResolver } from "astro-integration-kit";
+import { watchIntegration } from "astro-integration-kit/vanilla";
+
+export default function myIntegration(): AstroIntegration {
+    const { resolve } = createResolver(import.meta.url);
+
+    return {
+        name: "my-integration",
+        hooks: {
+			"astro:config:setup": async ({ addWatchFile, command, updateConfig }) => {
+				await watchIntegration({
+					addWatchFile,
+					command,
+					dir: resolve(),
+					updateConfig,
+				});
+			},
+        }
+    }
+}
+```
+
+## Which one should you use?
+
+All-in mode provides a way better DX and we recommend picking this one by default. However, if you have
+an existing integration that you want to migrate to `astro-integration-kit`, using Vanilla utilities
+will allow you to migrate progressively. Any Vanilla utility has an equivalent All-in utility with less
+arguments.
