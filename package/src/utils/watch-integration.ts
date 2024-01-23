@@ -1,7 +1,7 @@
 import { readdir, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
-import { useHookParams } from "./use-hook-params";
 import type { HookParameters } from "astro";
+import { useHookParams } from "./use-hook-params";
 
 const getFilesRecursively = async (dir: string, baseDir = dir) => {
 	const files = await readdir(dir);
@@ -32,7 +32,12 @@ type Params = {
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 };
 
-const _watchIntegration = async ({ addWatchFile, command, dir, updateConfig }: Params) => {
+const _watchIntegration = async ({
+	addWatchFile,
+	command,
+	dir,
+	updateConfig,
+}: Params) => {
 	if (command !== "dev") {
 		return;
 	}
@@ -71,7 +76,7 @@ export const watchIntegration = async (dir: string) => {
 	const { addWatchFile, command, updateConfig } =
 		useHookParams("astro:config:setup");
 
-	await _watchIntegration({ addWatchFile, command, dir, updateConfig })
+	await _watchIntegration({ addWatchFile, command, dir, updateConfig });
 };
 
 /**

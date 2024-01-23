@@ -8,9 +8,11 @@ import { z } from "astro/zod";
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	options: z.object({
-		name: z.string().optional().default("abc"),
-	}).default({ name: "abc" }),
+	options: z
+		.object({
+			name: z.string().optional().default("abc"),
+		})
+		.default({ name: "abc" }),
 	setup: (options) => {
 		const { resolve } = createResolver(import.meta.url);
 
@@ -24,7 +26,7 @@ const testIntegration = defineIntegration({
 				addVirtualImport({
 					name: "virtual:astro-integration-kit-playground/config",
 					content: `export default ${JSON.stringify({ foo: "bar" })}`,
-					updateConfig
+					updateConfig,
 				});
 			},
 		};

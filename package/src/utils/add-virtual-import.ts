@@ -1,6 +1,6 @@
+import type { HookParameters } from "astro";
 import type { Plugin } from "vite";
 import { useHookParams } from "./use-hook-params.js";
-import type { HookParameters } from "astro";
 
 const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;

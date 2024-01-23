@@ -4,5 +4,5 @@ import testIntegration from "./integration";
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [tailwind(), testIntegration({ name: 'ced' })],
+	integrations: [tailwind(), testIntegration({ name: "ced" })],
 });

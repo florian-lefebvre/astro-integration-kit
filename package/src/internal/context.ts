@@ -1,6 +1,6 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 import type { HookParameters } from "astro";
 import { createContext } from "unctx";
-import { AsyncLocalStorage } from "node:async_hooks";
 import type { HookName } from "../internal/types.js";
 
 export const hookContext = createContext<

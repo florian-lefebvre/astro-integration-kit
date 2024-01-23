@@ -1,7 +1,7 @@
 import type { AstroIntegration } from "astro";
 import { z } from "astro/zod";
-import { hookContext } from "../internal/context.js";
 import { DEFAULT_HOOKS_NAMES } from "../internal/constants.js";
+import { hookContext } from "../internal/context.js";
 
 export const defineIntegration = <
 	TOptionsSchema extends z.ZodDefault<z.AnyZodObject>,
@@ -16,7 +16,7 @@ export const defineIntegration = <
 	setup: (options: Required<TOptions>) => AstroIntegration["hooks"];
 }): ((options: TOptions) => AstroIntegration) => {
 	return (_options) => {
-		const options = optionsSchema?.parse(_options) as any as Required<TOptions>
+		const options = optionsSchema?.parse(_options) as any as Required<TOptions>;
 
 		const providedHooks = setup(options);
 
