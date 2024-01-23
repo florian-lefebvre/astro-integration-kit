@@ -8,16 +8,21 @@
 		"url": "https://florian-lefebvre.dev"
 	},
 	"license": "MIT",
-	"keywords": ["withastro", "astro", "utils", "utilities"],
+	"keywords": [
+		"withastro",
+		"astro",
+		"utils",
+		"utilities"
+	],
 	"homepage": "https://github.com/florian-lefebvre/astro-integration-kit",
 	"publishConfig": {
 		"access": "public"
 	},
 	"sideEffects": false,
-	"main": "dist/index.js",
-	"module": "dist/index.js",
-	"types": "dist/index.d.ts",
-  "files": ["dist"],
+	"exports": {
+		".": "./src/index.ts",
+		"./vanilla": "./src/vanilla.ts"
+	},
 	"scripts": {
 		"build": "tsc && vite build"
 	},
@@ -28,8 +33,7 @@
 	"devDependencies": {
 		"@types/node": "^20.11.0",
 		"typescript": "^5.3.3",
-		"vite": "^5.0.11",
-		"vite-plugin-dts": "^3.7.1"
+		"vite": "^5.0.11"
 	},
 	"dependencies": {
 		"unctx": "^2.3.1"
