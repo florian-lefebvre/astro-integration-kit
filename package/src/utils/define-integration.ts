@@ -41,7 +41,7 @@ export const defineIntegration = <
 	setup: (params: {
 		name: string;
 		options: TOptions;
-	}) => ExtendedAstroIntegration["hooks"];
+	}) => ExtendedHooks;
 }): ((options: TOptions) => AstroIntegration) => {
 	return (_options) => {
 		const options = defu(_options, defaults ?? {}) as TOptions;
@@ -77,14 +77,10 @@ export const defineIntegration = <
 	};
 };
 
-interface ExtendedAstroIntegration extends AstroIntegration {
-	hooks: Hooks & HookExtension;
-}
-
 type Hooks = NonNullable<AstroIntegration["hooks"]>
 
-interface HookExtension {
-	"astro:config:setup": AddParam<Hooks["astro:config:setup"], { addVitePlugin: AddVitePlugin, addVirtualImport: AddVirtualImport }>;
+interface ExtendedHooks extends Omit<Hooks, "astro:config:setup"> {
+	"astro:config:setup"?: AddParam<Hooks["astro:config:setup"], { addVitePlugin: AddVitePlugin, addVirtualImport: AddVirtualImport }>;
 }
 
 type AddVitePlugin = (plugin: import("vite").Plugin) => void;
