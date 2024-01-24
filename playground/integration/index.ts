@@ -4,16 +4,13 @@ import {
 	watchIntegration,
 } from "astro-integration-kit";
 import { addVirtualImport } from "astro-integration-kit/vanilla";
-import { z } from "astro/zod";
 
-const testIntegration = defineIntegration({
+const testIntegration = defineIntegration<{ name?: string | undefined }>({
 	name: "test-integration",
-	options: z
-		.object({
-			name: z.string().optional().default("abc"),
-		})
-		.default({ name: "abc" }),
-	setup: (options) => {
+	defaults: {
+		name: "abc",
+	},
+	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
 
 		const pluginPath = resolve("./plugin.ts");

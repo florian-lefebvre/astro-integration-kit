@@ -1,5 +1,5 @@
 import type { AstroIntegration } from "astro";
-import { z } from "astro/zod";
+import { defu } from "defu";
 import { DEFAULT_HOOKS_NAMES } from "../internal/constants.js";
 import { hookContext } from "../internal/context.js";
 
@@ -7,28 +7,35 @@ import { hookContext } from "../internal/context.js";
  * Makes creating integrations easier, and adds a few goodies!
  */
 export const defineIntegration = <
-	TOptionsSchema extends z.ZodDefault<z.AnyZodObject>,
-	TOptions = z.infer<TOptionsSchema>,
+	TOptions extends Record<string, unknown> = never,
 >({
 	name,
-	options: optionsSchema,
+	defaults,
 	setup,
 }: {
-	name: AstroIntegration["name"];
-	options: TOptionsSchema;
-	setup: (options: Required<TOptions>) => AstroIntegration["hooks"];
+	name: string;
+	defaults: {
+		[Property in keyof TOptions]-?: TOptions[Property];
+	};
+	setup: (params: {
+		name: string;
+		options: TOptions;
+	}) => AstroIntegration["hooks"];
 }): ((options: TOptions) => AstroIntegration) => {
 	return (_options) => {
-		const options = optionsSchema?.parse(_options) as any as Required<TOptions>;
+		const options = defu(_options, defaults ?? {}) as TOptions;
 
-		const providedHooks = setup(options);
+		const providedHooks = setup({ name, options });
 
 		const hooks: AstroIntegration["hooks"] = {};
 		for (const hookName of DEFAULT_HOOKS_NAMES) {
-			hooks[hookName] = (params) =>
-				hookContext.callAsync({ [hookName]: params }, () =>
-					providedHooks[hookName]?.(params as any),
-				);
+			if (providedHooks[hookName] !== undefined) {
+				hooks[hookName] = (params) =>
+					hookContext.callAsync({ [hookName]: params }, () =>
+						// biome-ignore lint/style/noNonNullAssertion: existence checked above
+						providedHooks[hookName]!(params as any),
+					);
+			}
 		}
 
 		return {

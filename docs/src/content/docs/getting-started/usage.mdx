@@ -11,14 +11,13 @@ To define your integration, use the `defineIntegration` utility:
 
 ```ts title="my-integration/index.ts"
 import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
-import { z } from "astro/zod"
 
-export default defineIntegration({
+export default defineIntegration<{ foo?: string }>({
     name: "my-integration",
-    options: z.object({
-        foo: z.string().optional().default("bar")
-    }).default({ foo: "bar" }),
-    setup(options) {
+    defaults: {
+        foo: "bar"
+    },
+    setup({ options }) {
         const { resolve } = createResolver(import.meta.url);
 
         return {
