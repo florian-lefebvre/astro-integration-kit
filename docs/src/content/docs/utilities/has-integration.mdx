@@ -4,7 +4,7 @@ description: Checks whether an integration is already installed
 ---
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-`hasIntegration` checks whether an integration has already been installed and simply returns a boolean.
+`hasIntegration` checks whether an integration has already been added to the Astro config. For example:
 
 <Tabs>
     <TabItem label="All-in">
@@ -35,12 +35,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 			name: "my-integration",
 			hooks: {
 				"astro:config:setup": ({ config }) => {
-					const tailwindIsInstalled = hasIntegration({
+					if (hasIntegration({
 						name: "@astrojs/tailwind",
 						config,
-					});
-
-					if (tailwindIsInstalled) {
+					})) {
 						console.log("Tailwind already installed")
 					}
 				},

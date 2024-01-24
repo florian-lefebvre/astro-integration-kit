@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-Adds hasIntegration util
+Adds the `hasIntegration` utility

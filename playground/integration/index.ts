@@ -28,7 +28,7 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 				});
 
 				if (hasIntegration("@astrojs/tailwind")) {
-					console.log("Tailwind in installed");
+					console.log("Tailwind is installed");
 				}
 			},
 		};
