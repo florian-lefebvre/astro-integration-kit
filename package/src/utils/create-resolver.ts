@@ -1,5 +1,5 @@
-import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "pathe";
 
 /**
  * Allows resolving paths relatively to the integration folder easily. Call it like this:

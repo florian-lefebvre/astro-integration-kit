@@ -21,6 +21,7 @@
 	"sideEffects": false,
 	"exports": {
 		".": "./src/index.ts",
+		"./internal": "./src/internal.ts",
 		"./vanilla": "./src/vanilla.ts"
 	},
 	"scripts": {
@@ -36,6 +37,8 @@
 		"vite": "^5.0.11"
 	},
 	"dependencies": {
+		"defu": "^6.1.4",
+		"pathe": "^1.1.2",
 		"unctx": "^2.3.1"
 	}
 }
