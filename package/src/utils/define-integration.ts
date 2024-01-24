@@ -5,6 +5,26 @@ import { hookContext } from "../internal/context.js";
 
 /**
  * Makes creating integrations easier, and adds a few goodies!
+ * 
+ * @param {object} options
+ * @param {string} options.name The name of your integration
+ * @param {defaults} options.object Any default config options you want to set
+ * @param {function} options.setup This will be called from your `astro:config:setup` call with the user options
+ * 
+ * @see https://astro-integration-kit.netlify.app/utilities/define-integration/
+ * 
+ * @example
+ * ```ts
+ * export default defineIntergration({
+ *		name: "my-integration",
+ *		defaults: {
+ *    		foo: "bar",
+ * 		},
+ * 		setup(options) {
+ * 			console.log(options.foo); // "bar"
+ * 		}
+ * })
+ * ```
  */
 export const defineIntegration = <
 	TOptions extends Record<string, unknown> = never,
