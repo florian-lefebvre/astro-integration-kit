@@ -11,14 +11,13 @@ description: Makes creating integrations easier, and adds a few goodies!
 
 ```ts title="my-integration/index.ts"
 import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
-import { z } from "astro/zod"
 
-export default defineIntegration({
+export default defineIntegration<{ foo?: string }>({
     name: "my-integration",
-    options: z.object({
-        foo: z.string().optional().default("bar")
-    }).default({ foo: "bar" }),
-    setup(options) {
+    defaults: {
+        foo: "bar"
+    },
+    setup({ options }) {
         const { resolve } = createResolver(import.meta.url);
 
         return {
@@ -34,9 +33,9 @@ export default defineIntegration({
 
 ### Options
 
-The `options` configuration accepts a zod schema with a default. This way, the integration
-options are both type-safe and runtime-safe. Those options are accessible in the `setup`
-function.
+The `defaults` configuration accepts the default value, it will be deeply merged with
+the ones provided by the user. Please note that this is not runtime safe, you'll need
+to do so inside `setup`.
 
 ### Context & All-in mode
 

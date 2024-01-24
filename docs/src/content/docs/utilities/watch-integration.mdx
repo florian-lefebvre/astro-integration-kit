@@ -11,14 +11,10 @@ the integration directory has changed. It must be called inside `astro:config:se
     <TabItem label="All-in">
 	```ts title="my-integration/index.ts"
 	import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
-	import { z } from "astro/zod"
 
 	export default defineIntegration({
 		name: "my-integration",
-		options: z.object({
-			foo: z.string().optional().default("bar")
-		}).default({ foo: "bar" }),
-		setup(options) {
+		setup() {
 			const { resolve } = createResolver(import.meta.url);
 
 			return {
