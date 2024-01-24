@@ -1,6 +1,7 @@
 import {
 	createResolver,
 	defineIntegration,
+	hasIntegration,
 	watchIntegration,
 } from "astro-integration-kit";
 import { addVirtualImport } from "astro-integration-kit/vanilla";
@@ -25,6 +26,10 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 					content: `export default ${JSON.stringify({ foo: "bar" })}`,
 					updateConfig,
 				});
+
+				if (hasIntegration("@astrojs/tailwind")) {
+					console.log("Tailwind in installed");
+				}
 			},
 		};
 	},
