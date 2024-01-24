@@ -43,7 +43,7 @@ export const hasIntegration = (name: Params["name"]): boolean => {
  *
  * @example
  * ```ts
- *  vanillaHasIntegration("@astrojs/tailwind")
+ *  hasIntegration("@astrojs/tailwind")
  * ```
  */
 export const vanillaHasIntegration = (params: Params): boolean => {
