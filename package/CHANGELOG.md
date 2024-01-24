@@ -1,5 +1,13 @@
 # astro-integration-kit
 
+## 0.0.6
+
+### Patch Changes
+
+- f34c2e7: Makes `watchIntegration` synchronous
+- 7b5ee7c: Adds a `addVitePlugin` utility
+- eaa2122: Improves `defineIntegration` API
+
 ## 0.0.5
 
 ### Patch Changes
