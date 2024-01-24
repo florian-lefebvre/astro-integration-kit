@@ -2,6 +2,7 @@ import type { AstroIntegration } from "astro";
 import { defu } from "defu";
 import { DEFAULT_HOOKS_NAMES } from "../internal/constants.js";
 import { hookContext } from "../internal/context.js";
+import { addVitePlugin } from "../vanilla.js";
 import { createVirtualModule } from "../utils/add-virtual-import.js"
 
 /**
@@ -50,10 +51,12 @@ export const defineIntegration = <
 
 		const hooks: AstroIntegration["hooks"] = {
 			"astro:config:setup"(params) {
-				const addVitePlugin: AddVitePlugin = plugin => void params.updateConfig({ vite: { plugins: [plugin] } });
-				const addVirtualImport: AddVirtualImport = ({ name, content }) => addVitePlugin(createVirtualModule(name, content));
 				hookContext.callAsync({ "astro:config:setup": params }, () => {
-					providedHooks["astro:config:setup"]?.({ ...params, addVirtualImport, addVitePlugin });
+					providedHooks["astro:config:setup"]?.({
+						...params,
+						addVirtualImport: ({ name, content }) => addVitePlugin({ plugin: createVirtualModule(name, content), updateConfig: params.updateConfig }),
+						addVitePlugin: plugin => addVitePlugin({ plugin, updateConfig: params.updateConfig }),
+					});
 				})
 			}
 		};
