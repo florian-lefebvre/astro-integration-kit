@@ -44,14 +44,14 @@ export default function myIntegration(): AstroIntegration {
     return {
         name: "my-integration",
         hooks: {
-			"astro:config:setup": ({ addWatchFile, command, updateConfig }) => {
-				watchIntegration({
-					addWatchFile,
-					command,
-					dir: resolve(),
-					updateConfig,
-				});
-			},
+            "astro:config:setup": ({ addWatchFile, command, updateConfig }) => {
+                watchIntegration({
+                    addWatchFile,
+                    command,
+                    dir: resolve(),
+                    updateConfig,
+                });
+            },
         }
     }
 }
