@@ -42,6 +42,13 @@ const _addVirtualImport = ({ name, content, updateConfig }: Params) => {
  * Creates a Vite virtual module and updates the Astro config.
  * Virtual imports are useful for passing things like config options, or data computed within the integration.
  *
+ * @param {object} params
+ * @param {string} params.name
+ * @param {string} params.content
+ *
+ * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-import/
+ *
+ * @example
  * ```ts
  * // my-integration/index.ts
  * import { addVirtualImport } from "astro-integration-kit";
@@ -60,8 +67,6 @@ const _addVirtualImport = ({ name, content, updateConfig }: Params) => {
  *
  * console.log(config.foo) // "bar"
  * ```
- *
- * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-import/
  */
 export const addVirtualImport = ({
 	name,
@@ -76,6 +81,14 @@ export const addVirtualImport = ({
  * Creates a Vite virtual module and updates the Astro config.
  * Virtual imports are useful for passing things like config options, or data computed within the integration.
  *
+ * @param {object} params
+ * @param {string} params.name
+ * @param {string} params.content
+ * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
+ *
+ * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-import/
+ *
+ * @example
  * ```ts
  * // my-integration/index.ts
  * import { addVirtualImport } from "astro-integration-kit/vanilla";
@@ -83,7 +96,7 @@ export const addVirtualImport = ({
  * addVirtualImport(
  *   name: 'virtual:my-integration/config',
  *   content: `export default ${ JSON.stringify({foo: "bar"}) }`,
- * 	 updateConfig
+ *   updateConfig
  * );
  * ```
  *
@@ -95,8 +108,6 @@ export const addVirtualImport = ({
  *
  * console.log(config.foo) // "bar"
  * ```
- *
- * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-import/
  */
 export const vanillaAddVirtualImport = (params: Params) => {
 	_addVirtualImport(params);
