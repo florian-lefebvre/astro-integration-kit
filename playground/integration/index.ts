@@ -5,7 +5,7 @@ import {
 } from "astro-integration-kit";
 import { addVirtualImport } from "astro-integration-kit/vanilla";
 
-const testIntegration = defineIntegration<{ name?: string }>({
+const testIntegration = defineIntegration<{ name?: string | undefined }>({
 	name: "test-integration",
 	defaults: {
 		name: "abc",

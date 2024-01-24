@@ -14,7 +14,9 @@ export const defineIntegration = <
 	setup,
 }: {
 	name: string;
-	defaults: TOptions;
+	defaults: {
+		[Property in keyof TOptions]-?: TOptions[Property];
+	};
 	setup: (params: {
 		name: string;
 		options: TOptions;
