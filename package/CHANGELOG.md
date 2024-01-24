@@ -1,5 +1,12 @@
 # astro-integration-kit
 
+## 0.0.7
+
+### Patch Changes
+
+- 97de1ae: Adds the `hasIntegration` utility
+- 1ff8675: Improves JSDoc annotations
+
 ## 0.0.6
 
 ### Patch Changes
