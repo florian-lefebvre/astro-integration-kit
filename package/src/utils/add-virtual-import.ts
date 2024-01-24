@@ -7,7 +7,7 @@ const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
 };
 
-const createVirtualModule = (name: string, content: string): Plugin => {
+export const createVirtualModule = (name: string, content: string): Plugin => {
 	const pluginName = `vite-plugin-${name}`;
 
 	return {
