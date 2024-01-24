@@ -1,6 +1,7 @@
 import type { HookParameters } from "astro";
 import type { Plugin } from "vite";
 import { useHookParams } from "../internal/use-hook-params.js";
+import { vanillaAddVitePlugin } from "./add-vite-plugin.js";
 
 const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
@@ -31,10 +32,9 @@ type Params = {
 };
 
 const _addVirtualImport = ({ name, content, updateConfig }: Params) => {
-	updateConfig({
-		vite: {
-			plugins: [createVirtualModule(name, content)],
-		},
+	vanillaAddVitePlugin({
+		plugin: createVirtualModule(name, content),
+		updateConfig,
 	});
 };
 
