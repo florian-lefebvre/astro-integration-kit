@@ -1,4 +1,6 @@
+import { readFile } from "node:fs/promises";
 import {
+	addDts,
 	createResolver,
 	defineIntegration,
 	hasIntegration,
@@ -18,8 +20,13 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 		console.log({ options, pluginPath });
 
 		return {
-			"astro:config:setup": ({ updateConfig }) => {
+			"astro:config:setup": async ({ updateConfig }) => {
 				watchIntegration(resolve());
+
+				addDts({
+					name: "test-integration",
+					content: await readFile(resolve("./virtual.d.ts"), "utf-8"),
+				});
 
 				addVirtualImport({
 					name: "virtual:astro-integration-kit-playground/config",
