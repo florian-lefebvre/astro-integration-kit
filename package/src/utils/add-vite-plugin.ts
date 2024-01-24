@@ -18,9 +18,9 @@ const _addVitePlugin = ({ plugin, updateConfig }: Params) => {
 /**
  * Adds a [vite plugin](https://vitejs.dev/guide/using-plugins) to the
  * Astro config.
- * 
+ *
  * @param {PluginOption} plugin
- * 
+ *
  * @see https://astro-integration-kit.netlify.app/utilities/add-vite-plugin/
  *
  * @example
@@ -37,11 +37,11 @@ export const addVitePlugin = (plugin: Params["plugin"]) => {
 /**
  * Adds a [vite plugin](https://vitejs.dev/guide/using-plugins) to the
  * Astro config.
- * 
+ *
  * @param {Params} params
  * @param {Plugin} params.plugin
  * @param {updateConfig} params.updateConfig
- * 
+ *
  * @see https://astro-integration-kit.netlify.app/utilities/add-vite-plugin/
  *
  * @example

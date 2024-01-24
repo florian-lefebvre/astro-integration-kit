@@ -3,9 +3,9 @@ import { dirname, resolve } from "pathe";
 
 /**
  * Allows resolving paths relatively to the integration folder easily. Call it like this:
- * 
+ *
  * @param {string} _base The location you want to create relative references from. `import.meta.url` is usually what you'll want.
- * 
+ *
  * @see https://astro-integration-kit.netlify.app/utilities/create-resolver/
  *
  * @example

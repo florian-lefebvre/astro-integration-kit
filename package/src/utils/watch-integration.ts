@@ -69,9 +69,9 @@ const _watchIntegration = ({
  * the integration directory has changed. Must be called inside `astro:config:setup`.
  *
  * @param {string} dir This is the directory you want to watch for changes
- * 
+ *
  * @see https://astro-integration-kit.netlify.app/utilities/watch-integration/
- * 
+ *
  * @example
  * ```ts
  * watchIntegration(resolve())
@@ -93,9 +93,9 @@ export const watchIntegration = (dir: string) => {
  * @param {addWatchFile} params.addWatchFile
  * @param {command} params.command
  * @param {updateConfig} params.updateConfig
- * 
+ *
  * @see https://astro-integration-kit.netlify.app/utilities/watch-integration/
- * 
+ *
  * @example
  * ```ts
  * vanillaWatchIntegration({
