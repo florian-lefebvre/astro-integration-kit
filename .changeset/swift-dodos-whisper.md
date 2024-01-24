@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-Add `addVitePlugin` utility
+Adds a `addVitePlugin` utility
