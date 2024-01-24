@@ -1,0 +1,50 @@
+---
+title: hasIntegration
+description: Checks whether an integration been added to the Astro config.
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+`hasIntegration` checks whether an integration has already been added to the Astro config. For example:
+
+<Tabs>
+    <TabItem label="All-in">
+	```ts title="my-integration/index.ts"
+	import { hasIntegration } from "astro-integration-kit";
+
+	export default defineIntegration({
+		name: "my-integration",
+		setup() {
+			return {
+				"astro:config:setup": () => {
+					if (hasIntegration("@astrojs/tailwind")) {
+						console.log("Tailwind already installed");
+					}
+				}
+			}
+		}
+	})
+	```
+	</TabItem>
+	<TabItem label="Vanilla">
+	```ts title="integration/index.ts"
+	import type { AstroIntegration } from "astro";
+	import { hasIntegration } from "astro-integration-kit/vanilla";
+
+	export default function myIntegration(): AstroIntegration {
+		return {
+			name: "my-integration",
+			hooks: {
+				"astro:config:setup": ({ config }) => {
+					if (hasIntegration({
+						name: "@astrojs/tailwind",
+						config,
+					})) {
+						console.log("Tailwind already installed")
+					}
+				},
+			}
+		}
+	}
+	``` 
+	</TabItem>
+</Tabs>
