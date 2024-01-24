@@ -10,12 +10,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     <TabItem label="All-in">
     ```ts title="my-integration/index.ts"
     import { addVirtualImport, defineIntegration } from "astro-integration-kit";
-    import { z } from "astro/zod"
 
     export default defineIntegration({
         name: "my-integration",
-        options: z.object({}).default({}),
-        setup(options) {
+        setup() {
             return {
                 "astro:config:setup": () => {
                     addVirtualImport({
