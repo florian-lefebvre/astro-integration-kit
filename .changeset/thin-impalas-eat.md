@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-improves jsdocs
+Improves JSDoc annotations
