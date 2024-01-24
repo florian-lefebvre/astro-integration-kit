@@ -22,8 +22,8 @@ export default defineIntegration({
         const { resolve } = createResolver(import.meta.url);
 
         return {
-            "astro:config:setup": async () => {
-                await watchIntegration(resolve())
+            "astro:config:setup": () => {
+                watchIntegration(resolve())
             }
         }
     }
@@ -45,8 +45,8 @@ export default function myIntegration(): AstroIntegration {
     return {
         name: "my-integration",
         hooks: {
-			"astro:config:setup": async ({ addWatchFile, command, updateConfig }) => {
-				await watchIntegration({
+			"astro:config:setup": ({ addWatchFile, command, updateConfig }) => {
+				watchIntegration({
 					addWatchFile,
 					command,
 					dir: resolve(),

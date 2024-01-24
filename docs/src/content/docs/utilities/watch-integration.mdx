@@ -22,8 +22,8 @@ the integration directory has changed. It must be called inside `astro:config:se
 			const { resolve } = createResolver(import.meta.url);
 
 			return {
-				"astro:config:setup": async () => {
-					await watchIntegration(resolve())
+				"astro:config:setup": () => {
+					watchIntegration(resolve())
 				}
 			}
 		}
@@ -41,8 +41,8 @@ the integration directory has changed. It must be called inside `astro:config:se
 		return {
 			name: "my-integration",
 			hooks: {
-				"astro:config:setup": async ({ addWatchFile, command, updateConfig }) => {
-					await watchIntegration({
+				"astro:config:setup": ({ addWatchFile, command, updateConfig }) => {
+					watchIntegration({
 						addWatchFile,
 						command,
 						dir: resolve(),
