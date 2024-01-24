@@ -1,19 +1,19 @@
-import { readdir, stat } from "node:fs/promises";
+import { readdirSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import type { HookParameters } from "astro";
 import { useHookParams } from "../internal/use-hook-params.js";
 
-const getFilesRecursively = async (dir: string, baseDir = dir) => {
-	const files = await readdir(dir);
+const getFilesRecursively = (dir: string, baseDir = dir) => {
+	const files = readdirSync(dir);
 	let filepaths: Array<string> = [];
 
 	for (const file of files) {
 		const filepath = join(dir, file);
-		const _stat = await stat(filepath);
+		const _stat = statSync(filepath);
 
 		if (_stat.isDirectory()) {
 			// Recursively get files from subdirectories
-			const subDirectoryFiles = await getFilesRecursively(filepath, baseDir);
+			const subDirectoryFiles = getFilesRecursively(filepath, baseDir);
 			filepaths = filepaths.concat(subDirectoryFiles);
 		} else {
 			// Calculate relative path and add it to the array
@@ -32,7 +32,7 @@ type Params = {
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 };
 
-const _watchIntegration = async ({
+const _watchIntegration = ({
 	addWatchFile,
 	command,
 	dir,
@@ -42,7 +42,7 @@ const _watchIntegration = async ({
 		return;
 	}
 
-	const paths = (await getFilesRecursively(dir)).map((p) => resolve(dir, p));
+	const paths = getFilesRecursively(dir).map((p) => resolve(dir, p));
 
 	for (const path of paths) {
 		addWatchFile(path);
@@ -69,14 +69,14 @@ const _watchIntegration = async ({
  * the integration directory has changed. Must be called inside `astro:config:setup`.
  *
  * ```ts
- * await watchIntegration(resolve())
+ * watchIntegration(resolve())
  * ```
  */
-export const watchIntegration = async (dir: string) => {
+export const watchIntegration = (dir: string) => {
 	const { addWatchFile, command, updateConfig } =
 		useHookParams("astro:config:setup");
 
-	await _watchIntegration({ addWatchFile, command, dir, updateConfig });
+	_watchIntegration({ addWatchFile, command, dir, updateConfig });
 };
 
 /**
@@ -84,9 +84,9 @@ export const watchIntegration = async (dir: string) => {
  * the integration directory has changed. Must be called inside `astro:config:setup`.
  *
  * ```ts
- * await watchIntegration({ addWatchFile, command, dir: resolve(), updateConfig })
+ * watchIntegration({ addWatchFile, command, dir: resolve(), updateConfig })
  * ```
  */
-export const vanillaWatchIntegration = async (params: Params) => {
-	await _watchIntegration(params);
+export const vanillaWatchIntegration = (params: Params) => {
+	_watchIntegration(params);
 };

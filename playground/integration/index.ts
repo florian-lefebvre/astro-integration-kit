@@ -17,8 +17,8 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 		console.log({ options, pluginPath });
 
 		return {
-			"astro:config:setup": async ({ updateConfig }) => {
-				await watchIntegration(resolve());
+			"astro:config:setup": ({ updateConfig }) => {
+				watchIntegration(resolve());
 
 				addVirtualImport({
 					name: "virtual:astro-integration-kit-playground/config",

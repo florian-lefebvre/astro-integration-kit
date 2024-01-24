@@ -21,8 +21,8 @@ export default defineIntegration<{ foo?: string }>({
         const { resolve } = createResolver(import.meta.url);
 
         return {
-            "astro:config:setup": async () => {
-                await watchIntegration(resolve())
+            "astro:config:setup": () => {
+                watchIntegration(resolve())
             }
         }
     }
