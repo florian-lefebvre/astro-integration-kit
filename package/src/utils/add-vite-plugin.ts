@@ -2,7 +2,7 @@ import type { HookParameters } from "astro";
 import type { PluginOption } from "vite";
 import { useHookParams } from "../internal/use-hook-params.js";
 
-type Params = {
+export type Params = {
 	plugin: PluginOption;
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 };
