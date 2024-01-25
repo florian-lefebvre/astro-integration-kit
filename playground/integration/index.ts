@@ -1,10 +1,8 @@
 import {
+	addVirtualImport,
 	createResolver,
 	defineIntegration,
-	hasIntegration,
-	watchIntegration,
 } from "astro-integration-kit";
-import { addVirtualImport } from "astro-integration-kit/vanilla";
 
 const testIntegration = defineIntegration<{ name?: string | undefined }>({
 	name: "test-integration",
@@ -18,7 +16,11 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 		console.log({ options, pluginPath });
 
 		return {
-			"astro:config:setup": ({ updateConfig }) => {
+			"astro:config:setup": ({
+				updateConfig,
+				watchIntegration,
+				hasIntegration,
+			}) => {
 				watchIntegration(resolve());
 
 				addVirtualImport({
