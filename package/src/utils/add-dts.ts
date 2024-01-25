@@ -2,7 +2,6 @@ import { readFile, writeFile } from "node:fs/promises";
 import { relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AstroIntegrationLogger } from "astro";
-import { useHookParams } from "../internal.js";
 import { ensureDirExists } from "../internal/node.js";
 
 const injectEnvDTS = async ({
@@ -50,65 +49,6 @@ const injectEnvDTS = async ({
 	logger.info("Updated env.d.ts types");
 };
 
-type Params = {
-	name: string;
-	content: string;
-	root: URL;
-	srcDir: URL;
-	logger: AstroIntegrationLogger;
-};
-
-export const _addDts = async ({
-	name,
-	content,
-	root,
-	srcDir,
-	logger,
-}: Params) => {
-	const dtsURL = new URL(`.astro/${name}.d.ts`, root);
-	const filePath = fileURLToPath(dtsURL);
-
-	await injectEnvDTS({
-		srcDir,
-		logger,
-		specifier: dtsURL,
-	});
-
-	await ensureDirExists(filePath);
-	await writeFile(filePath, content, "utf-8");
-};
-
-/**
- * Allows to inject .d.ts file in users project. It will create a file inside `.astro`
- * and reference it from `src/env.d.ts`.
- *
- * @param {object} params
- * @param {string} params.name - The name of the .d.ts file. Eg `test` will generate `.astro/test.d.ts`
- * @param {string} params.content
- *
- * @example
- * ```ts
- * addDts({
- * 	 name: "my-integration",
- * 	 content: `declare module "virtual:my-integration" {}`
- * })
- * ```
- */
-export const addDts = async ({
-	name,
-	content,
-}: Pick<Params, "name" | "content">) => {
-	const { config, logger } = useHookParams("astro:config:setup");
-
-	await _addDts({
-		name,
-		content,
-		root: config.root,
-		srcDir: config.srcDir,
-		logger,
-	});
-};
-
 /**
  * Allows to inject .d.ts file in users project. It will create a file inside `.astro`
  * and reference it from `src/env.d.ts`.
@@ -130,7 +70,31 @@ export const addDts = async ({
  * 	 logger
  * })
  * ```
+ *
+ * @see https://astro-integration-kit.netlify.app/utilities/add-dts/
  */
-export const vanillaAddDts = async (params: Params) => {
-	_addDts(params);
+export const addDts = async ({
+	name,
+	content,
+	root,
+	srcDir,
+	logger,
+}: {
+	name: string;
+	content: string;
+	root: URL;
+	srcDir: URL;
+	logger: AstroIntegrationLogger;
+}) => {
+	const dtsURL = new URL(`.astro/${name}.d.ts`, root);
+	const filePath = fileURLToPath(dtsURL);
+
+	await injectEnvDTS({
+		srcDir,
+		logger,
+		specifier: dtsURL,
+	});
+
+	await ensureDirExists(filePath);
+	await writeFile(filePath, content, "utf-8");
 };

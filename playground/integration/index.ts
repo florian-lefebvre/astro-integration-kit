@@ -21,11 +21,11 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 				updateConfig,
 				watchIntegration,
 				hasIntegration,
-				addDts
+				addDts,
 			}) => {
 				watchIntegration(resolve());
 
-				addDts({
+				await addDts({
 					name: "test-integration",
 					content: await readFile(resolve("./virtual.d.ts"), "utf-8"),
 				});
