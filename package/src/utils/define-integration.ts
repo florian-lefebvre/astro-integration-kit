@@ -2,6 +2,8 @@ import type { AstroIntegration } from "astro";
 import { defu } from "defu";
 import { DEFAULT_HOOKS_NAMES } from "../internal/constants.js";
 import { hookContext } from "../internal/context.js";
+import { addVitePlugin } from "../vanilla.js";
+import { createVirtualModule } from "../utils/add-virtual-import.js"
 
 /**
  * Makes creating integrations easier, and adds a few goodies!
@@ -40,15 +42,28 @@ export const defineIntegration = <
 	setup: (params: {
 		name: string;
 		options: TOptions;
-	}) => AstroIntegration["hooks"];
+	}) => ExtendedHooks;
 }): ((options: TOptions) => AstroIntegration) => {
 	return (_options) => {
 		const options = defu(_options, defaults ?? {}) as TOptions;
 
 		const providedHooks = setup({ name, options });
 
-		const hooks: AstroIntegration["hooks"] = {};
-		for (const hookName of DEFAULT_HOOKS_NAMES) {
+		const hooks: AstroIntegration["hooks"] = {
+			"astro:config:setup"(params) {
+				hookContext.callAsync({ "astro:config:setup": params }, () => {
+					providedHooks["astro:config:setup"]?.({
+						...params,
+						addVirtualImport: ({ name, content }) => addVitePlugin({ plugin: createVirtualModule(name, content), updateConfig: params.updateConfig }),
+						addVitePlugin: plugin => addVitePlugin({ plugin, updateConfig: params.updateConfig }),
+					});
+				})
+			}
+		};
+
+		const otherHooks = DEFAULT_HOOKS_NAMES.filter((hookName): hookName is Exclude<typeof DEFAULT_HOOKS_NAMES[number], "astro:config:setup"> => hookName !== "astro:config:setup");
+
+		for (const hookName of otherHooks) {
 			if (providedHooks[hookName] !== undefined) {
 				hooks[hookName] = (params) =>
 					hookContext.callAsync({ [hookName]: params }, () =>
@@ -64,3 +79,15 @@ export const defineIntegration = <
 		};
 	};
 };
+
+type Hooks = NonNullable<AstroIntegration["hooks"]>
+
+interface ExtendedHooks extends Omit<Hooks, "astro:config:setup"> {
+	"astro:config:setup"?: AddParam<Hooks["astro:config:setup"], { addVitePlugin: AddVitePlugin, addVirtualImport: AddVirtualImport }>;
+}
+
+type AddVitePlugin = (plugin: import("vite").Plugin) => void;
+
+type AddVirtualImport = (vimport: { name: string, content: string }) => void;
+
+type AddParam<Func, Param> = Func extends (params: infer Params) => infer ReturnType ? (params: Params & Param) => ReturnType : never;
