@@ -95,8 +95,7 @@ export interface ExtendedHooks {
 	"astro:build:done"?: AddParam<Hooks["astro:build:done"]>;
 }
 
-// biome-ignore lint/complexity/noBannedTypes: we know what we are doing
-type AddParam<Func, Param = {}> = Func extends (
+type AddParam<Func, Param = Record<never, never>> = Func extends (
 	params: infer Params,
 ) => infer ReturnType
 	? (params: Params & Param) => ReturnType
