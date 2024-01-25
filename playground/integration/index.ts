@@ -1,12 +1,9 @@
 import { readFile } from "node:fs/promises";
 import {
-	addDts,
+	addVirtualImport,
 	createResolver,
 	defineIntegration,
-	hasIntegration,
-	watchIntegration,
 } from "astro-integration-kit";
-import { addVirtualImport } from "astro-integration-kit/vanilla";
 
 const testIntegration = defineIntegration<{ name?: string | undefined }>({
 	name: "test-integration",
@@ -20,7 +17,12 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 		console.log({ options, pluginPath });
 
 		return {
-			"astro:config:setup": async ({ updateConfig }) => {
+			"astro:config:setup": async ({
+				updateConfig,
+				watchIntegration,
+				hasIntegration,
+				addDts
+			}) => {
 				watchIntegration(resolve());
 
 				addDts({

@@ -1,7 +1,6 @@
 import type { HookParameters } from "astro";
 import type { Plugin } from "vite";
-import { useHookParams } from "../internal/use-hook-params.js";
-import { vanillaAddVitePlugin } from "./add-vite-plugin.js";
+import { addVitePlugin } from "./add-vite-plugin.js";
 
 const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
@@ -25,58 +24,6 @@ const createVirtualModule = (name: string, content: string): Plugin => {
 	};
 };
 
-type Params = {
-	name: string;
-	content: string;
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-};
-
-const _addVirtualImport = ({ name, content, updateConfig }: Params) => {
-	vanillaAddVitePlugin({
-		plugin: createVirtualModule(name, content),
-		updateConfig,
-	});
-};
-
-/**
- * Creates a Vite virtual module and updates the Astro config.
- * Virtual imports are useful for passing things like config options, or data computed within the integration.
- *
- * @param {object} params
- * @param {string} params.name
- * @param {string} params.content
- *
- * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-import/
- *
- * @example
- * ```ts
- * // my-integration/index.ts
- * import { addVirtualImport } from "astro-integration-kit";
- *
- * addVirtualImport(
- *   name: 'virtual:my-integration/config',
- *   content: `export default ${ JSON.stringify({foo: "bar"}) }`,
- * );
- * ```
- *
- * This is then readable anywhere else in your integration:
- *
- * ```ts
- * // myIntegration/src/component/layout.astro
- * import config from "virtual:my-integration/config";
- *
- * console.log(config.foo) // "bar"
- * ```
- */
-export const addVirtualImport = ({
-	name,
-	content,
-}: Omit<Params, "updateConfig">) => {
-	const { updateConfig } = useHookParams("astro:config:setup");
-
-	_addVirtualImport({ name, content, updateConfig });
-};
-
 /**
  * Creates a Vite virtual module and updates the Astro config.
  * Virtual imports are useful for passing things like config options, or data computed within the integration.
@@ -91,7 +38,7 @@ export const addVirtualImport = ({
  * @example
  * ```ts
  * // my-integration/index.ts
- * import { addVirtualImport } from "astro-integration-kit/vanilla";
+ * import { addVirtualImport } from "astro-integration-kit";
  *
  * addVirtualImport(
  *   name: 'virtual:my-integration/config',
@@ -109,6 +56,17 @@ export const addVirtualImport = ({
  * console.log(config.foo) // "bar"
  * ```
  */
-export const vanillaAddVirtualImport = (params: Params) => {
-	_addVirtualImport(params);
+export const addVirtualImport = ({
+	name,
+	content,
+	updateConfig,
+}: {
+	name: string;
+	content: string;
+	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+}) => {
+	addVitePlugin({
+		plugin: createVirtualModule(name, content),
+		updateConfig,
+	});
 };

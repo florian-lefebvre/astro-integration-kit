@@ -1,7 +1,10 @@
 import type { AstroIntegration } from "astro";
 import { defu } from "defu";
-import { DEFAULT_HOOKS_NAMES } from "../internal/constants.js";
-import { hookContext } from "../internal/context.js";
+import type { ExtendedHooks } from "../types.js";
+import { addVirtualImport } from "../utils/add-virtual-import.js";
+import { addVitePlugin } from "../utils/add-vite-plugin.js";
+import { hasIntegration } from "./has-integration.js";
+import { watchIntegration } from "./watch-integration.js";
 
 /**
  * Makes creating integrations easier, and adds a few goodies!
@@ -20,7 +23,7 @@ import { hookContext } from "../internal/context.js";
  *		defaults: {
  *    		foo: "bar",
  * 		},
- * 		setup(options) {
+ * 		setup({ options }) {
  * 			console.log(options.foo); // "bar"
  * 		}
  * })
@@ -40,23 +43,64 @@ export const defineIntegration = <
 	setup: (params: {
 		name: string;
 		options: TOptions;
-	}) => AstroIntegration["hooks"];
+	}) => ExtendedHooks;
 }): ((options: TOptions) => AstroIntegration) => {
 	return (_options) => {
 		const options = defu(_options, defaults ?? {}) as TOptions;
 
 		const providedHooks = setup({ name, options });
 
-		const hooks: AstroIntegration["hooks"] = {};
-		for (const hookName of DEFAULT_HOOKS_NAMES) {
-			if (providedHooks[hookName] !== undefined) {
-				hooks[hookName] = (params) =>
-					hookContext.callAsync({ [hookName]: params }, () =>
-						// biome-ignore lint/style/noNonNullAssertion: existence checked above
-						providedHooks[hookName]!(params as any),
-					);
-			}
-		}
+		const hooks: AstroIntegration["hooks"] = {
+			"astro:config:setup": (params) => {
+				return providedHooks["astro:config:setup"]?.({
+					...params,
+					addVirtualImport: ({ name, content }) =>
+						addVirtualImport({
+							name,
+							content,
+							updateConfig: params.updateConfig,
+						}),
+					addVitePlugin: (plugin) =>
+						addVitePlugin({ plugin, updateConfig: params.updateConfig }),
+					hasIntegration: (name) =>
+						hasIntegration({ name, config: params.config }),
+					watchIntegration: (dir) =>
+						watchIntegration({
+							command: params.command,
+							dir,
+							addWatchFile: params.addWatchFile,
+							updateConfig: params.updateConfig,
+						}),
+				});
+			},
+			"astro:config:done": (params) => {
+				return providedHooks["astro:config:done"]?.({ ...params });
+			},
+			"astro:server:setup": (params) => {
+				return providedHooks["astro:server:setup"]?.({ ...params });
+			},
+			"astro:server:start": (params) => {
+				return providedHooks["astro:server:start"]?.({ ...params });
+			},
+			"astro:server:done": (params) => {
+				return providedHooks["astro:server:done"]?.({ ...params });
+			},
+			"astro:build:start": (params) => {
+				return providedHooks["astro:build:start"]?.({ ...params });
+			},
+			"astro:build:setup": (params) => {
+				return providedHooks["astro:build:setup"]?.({ ...params });
+			},
+			"astro:build:generated": (params) => {
+				return providedHooks["astro:build:generated"]?.({ ...params });
+			},
+			"astro:build:ssr": (params) => {
+				return providedHooks["astro:build:ssr"]?.({ ...params });
+			},
+			"astro:build:done": (params) => {
+				return providedHooks["astro:build:done"]?.({ ...params });
+			},
+		};
 
 		return {
 			name,
