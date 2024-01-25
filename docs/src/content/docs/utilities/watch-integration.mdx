@@ -1,16 +1,16 @@
 ---
 title: watchIntegration
-description: In development, will reload the Astro dev server if any files within the integration directory has changed. Must be called inside `astro:config:setup`.
+description: In development, will reload the Astro dev server if any files within the integration directory has changed.
 ---
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 In development, `watchIntegration` will reload the Astro dev server if any files within
-the integration directory has changed. It must be called inside `astro:config:setup`:
+the integration directory has changed. For example:
 
 <Tabs>
-    <TabItem label="All-in">
-	```ts title="my-integration/index.ts"
-	import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
+    <TabItem label="Extended hooks">
+	```ts title="my-integration/index.ts" "watchIntegration"
+	import { createResolver, defineIntegration } from "astro-integration-kit";
 
 	export default defineIntegration({
 		name: "my-integration",
@@ -18,7 +18,7 @@ the integration directory has changed. It must be called inside `astro:config:se
 			const { resolve } = createResolver(import.meta.url);
 
 			return {
-				"astro:config:setup": () => {
+				"astro:config:setup": ({ watchIntegration }) => {
 					watchIntegration(resolve())
 				}
 			}
@@ -26,8 +26,8 @@ the integration directory has changed. It must be called inside `astro:config:se
 	})
 	```
 	</TabItem>
-	<TabItem label="Vanilla">
-	```ts title="integration/index.ts"
+	<TabItem label="Standalone utilities">
+	```ts title="integration/index.ts" "watchIntegration"
 	import type { AstroIntegration } from "astro";
 	import { createResolver, watchIntegration } from "astro-integration-kit";
 

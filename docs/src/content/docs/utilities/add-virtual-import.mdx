@@ -7,15 +7,15 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 `addVirtualImport` allows you to create virtual modules and share data from your integration. For example:
 
 <Tabs>
-    <TabItem label="All-in">
-    ```ts title="my-integration/index.ts"
-    import { addVirtualImport, defineIntegration } from "astro-integration-kit";
+    <TabItem label="Extende hooks">
+    ```ts title="my-integration/index.ts" "addVirtualImport"
+    import { defineIntegration } from "astro-integration-kit";
 
     export default defineIntegration({
         name: "my-integration",
         setup() {
             return {
-                "astro:config:setup": () => {
+                "astro:config:setup": ({ addVirtualImport }) => {
                     addVirtualImport({
                         name: 'virtual:my-integration/config',
                         content: `export default ${JSON.stringify({ foo: "bar" })}`,
@@ -26,10 +26,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     })
     ```
     </TabItem>
-    <TabItem label="Vanilla">
-    ```ts title="integration/index.ts"
+    <TabItem label="Standalone utilities">
+    ```ts title="integration/index.ts" "addVirtualImport"
     import type { AstroIntegration } from "astro";
-    import { addVirtualImport } from "astro-integration-kit/vanilla";
+    import { addVirtualImport } from "astro-integration-kit";
 
     export default function myIntegration(): AstroIntegration {
         return {
