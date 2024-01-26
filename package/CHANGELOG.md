@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.0.8
+
+### Patch Changes
+
+- 9b3c1e2: Simplifies usage by providing additional utilities through extended hooks
+
 ## 0.0.7
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
 	"name": "astro-integration-kit",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"description": "A package that contains utilities to help you build Astro integrations.",
 	"author": {
 		"email": "contact@florian-lefebvre.dev",
@@ -20,9 +20,7 @@
 	},
 	"sideEffects": false,
 	"exports": {
-		".": "./src/index.ts",
-		"./internal": "./src/internal.ts",
-		"./vanilla": "./src/vanilla.ts"
+		".": "./src/index.ts"
 	},
 	"scripts": {
 		"build": "tsc && vite build",
@@ -40,7 +38,6 @@
 	},
 	"dependencies": {
 		"defu": "^6.1.4",
-		"pathe": "^1.1.2",
-		"unctx": "^2.3.1"
+		"pathe": "^1.1.2"
 	}
 }

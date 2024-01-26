@@ -6,11 +6,11 @@ description: Makes creating integrations easier, and adds a few goodies!
 `defineIntegration` makes creating integrations easier, and adds a few goodies!
 
 :::caution
-`definIntegration` is required for All-in mode.
+`defineIntegration` is required to use **extended hooks**.
 :::
 
-```ts title="my-integration/index.ts"
-import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
+```ts title="my-integration/index.ts" "defineIntegration"
+import { createResolver, defineIntegration } from "astro-integration-kit";
 
 export default defineIntegration<{ foo?: string }>({
     name: "my-integration",
@@ -21,7 +21,7 @@ export default defineIntegration<{ foo?: string }>({
         const { resolve } = createResolver(import.meta.url);
 
         return {
-            "astro:config:setup": () => {
+            "astro:config:setup": ({ watchIntegration }) => {
                 watchIntegration(resolve())
             }
         }
@@ -33,14 +33,10 @@ export default defineIntegration<{ foo?: string }>({
 
 ### Options
 
-The `defaults` configuration accepts the default values for your integration's options. `defaults` will be deeply merged with the options provided by the user. Please note that this is not runtime safe, it's good practice to check the types of your options inside `setup`.
+`defineIntegration` accepts a generic that will properly type the integration options.
 
-### Context & All-in mode
+### Defaults
 
-Using `defineIntegration` allows you to go [All-in](/getting-started/usage/#all-in). This means
-that Astro hooks parameters are passed to our utilities through Context and you don't need
-to pass them manually.
-
-:::note
-If you're curious, we're using [`unctx`](https://github.com/unjs/unctx) for this dark magic!
-:::
+The `defaults` configuration accepts the default values for your integration's options.
+`defaults` will be deeply merged with the options provided by the user. Please note that
+this is not runtime safe, it's good practice to check the types of your options inside `setup`.

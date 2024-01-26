@@ -3,14 +3,14 @@ title: Usage
 description: Learn how to use astro-integration-kit in your project.
 ---
 
-Astro Integration Kit can be used in 2 ways: "all-in" and "vanilla".
+Astro Integration Kit can be used in 2 ways: as **extended hooks** or as **standalone utilities**.
 
-## All-in
+## Extended hooks
 
-To define your integration, use the `defineIntegration` utility:
+To define your integration, use the `defineIntegration` utility. Hooks now have additional utilities:
 
-```ts title="my-integration/index.ts"
-import { createResolver, defineIntegration, watchIntegration } from "astro-integration-kit";
+```ts title="my-integration/index.ts" "watchIntegration"
+import { createResolver, defineIntegration } from "astro-integration-kit";
 
 export default defineIntegration<{ foo?: string }>({
     name: "my-integration",
@@ -21,7 +21,7 @@ export default defineIntegration<{ foo?: string }>({
         const { resolve } = createResolver(import.meta.url);
 
         return {
-            "astro:config:setup": () => {
+            "astro:config:setup": ({ watchIntegration }) => {
                 watchIntegration(resolve())
             }
         }
@@ -29,14 +29,13 @@ export default defineIntegration<{ foo?: string }>({
 })
 ```
 
-## Vanilla
+## Standalone utilities
 
-Use utilities exported from `astro-integration-kit/vanilla`:
+Use utilities exported from `astro-integration-kit`:
 
-```ts title="integration/index.ts"
+```ts title="integration/index.ts" "watchIntegration"
 import type { AstroIntegration } from "astro";
-import { createResolver } from "astro-integration-kit";
-import { watchIntegration } from "astro-integration-kit/vanilla";
+import { createResolver, watchIntegration } from "astro-integration-kit";
 
 export default function myIntegration(): AstroIntegration {
     const { resolve } = createResolver(import.meta.url);
@@ -59,7 +58,7 @@ export default function myIntegration(): AstroIntegration {
 
 ## Which one should you use?
 
-All-in mode provides a way better DX and we recommend picking this one by default. However, if you have
-an existing integration that you want to migrate to `astro-integration-kit`, using Vanilla utilities
-will allow you to migrate progressively. Any Vanilla utility has an equivalent All-in utility with less
-arguments.
+**Extended hooks** provide a way better DX and we recommend picking this one by default. However, if you have
+an existing integration that you want to migrate to `astro-integration-kit`, using **standalone utilities**
+will allow you to migrate progressively. Any **standalone utility** is also available as an **extended hook**
+argument.

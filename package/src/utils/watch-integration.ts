@@ -1,7 +1,6 @@
 import { readdirSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import type { HookParameters } from "astro";
-import { useHookParams } from "../internal/use-hook-params.js";
 
 const getFilesRecursively = (dir: string, baseDir = dir) => {
 	const files = readdirSync(dir);
@@ -25,19 +24,39 @@ const getFilesRecursively = (dir: string, baseDir = dir) => {
 	return filepaths;
 };
 
-type Params = {
-	addWatchFile: HookParameters<"astro:config:setup">["addWatchFile"];
-	command: HookParameters<"astro:config:setup">["command"];
-	dir: string;
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-};
-
-const _watchIntegration = ({
+/**
+ * In development, will reload the Astro dev server if any files within
+ * the integration directory has changed.
+ *
+ * @param {object} params
+ * @param {string} params.dir
+ * @param {import("astro").HookParameters<"astro:config:setup">["addWatchFile"]} params.addWatchFile
+ * @param {import("astro").HookParameters<"astro:config:setup">["command"]} params.command
+ * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
+ *
+ * @see https://astro-integration-kit.netlify.app/utilities/watch-integration/
+ *
+ * @example
+ * ```ts
+ * watchIntegration({
+ *    dir: resolve(),
+ *    addWatchFile,
+ *    command,
+ *    updateConfig,
+ * })
+ * ```
+ */
+export const watchIntegration = ({
 	addWatchFile,
 	command,
 	dir,
 	updateConfig,
-}: Params) => {
+}: {
+	addWatchFile: HookParameters<"astro:config:setup">["addWatchFile"];
+	command: HookParameters<"astro:config:setup">["command"];
+	dir: string;
+	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+}) => {
 	if (command !== "dev") {
 		return;
 	}
@@ -62,50 +81,4 @@ const _watchIntegration = ({
 			],
 		},
 	});
-};
-
-/**
- * In development, will reload the Astro dev server if any files within
- * the integration directory has changed. Must be called inside `astro:config:setup`.
- *
- * @param {string} dir - This is the directory you want to watch for changes
- *
- * @see https://astro-integration-kit.netlify.app/utilities/watch-integration/
- *
- * @example
- * ```ts
- * watchIntegration(resolve())
- * ```
- */
-export const watchIntegration = (dir: string) => {
-	const { addWatchFile, command, updateConfig } =
-		useHookParams("astro:config:setup");
-
-	_watchIntegration({ addWatchFile, command, dir, updateConfig });
-};
-
-/**
- * In development, will reload the Astro dev server if any files within
- * the integration directory has changed. Must be called inside `astro:config:setup`.
- *
- * @param {object} params
- * @param {string} params.dir
- * @param {import("astro").HookParameters<"astro:config:setup">["addWatchFile"]} params.addWatchFile
- * @param {import("astro").HookParameters<"astro:config:setup">["command"]} params.command
- * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
- *
- * @see https://astro-integration-kit.netlify.app/utilities/watch-integration/
- *
- * @example
- * ```ts
- * watchIntegration({
- *    dir: resolve(),
- *    addWatchFile,
- *    command,
- *    updateConfig,
- * })
- * ```
- */
-export const vanillaWatchIntegration = (params: Params) => {
-	_watchIntegration(params);
 };
