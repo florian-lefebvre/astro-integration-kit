@@ -3,8 +3,13 @@ import type { HookParameters } from "astro";
 /**
  * Checks whether an integration is already installed.
  *
+ * If `before` is given, returns true only if the integration is installed before that other integration.
+ * If `after` is given, returns true only if the integration is installed after that other integration.
+ *
  * @param {object} params
- * @param {string} params.name
+ * @param {string} params.name Integration to look up.
+ * @param {string} params.before Check if the named integration is installed before this.
+ * @param {string} params.after Check if the named integration is installed after this.
  * @param {config} params.config
  *
  * @returns {boolean}
@@ -21,91 +26,34 @@ import type { HookParameters } from "astro";
  */
 export const hasIntegration = ({
 	name,
+	before,
+	after,
 	config,
 }: {
 	name: string;
+	before?: string;
+	after?: string;
 	config: HookParameters<"astro:config:setup">["config"];
 }): boolean => {
-	return !!config.integrations.find((integration) => integration.name === name);
+	const integrationPosition = config.integrations.findIndex((integration) => integration.name === name);
+
+	// Integration is not installed
+	if (integrationPosition === -1) return false;
+
+	if (before !== undefined) {
+		const otherPosition = config.integrations.findIndex((integration) => integration.name === before);
+
+		// Integration is after the other, so it is not before.
+		if (otherPosition !== -1 && integrationPosition > otherPosition) return false;
+	}
+
+	if (after !== undefined) {
+		const otherPosition = config.integrations.findIndex((integration) => integration.name === after);
+
+		// Integration is before the other, so it is not after.
+		if (otherPosition !== -1 && integrationPosition > otherPosition) return false;
+	}
+
+	return true;
 };
-
-/**
- * Checks whether a target integration was installed before the current integration.
- *
- * @param {object} params
- * @param {string} params.current Integration doing the lookup.
- * @param {string} params.target Integration to find before current.
- * @param {config} params.config
- *
- * @returns {boolean}
- *
- * @see https://astro-integration-kit.netlify.app/utilities/has-integration/
- *
- * @example
- * ```ts
- *  hasPreviousIntegration({
- * 		current: "my-integration",
- * 		target: "@astrojs/tailwind",
- * 		config
- * 	})
- * ```
- */
-export const hasPreviousIntegration = ({
-	current,
-	target,
-	config,
-}: {
-	current: string;
-	target: string;
-	config: HookParameters<"astro:config:setup">["config"];
-}): boolean => {
-	const currentPosistion = config.integrations.findIndex((integration) => integration.name === current);
-
-	// If the current integration is not in the configuration, nothing comes before it.
-	if (currentPosistion) return false;
-
-	const targetPosition = config.integrations.findIndex((integration) => integration.name === target);
-
-	return targetPosition !== 1 && targetPosition < currentPosistion;
-}
-
-/**
- * Checks whether a target integration was installed after the current integration.
- *
- * @param {object} params
- * @param {string} params.current Integration doing the lookup.
- * @param {string} params.target Integration to find after current.
- * @param {config} params.config
- *
- * @returns {boolean}
- *
- * @see https://astro-integration-kit.netlify.app/utilities/has-integration/
- *
- * @example
- * ```ts
- *  hasPreviousIntegration({
- * 		current: "my-integration",
- * 		target: "@astrojs/tailwind",
- * 		config
- * 	})
- * ```
- */
-export const hasFollowingIntegration = ({
-	current,
-	target,
-	config,
-}: {
-	current: string;
-	target: string;
-	config: HookParameters<"astro:config:setup">["config"];
-}): boolean => {
-	const currentPosistion = config.integrations.findIndex((integration) => integration.name === current);
-
-	// If the current integration is not in the configuration, nothing comes after it.
-	if (currentPosistion) return false;
-
-	const targetPosition = config.integrations.findIndex((integration) => integration.name === target);
-
-	return targetPosition > currentPosistion;
-}
 

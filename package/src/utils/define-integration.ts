@@ -3,7 +3,7 @@ import { defu } from "defu";
 import type { ExtendedHooks } from "../types.js";
 import { addVirtualImport } from "../utils/add-virtual-import.js";
 import { addVitePlugin } from "../utils/add-vite-plugin.js";
-import { hasIntegration, hasPreviousIntegration, hasFollowingIntegration } from "./has-integration.js";
+import { hasIntegration } from "./has-integration.js";
 import { watchIntegration } from "./watch-integration.js";
 
 /**
@@ -62,12 +62,14 @@ export const defineIntegration = <
 						}),
 					addVitePlugin: (plugin) =>
 						addVitePlugin({ plugin, updateConfig: params.updateConfig }),
-					hasIntegration: (name) =>
-						hasIntegration({ name, config: params.config }),
-					hasPreviousIntegration: (target) =>
-						hasPreviousIntegration({ current: name, target, config: params.config }),
-					hasFollowingIntegration: (target) =>
-						hasFollowingIntegration({ current: name, target, config: params.config }),
+					hasIntegration: (other, { position } = {}) =>
+						hasIntegration({
+							name: other,
+							config: params.config,
+							...(!!position && {
+								[position]: name,
+							})
+						}),
 					watchIntegration: (dir) =>
 						watchIntegration({
 							command: params.command,

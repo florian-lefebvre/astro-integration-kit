@@ -57,18 +57,18 @@ For that use-case, there are two variants of this utility that checks an integra
 
 <Tabs>
     <TabItem label="Extended hooks">
-	```ts title="my-integration/index.ts" "hasPreviousIntegration" "hasFollowingIntegration"
+	```ts title="my-integration/index.ts" ins=/\{position: ".*"}/
 	import { defineIntegration } from "astro-integration-kit";
 
 	export default defineIntegration({
 		name: "my-integration",
 		setup() {
 			return {
-				"astro:config:setup": ({ hasPreviousIntegration, hasFollowingIntegration }) => {
-					if (hasPreviousIntegration("@astrojs/tailwind")) {
+				"astro:config:setup": ({ hasIntegration }) => {
+					if (hasIntegration("@astrojs/tailwind", {position: "before"})) {
 						console.warn("my-integration should be installed before tailwind to work correctly");
 					}
-					if (hasFollowingIntegration("astro-env")) {
+					if (hasIntegration("astro-env", {position: "after"})) {
 						console.warn("my-integration should be installed after astro-env to work correctly");
 					}
 				}
@@ -78,25 +78,25 @@ For that use-case, there are two variants of this utility that checks an integra
 	```
 	</TabItem>
 	<TabItem label="Standalone utilities">
-	```ts title="integration/index.ts" "hasPreviousIntegration" "hasFollowingIntegration"
+	```ts title="integration/index.ts" ins=/(?:before|after): .*,$/
 	import type { AstroIntegration } from "astro";
-	import { hasPreviousIntegration, hasFollowingIntegration } from "astro-integration-kit";
+	import { hasIntegration } from "astro-integration-kit";
 
 	export default function myIntegration(): AstroIntegration {
 		return {
 			name: "my-integration",
 			hooks: {
 				"astro:config:setup": ({ config }) => {
-					if (hasPreviousIntegration({
-						current: "my-integration",
-						target: "@astrojs/tailwind",
+					if (hasIntegration({
+						name: "@astrojs/tailwind",
+						before: "my-integration",
 						config,
 					})) {
 						console.warn("my-integration should be installed before tailwind to work correctly");
 					}
-					if (hasFollowingIntegration({
-						current: "my-integration",
-						target: "astro-env",
+					if (hasIntegration({
+						name: "astro-env",
+						after: "my-integration",
 						config,
 					})) {
 						console.warn("my-integration should be installed after astro-env to work correctly");
