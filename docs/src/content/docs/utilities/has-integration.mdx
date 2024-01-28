@@ -48,3 +48,55 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 	``` 
 	</TabItem>
 </Tabs>
+
+### Relative position check
+
+The `hasIntegration` utility checks whether an integration was installed, but sometimes two integrations must be installed in an specific order to work together correctly.
+
+For that use-case, there are two variants of this utility that checks an integration relative to the current integration. For example:
+
+<Tabs>
+    <TabItem label="Extended hooks">
+	```ts title="my-integration/index.ts" "hasIntegration"
+	import { defineIntegration } from "astro-integration-kit";
+
+	export default defineIntegration({
+		name: "my-integration",
+		setup() {
+			return {
+				"astro:config:setup": ({ hasPreviousIntegration }) => {
+					if (hasPreviousIntegration("@astrojs/tailwind")) {
+						console.warn("my-integration should be installed before tailwind to work correctly");
+					}
+				}
+			}
+		}
+	})
+	```
+	</TabItem>
+	<TabItem label="Standalone utilities">
+	```ts title="integration/index.ts" "hasIntegration"
+	import type { AstroIntegration } from "astro";
+	import { hasFollowingIntegration } from "astro-integration-kit";
+
+	export default function myIntegration(): AstroIntegration {
+		return {
+			name: "my-integration",
+			hooks: {
+				"astro:config:setup": ({ config }) => {
+					if (hasFollowingIntegration({
+                        current: "my-integration",
+						target: "@astrojs/tailwind",
+						config,
+					})) {
+						console.warn("my-integration should be installed after tailwind to work correctly");
+					}
+				},
+			}
+		}
+	}
+	``` 
+	</TabItem>
+</Tabs>
+
+
