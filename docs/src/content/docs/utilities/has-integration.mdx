@@ -57,16 +57,19 @@ For that use-case, there are two variants of this utility that checks an integra
 
 <Tabs>
     <TabItem label="Extended hooks">
-	```ts title="my-integration/index.ts" "hasIntegration"
+	```ts title="my-integration/index.ts" "hasPreviousIntegration" "hasFollowingIntegration"
 	import { defineIntegration } from "astro-integration-kit";
 
 	export default defineIntegration({
 		name: "my-integration",
 		setup() {
 			return {
-				"astro:config:setup": ({ hasPreviousIntegration }) => {
+				"astro:config:setup": ({ hasPreviousIntegration, hasFollowingIntegration }) => {
 					if (hasPreviousIntegration("@astrojs/tailwind")) {
 						console.warn("my-integration should be installed before tailwind to work correctly");
+					}
+					if (hasFollowingIntegration("astro-env")) {
+						console.warn("my-integration should be installed after astro-env to work correctly");
 					}
 				}
 			}
@@ -75,21 +78,28 @@ For that use-case, there are two variants of this utility that checks an integra
 	```
 	</TabItem>
 	<TabItem label="Standalone utilities">
-	```ts title="integration/index.ts" "hasIntegration"
+	```ts title="integration/index.ts" "hasPreviousIntegration" "hasFollowingIntegration"
 	import type { AstroIntegration } from "astro";
-	import { hasFollowingIntegration } from "astro-integration-kit";
+	import { hasPreviousIntegration, hasFollowingIntegration } from "astro-integration-kit";
 
 	export default function myIntegration(): AstroIntegration {
 		return {
 			name: "my-integration",
 			hooks: {
 				"astro:config:setup": ({ config }) => {
-					if (hasFollowingIntegration({
-                        current: "my-integration",
+					if (hasPreviousIntegration({
+						current: "my-integration",
 						target: "@astrojs/tailwind",
 						config,
 					})) {
-						console.warn("my-integration should be installed after tailwind to work correctly");
+						console.warn("my-integration should be installed before tailwind to work correctly");
+					}
+					if (hasFollowingIntegration({
+						current: "my-integration",
+						target: "astro-env",
+						config,
+					})) {
+						console.warn("my-integration should be installed after astro-env to work correctly");
 					}
 				},
 			}
