@@ -69,6 +69,36 @@ export interface ExtendedHooks {
 			 */
 			hasIntegration: (name: string) => boolean;
 			/**
+			 * Checks whether a target integration was installed before the current integration.
+			 *
+			 * @param {object} name Integration to find before current.
+			 *
+			 * @returns {boolean}
+			 *
+			 * @see https://astro-integration-kit.netlify.app/utilities/has-integration/
+			 *
+			 * @example
+			 * ```ts
+			 *  hasPreviousIntegration("@astrojs/tailwind")
+			 * ```
+			 */
+			hasPreviousIntegration: (name: string) => boolean;
+			/**
+			 * Checks whether a target integration was installed after the current integration.
+			 *
+			 * @param {object} name Integration to find after current.
+			 *
+			 * @returns {boolean}
+			 *
+			 * @see https://astro-integration-kit.netlify.app/utilities/has-integration/
+			 *
+			 * @example
+			 * ```ts
+			 *  hasPreviousIntegration("@astrojs/tailwind")
+			 * ```
+			 */
+			hasFollowingIntegration: (name: string) => boolean;
+			/**
 			 * In development, will reload the Astro dev server if any files within
 			 * the integration directory has changed.
 			 *
