@@ -1,8 +1,7 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { relative } from "node:path";
+import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AstroIntegrationLogger } from "astro";
-import { ensureDirExists } from "../internal/node.js";
 
 const injectEnvDTS = async ({
 	srcDir,
@@ -33,11 +32,11 @@ const injectEnvDTS = async ({
 	const newEnvDTsContents = envDTsContents
 		.replace(
 			`/// <reference types='astro/client' />`,
-			`/// <reference types='astro/client' />\n/// <reference types='${specifier}' />\n`,
+			`/// <reference types='astro/client' />\n/// <reference types='${specifier}' />`,
 		)
 		.replace(
 			`/// <reference types="astro/client" />`,
-			`/// <reference types="astro/client" />\n/// <reference types="${specifier}" />\n`,
+			`/// <reference types="astro/client" />\n/// <reference types="${specifier}" />`,
 		);
 
 	// the odd case where the user changed the reference to astro/client
@@ -95,6 +94,6 @@ export const addDts = async ({
 		specifier: dtsURL,
 	});
 
-	await ensureDirExists(filePath);
+	await mkdir(dirname(filePath), { recursive: true });
 	await writeFile(filePath, content, "utf-8");
 };
