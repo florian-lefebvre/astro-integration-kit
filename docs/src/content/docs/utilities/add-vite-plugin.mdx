@@ -8,16 +8,16 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 to the Astro config. For example:
 
 <Tabs>
-    <TabItem label="All-in">
-    ```ts title="my-integration/index.ts"
-    import { addVitePlugin, defineIntegration } from "astro-integration-kit";
+    <TabItem label="Extended hooks">
+    ```ts title="my-integration/index.ts" "addVitePlugin"
+    import { defineIntegration } from "astro-integration-kit";
     import { VitePWA } from 'vite-plugin-pwa'
 
     export default defineIntegration({
         name: "my-integration",
         setup(options) {
             return {
-                "astro:config:setup": () => {
+                "astro:config:setup": ({ addVitePlugin }) => {
                     addVitePlugin(VitePWA({ registerType: 'autoUpdate' }))
                 }
             }
@@ -25,10 +25,10 @@ to the Astro config. For example:
     })
     ```
     </TabItem>
-    <TabItem label="Vanilla">
-    ```ts title="integration/index.ts"
+    <TabItem label="Standalone utilities">
+    ```ts title="integration/index.ts" "addVitePlugin"
     import type { AstroIntegration } from "astro";
-    import { addVitePlugin } from "astro-integration-kit/vanilla";
+    import { addVitePlugin } from "astro-integration-kit";
     import { VitePWA } from 'vite-plugin-pwa'
 
     export default function myIntegration(): AstroIntegration {
