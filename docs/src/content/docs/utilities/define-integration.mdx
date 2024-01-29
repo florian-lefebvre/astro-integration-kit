@@ -42,8 +42,7 @@ The `defaults` configuration accepts the default values for your integration's o
 this is not runtime safe, it's good practice to check the types of your options inside `setup`.
 
 :::caution
-When writing your options types, be sure to be very explicit about them, specifically concerning
-optional properties. Make sure to specify `undefined` as a possible value:
+When typing optional properties within your `IntegrationOptions`, make sure to specify `undefined` as a possible value.
 
 ```ts "undefined"
 interface IntegrationOptions {
