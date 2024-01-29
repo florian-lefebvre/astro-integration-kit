@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import {
 	addVirtualImport,
 	createResolver,
@@ -17,7 +17,7 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 		console.log({ options, pluginPath });
 
 		return {
-			"astro:config:setup": async ({
+			"astro:config:setup": ({
 				updateConfig,
 				watchIntegration,
 				hasIntegration,
@@ -25,9 +25,9 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 			}) => {
 				watchIntegration(resolve());
 
-				await addDts({
+				addDts({
 					name: "test-integration",
-					content: await readFile(resolve("./virtual.d.ts"), "utf-8"),
+					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
 				addVirtualImport({

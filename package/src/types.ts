@@ -22,7 +22,7 @@ export interface ExtendedHooks {
 			 *
 			 * @see https://astro-integration-kit.netlify.app/utilities/add-dts/
 			 */
-			addDts: (params: { name: string; content: string }) => Promise<void>;
+			addDts: (params: { name: string; content: string }) => void;
 			/**
 			 * Creates a Vite virtual module and updates the Astro config.
 			 * Virtual imports are useful for passing things like config options, or data computed within the integration.

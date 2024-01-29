@@ -16,8 +16,8 @@ create a file inside `.astro` and reference it from `src/env.d.ts`. For example:
         name: "my-integration",
         setup(options) {
             return {
-                "astro:config:setup": async ({ addDts }) => {
-                    await addDts({
+                "astro:config:setup": ({ addDts }) => {
+                    addDts({
                         name: "my-integration",
                         content: `declare module "virtual:my-integration" {}`
                     })
@@ -36,8 +36,8 @@ create a file inside `.astro` and reference it from `src/env.d.ts`. For example:
         return {
             name: "my-integration",
             hooks: {
-                "astro:config:setup": async ({ config, logger }) => {
-                    await addDts({
+                "astro:config:setup": ({ config, logger }) => {
+                    addDts({
                         name: "my-integration",
                         content: `declare module "virtual:my-integration" {}`,
                         root: config.root,

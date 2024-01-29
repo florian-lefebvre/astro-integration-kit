@@ -1,9 +1,9 @@
-import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AstroIntegrationLogger } from "astro";
 
-const injectEnvDTS = async ({
+const injectEnvDTS = ({
 	srcDir,
 	logger,
 	specifier,
@@ -20,7 +20,7 @@ const injectEnvDTS = async ({
 		specifier = specifier.replaceAll("\\", "/");
 	}
 
-	const envDTsContents = await readFile(envDTsPath, "utf8");
+	const envDTsContents = readFileSync(envDTsPath, "utf8");
 
 	if (envDTsContents.includes(`/// <reference types='${specifier}' />`)) {
 		return;
@@ -44,7 +44,7 @@ const injectEnvDTS = async ({
 		return;
 	}
 
-	await writeFile(envDTsPath, newEnvDTsContents);
+	writeFileSync(envDTsPath, newEnvDTsContents);
 	logger.info("Updated env.d.ts types");
 };
 
@@ -72,7 +72,7 @@ const injectEnvDTS = async ({
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-dts/
  */
-export const addDts = async ({
+export const addDts = ({
 	name,
 	content,
 	root,
@@ -88,12 +88,12 @@ export const addDts = async ({
 	const dtsURL = new URL(`.astro/${name}.d.ts`, root);
 	const filePath = fileURLToPath(dtsURL);
 
-	await injectEnvDTS({
+	injectEnvDTS({
 		srcDir,
 		logger,
 		specifier: dtsURL,
 	});
 
-	await mkdir(dirname(filePath), { recursive: true });
-	await writeFile(filePath, content, "utf-8");
+	mkdirSync(dirname(filePath), { recursive: true });
+	writeFileSync(filePath, content, "utf-8");
 };
