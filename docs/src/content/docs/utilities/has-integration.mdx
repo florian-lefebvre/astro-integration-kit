@@ -15,9 +15,9 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 		name: "my-integration",
 		setup() {
 			return {
-				"astro:config:setup": ({ hasIntegration }) => {
+				"astro:config:setup": ({ hasIntegration, logger }) => {
 					if (hasIntegration("@astrojs/tailwind")) {
-						console.log("Tailwind is installed!");
+						logger.info("Tailwind is installed!");
 					}
 				}
 			}
@@ -26,7 +26,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 	```
 	</TabItem>
 	<TabItem label="Standalone utilities">
-	```ts title="integration/index.ts" "hasIntegration"
+	```ts title="my-integration/index.ts" "hasIntegration"
 	import type { AstroIntegration } from "astro";
 	import { hasIntegration } from "astro-integration-kit";
 
@@ -34,12 +34,12 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 		return {
 			name: "my-integration",
 			hooks: {
-				"astro:config:setup": ({ config }) => {
+				"astro:config:setup": ({ config, logger }) => {
 					if (hasIntegration({
 						name: "@astrojs/tailwind",
 						config,
 					})) {
-						console.log("Tailwind is installed!")
+						logger.info("Tailwind is installed!")
 					}
 				},
 			}
@@ -78,7 +78,7 @@ For that use-case, this utility accepts an optional parameter `position` that ca
 	```
 	</TabItem>
 	<TabItem label="Standalone utilities">
-	```ts title="integration/index.ts" ins=/(?:before|after): .*,$/
+	```ts title="my-integration/index.ts" ins=/(?:before|after): .*,$/
 	import type { AstroIntegration } from "astro";
 	import { hasIntegration } from "astro-integration-kit";
 
