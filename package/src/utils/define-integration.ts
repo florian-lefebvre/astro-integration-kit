@@ -72,6 +72,7 @@ export const defineIntegration = <
 					hasIntegration: (_name: string, position?: "before" | "after", relativeTo?: string) =>
 						hasIntegration({
 							name: _name,
+							// When `relativeTo` is not set get positions relative the current integration.
 							relativeTo: relativeTo ?? name,
 							position,
 							config: params.config,
