@@ -89,14 +89,16 @@ For that use-case, this utility accepts an optional parameter `position` that ca
 				"astro:config:setup": ({ config, logger }) => {
 					if (hasIntegration({
 						name: "@astrojs/tailwind",
-						before: "my-integration",
+						position: "before",
+						relativeTo: "my-integration",
 						config,
 					})) {
 						logger.warn("my-integration should be installed before tailwind to work correctly");
 					}
 					if (hasIntegration({
 						name: "astro-env",
-						after: "my-integration",
+						position: "after",
+						relativeTo: "my-integration",
 						config,
 					})) {
 						logger.warn("my-integration should be installed after astro-env to work correctly");
