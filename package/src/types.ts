@@ -54,10 +54,9 @@ export interface ExtendedHooks {
 			/**
 			 * Checks whether an integration is already installed.
 			 *
-			 * @param {object} params
 			 * @param {string} params.name Name of the integration to look up.
 			 * @param {config} params.options
-			 * @param {config} params.options.position Position in relation to the current integration to check.
+			 * @param {undefined | "before" | "after"} options.position - Position in relation to the current integration to check.
 			 *
 			 * @returns {boolean}
 			 *
@@ -69,7 +68,7 @@ export interface ExtendedHooks {
 			 * ```
 			 */
 			hasIntegration: (name: string, options?: {
-				position?: 'before' | 'after',
+				position?: "before" | "after",
 			}) => boolean;
 			/**
 			 * In development, will reload the Astro dev server if any files within

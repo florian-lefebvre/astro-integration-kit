@@ -3,8 +3,8 @@ import type { HookParameters } from "astro";
 /**
  * Checks whether an integration is already installed.
  *
- * If `before` is given, returns true only if the integration is installed before that other integration.
- * If `after` is given, returns true only if the integration is installed after that other integration.
+ * If `before` is given, returns true only if the integration is installed before the named|provided integration.
+ * If `after` is given, returns true only if the integration is installed after the named|provided integration.
  *
  * @param {object} params
  * @param {string} params.name Integration to look up.
