@@ -39,6 +39,22 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 				if (hasIntegration("@astrojs/tailwind")) {
 					console.log("Tailwind is installed");
 				}
+
+				if (hasIntegration("@astrojs/tailwind", "before")) {
+					console.log("Tailwind is installed before this");
+				}
+
+				if (hasIntegration("integration-a", "after")) {
+					console.log("Integration A is installed after this");
+				}
+
+				if (hasIntegration("integration-a", "before", "integration-b")) {
+					console.log("Integration A is installed before Integration B");
+				}
+
+				if (hasIntegration("integration-b", "after", "integration-a")) {
+					console.log("Integration B is installed after Integration A");
+				}
 			},
 		};
 	},

@@ -57,7 +57,7 @@ For that use-case, this utility accepts an optional parameter `position` that ca
 
 <Tabs>
     <TabItem label="Extended hooks">
-	```ts title="my-integration/index.ts" ins=/\{position: ".*"}/
+	```ts title="my-integration/index.ts" ins=/"(?:before|after)"(?:, ".*"\\))?/
 	import { defineIntegration } from "astro-integration-kit";
 
 	export default defineIntegration({
@@ -65,11 +65,17 @@ For that use-case, this utility accepts an optional parameter `position` that ca
 		setup() {
 			return {
 				"astro:config:setup": ({ hasIntegration, logger }) => {
-					if (hasIntegration("@astrojs/tailwind", {position: "before"})) {
-						logger.warn("my-integration should be installed before tailwind to work correctly");
+					if (hasIntegration("@astrojs/tailwind", "before")) {
+						logger.info("Tailwind is installed before my-integration");
 					}
-					if (hasIntegration("astro-env", {position: "after"})) {
-						logger.warn("my-integration should be installed after astro-env to work correctly");
+					if (hasIntegration("astro-env", "after")) {
+						logger.info("AstroEnv is installed after my-integration");
+					}
+					if (hasIntegration("astro-expressive-code", "before", "@astrojs/mdx")) {
+						logger.info("Expressice Code is installed before MDX");
+					}
+					if (hasIntegration("astro-expressive-code", "after", "@astrojs/tailwind")) {
+						logger.info("Expressice Code is installed after Tailwind");
 					}
 				}
 			}
@@ -78,7 +84,7 @@ For that use-case, this utility accepts an optional parameter `position` that ca
 	```
 	</TabItem>
 	<TabItem label="Standalone utilities">
-	```ts title="my-integration/index.ts" ins=/(?:before|after): .*,$/
+	```ts title="my-integration/index.ts" ins=/position: .*,$/ ins=/relativeTo: .*,$/
 	import type { AstroIntegration } from "astro";
 	import { hasIntegration } from "astro-integration-kit";
 

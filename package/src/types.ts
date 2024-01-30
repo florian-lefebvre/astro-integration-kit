@@ -74,7 +74,8 @@ export interface ExtendedHooks {
 			 * Checks whether an integration is already installed.
 			 *
 			 * @param {string} name - Name of the integration to look up.
-			 * @param {undefined | "before" | "after"} options.position - Position in relation to the current integration to check.
+			 * @param {undefined | "before" | "after"} position - Position in relation to the current integration to check.
+			 * @param {undefined | string} relativeTo - What integration to check the position against. Defaults to the calling integration.
 			 *
 			 * @returns {boolean}
 			 *
@@ -85,9 +86,11 @@ export interface ExtendedHooks {
 			 *  hasIntegration("@astrojs/tailwind")
 			 * ```
 			 */
-			hasIntegration: (name: string, options?: {
-				position?: "before" | "after",
-			}) => boolean;
+			hasIntegration: (...params: (
+				| [name: string]
+				| [name: string, position: "before" | "after"]
+				| [name: string, position: "before" | "after", relativeTo: string]
+			)) => boolean;
 			/**
 			 * In development, will reload the Astro dev server if any files within
 			 * the integration directory has changed.
