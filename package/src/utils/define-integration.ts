@@ -69,9 +69,9 @@ export const defineIntegration = <
 						}),
 					addVitePlugin: (plugin) =>
 						addVitePlugin({ plugin, updateConfig: params.updateConfig }),
-					hasIntegration: (other: string, position?: "before" | "after", relativeTo?: string) =>
+					hasIntegration: (_name: string, position?: "before" | "after", relativeTo?: string) =>
 						hasIntegration({
-							name: other,
+							name: _name,
 							relativeTo: relativeTo ?? name,
 							position,
 							config: params.config,
