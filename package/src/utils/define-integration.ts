@@ -3,6 +3,7 @@ import { defu } from "defu";
 import type { ExtendedHooks } from "../types.js";
 import { addVirtualImport } from "../utils/add-virtual-import.js";
 import { addVitePlugin } from "../utils/add-vite-plugin.js";
+import { addDts } from "./add-dts.js";
 import { hasIntegration } from "./has-integration.js";
 import { watchIntegration } from "./watch-integration.js";
 
@@ -37,9 +38,7 @@ export const defineIntegration = <
 	setup,
 }: {
 	name: string;
-	defaults: {
-		[Property in keyof TOptions]-?: TOptions[Property];
-	};
+	defaults?: Required<TOptions>;
 	setup: (params: {
 		name: string;
 		options: TOptions;
@@ -54,6 +53,14 @@ export const defineIntegration = <
 			"astro:config:setup": (params) => {
 				return providedHooks["astro:config:setup"]?.({
 					...params,
+					addDts: ({ name, content }) =>
+						addDts({
+							name,
+							content,
+							logger: params.logger,
+							root: params.config.root,
+							srcDir: params.config.srcDir,
+						}),
 					addVirtualImport: ({ name, content }) =>
 						addVirtualImport({
 							name,

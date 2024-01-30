@@ -5,6 +5,25 @@ export interface ExtendedHooks {
 		Hooks["astro:config:setup"],
 		{
 			/**
+			 * Allows to inject .d.ts file in users project. It will create a file inside `.astro`
+			 * and reference it from `src/env.d.ts`.
+			 *
+			 * @param {object} params
+			 * @param {string} params.name - The name of the .d.ts file. Eg `test` will generate `.astro/test.d.ts`
+			 * @param {string} params.content
+			 *
+			 * @example
+			 * ```ts
+			 * addDts({
+			 * 	 name: "my-integration",
+			 * 	 content: `declare module "virtual:my-integration" {}`
+			 * })
+			 * ```
+			 *
+			 * @see https://astro-integration-kit.netlify.app/utilities/add-dts/
+			 */
+			addDts: (params: { name: string; content: string }) => void;
+			/**
 			 * Creates a Vite virtual module and updates the Astro config.
 			 * Virtual imports are useful for passing things like config options, or data computed within the integration.
 			 *
