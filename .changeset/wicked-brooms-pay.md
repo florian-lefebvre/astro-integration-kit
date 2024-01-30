@@ -9,5 +9,8 @@ Updates the `hasIntegration` utility to support relative position check
 ```ts
 hasIntegration("@astrojs/tailwind", {
 	position: "before" // "after"
-})
+});
+```
+
+Note that it is undefined by default and will just check for the presence of the integration, no matter its position.
 

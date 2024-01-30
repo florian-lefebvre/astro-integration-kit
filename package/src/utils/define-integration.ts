@@ -72,10 +72,9 @@ export const defineIntegration = <
 					hasIntegration: (other, { position } = {}) =>
 						hasIntegration({
 							name: other,
+							relativeTo: name,
+							position,
 							config: params.config,
-							...(!!position && {
-								[position]: name,
-							})
 						}),
 					watchIntegration: (dir) =>
 						watchIntegration({

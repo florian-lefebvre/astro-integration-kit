@@ -73,8 +73,7 @@ export interface ExtendedHooks {
 			/**
 			 * Checks whether an integration is already installed.
 			 *
-			 * @param {string} params.name Name of the integration to look up.
-			 * @param {config} params.options
+			 * @param {string} name - Name of the integration to look up.
 			 * @param {undefined | "before" | "after"} options.position - Position in relation to the current integration to check.
 			 *
 			 * @returns {boolean}

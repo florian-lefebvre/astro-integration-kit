@@ -1,4 +1,15 @@
 import type { HookParameters } from "astro";
+import { AstroError } from "astro/errors";
+
+type HasIntegrationParams =
+	& (
+		| { position?: undefined, relativeTo?: string }
+		| { position: "before" | "after", relativeTo: string }
+	)
+	& {
+		name: string;
+		config: HookParameters<"astro:config:setup">["config"];
+	}
 
 /**
  * Checks whether an integration is already installed.
@@ -7,12 +18,14 @@ import type { HookParameters } from "astro";
  * If `after` is given, returns true only if the integration is installed after the named|provided integration.
  *
  * @param {object} params
- * @param {string} params.name Integration to look up.
- * @param {string} params.before Check if the named integration is installed before this.
- * @param {string} params.after Check if the named integration is installed after this.
+ * @param {string} params.name - Integration to look up.
+ * @param {undefined | "before" | "after"} params.position - Position in relation to another integration to check.
+ * @param {undefined | string} params.relativeTo - Other integration to check for relative poisition.
  * @param {config} params.config
  *
  * @returns {boolean}
+ *
+ * @throws {AstroError} When `params.position` is defined but `params.relativeTo` isn't.
  *
  * @see https://astro-integration-kit.netlify.app/utilities/has-integration/
  *
@@ -26,34 +39,29 @@ import type { HookParameters } from "astro";
  */
 export const hasIntegration = ({
 	name,
-	before,
-	after,
+	position,
+	relativeTo,
 	config,
-}: {
-	name: string;
-	before?: string;
-	after?: string;
-	config: HookParameters<"astro:config:setup">["config"];
-}): boolean => {
+}: HasIntegrationParams): boolean => {
 	const integrationPosition = config.integrations.findIndex((integration) => integration.name === name);
 
 	// Integration is not installed
 	if (integrationPosition === -1) return false;
 
-	if (before !== undefined) {
-		const otherPosition = config.integrations.findIndex((integration) => integration.name === before);
+	// Not a relative check, the integration is present.
+	if (position === undefined) return true;
 
-		// Integration is after the other, so it is not before.
-		if (otherPosition !== -1 && integrationPosition > otherPosition) return false;
-	}
+	if (relativeTo === undefined) throw new AstroError(
+		'Cannot perform a relative integration check without a relative reference.',
+		'Pass `relativeTo` on your call to `hasIntegration` or remove the `position` option.',
+	);
 
-	if (after !== undefined) {
-		const otherPosition = config.integrations.findIndex((integration) => integration.name === after);
+	const otherPosition = config.integrations.findIndex((integration) => integration.name === relativeTo);
 
-		// Integration is before the other, so it is not after.
-		if (otherPosition !== -1 && integrationPosition > otherPosition) return false;
-	}
+	if (otherPosition === -1) throw new AstroError('Cannot check relative position against an absent integration.');
 
-	return true;
+	return position === "before"
+		? integrationPosition < otherPosition
+		: integrationPosition > otherPosition;
 };
 
