@@ -86,11 +86,12 @@ export interface ExtendedHooks {
 			 *  hasIntegration("@astrojs/tailwind")
 			 * ```
 			 */
-			hasIntegration: (...params: (
-				| [name: string]
-				| [name: string, position: "before" | "after"]
-				| [name: string, position: "before" | "after", relativeTo: string]
-			)) => boolean;
+			hasIntegration: (
+				...params:
+					| [name: string]
+					| [name: string, position: "before" | "after"]
+					| [name: string, position: "before" | "after", relativeTo: string]
+			) => boolean;
 			/**
 			 * In development, will reload the Astro dev server if any files within
 			 * the integration directory has changed.

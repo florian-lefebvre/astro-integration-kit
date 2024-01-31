@@ -1,15 +1,13 @@
 import type { HookParameters } from "astro";
 import { AstroError } from "astro/errors";
 
-type HasIntegrationParams =
-	& (
-		| { position?: undefined, relativeTo?: string }
-		| { position: "before" | "after", relativeTo: string }
-	)
-	& {
-		name: string;
-		config: HookParameters<"astro:config:setup">["config"];
-	}
+type HasIntegrationParams = (
+	| { position?: undefined; relativeTo?: string }
+	| { position: "before" | "after"; relativeTo: string }
+) & {
+	name: string;
+	config: HookParameters<"astro:config:setup">["config"];
+};
 
 /**
  * Checks whether an integration is already installed.
@@ -43,7 +41,9 @@ export const hasIntegration = ({
 	relativeTo,
 	config,
 }: HasIntegrationParams): boolean => {
-	const integrationPosition = config.integrations.findIndex((integration) => integration.name === name);
+	const integrationPosition = config.integrations.findIndex(
+		(integration) => integration.name === name,
+	);
 
 	// Integration is not installed
 	if (integrationPosition === -1) return false;
@@ -51,17 +51,22 @@ export const hasIntegration = ({
 	// Not a relative check, the integration is present.
 	if (position === undefined) return true;
 
-	if (relativeTo === undefined) throw new AstroError(
-		'Cannot perform a relative integration check without a relative reference.',
-		'Pass `relativeTo` on your call to `hasIntegration` or remove the `position` option.',
+	if (relativeTo === undefined)
+		throw new AstroError(
+			"Cannot perform a relative integration check without a relative reference.",
+			"Pass `relativeTo` on your call to `hasIntegration` or remove the `position` option.",
+		);
+
+	const otherPosition = config.integrations.findIndex(
+		(integration) => integration.name === relativeTo,
 	);
 
-	const otherPosition = config.integrations.findIndex((integration) => integration.name === relativeTo);
-
-	if (otherPosition === -1) throw new AstroError('Cannot check relative position against an absent integration.');
+	if (otherPosition === -1)
+		throw new AstroError(
+			"Cannot check relative position against an absent integration.",
+		);
 
 	return position === "before"
 		? integrationPosition < otherPosition
 		: integrationPosition > otherPosition;
 };
-

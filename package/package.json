@@ -23,7 +23,7 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"build": "tsc && vite build"
+		"test": "vitest"
 	},
 	"type": "module",
 	"peerDependencies": {
@@ -32,7 +32,8 @@
 	"devDependencies": {
 		"@types/node": "^20.11.0",
 		"typescript": "^5.3.3",
-		"vite": "^5.0.11"
+		"vite": "^5.0.11",
+		"vitest": "^1.2.1"
 	},
 	"dependencies": {
 		"defu": "^6.1.4",

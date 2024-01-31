@@ -25,6 +25,14 @@ Start the playground:
 pnpm playground:dev
 ```
 
+Testing is using Vitest and all tests are co-located with the module they are testing.
+
+To run all the tests:
+
+```bash
+pnpm test
+```
+
 You can now edit files in `package`. Please note that making changes to those files may require restarting the playground dev server.
 
 ## Licensing
