@@ -98,9 +98,8 @@ describe("defineIntegration", () => {
 
 		defineIntegration({
 			name,
-			defaults,
 			setup,
-		})({});
+		})();
 
 		const callArgs = setup.mock.lastCall?.[0];
 
@@ -141,7 +140,7 @@ describe("defineIntegration", () => {
 		const integration = defineIntegration({
 			name,
 			setup,
-		})({});
+		})();
 
 		expect(integration.name).toBe(name);
 	});
@@ -167,7 +166,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
-				})({});
+				})();
 
 				const params = astroConfigSetupParamsStub();
 
@@ -197,7 +196,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
-				})({});
+				})();
 
 				const params = astroConfigSetupParamsStub();
 
@@ -229,7 +228,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
-				})({});
+				})();
 
 				const params = astroConfigSetupParamsStub();
 
@@ -260,7 +259,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
-				})({});
+				})();
 
 				const params = astroConfigSetupParamsStub();
 
@@ -291,7 +290,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
-				})({});
+				})();
 
 				const params = astroConfigSetupParamsStub();
 
@@ -320,7 +319,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
-				})({});
+				})();
 
 				const params = astroConfigSetupParamsStub();
 
@@ -348,7 +347,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
-				})({});
+				})();
 
 				const params = astroConfigSetupParamsStub();
 
