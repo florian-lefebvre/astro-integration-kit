@@ -63,7 +63,7 @@ Checking for the presence of an integration in relation to an uninstalled integr
 	With extended hooks, `hasIntegration` can receive the position and relative reference as optional positional parameters.
 	If a relative reference is not given the result will be relative to the current integration being defined.
 
-	```ts title="my-integration/index.ts" ins=/"(?:before|after)"(?:, ".*"\\))?/
+	```ts title="my-integration/index.ts" /hasIntegration\\(.*?\\)/
 	import { defineIntegration } from "astro-integration-kit";
 
 	export default defineIntegration({
@@ -94,7 +94,7 @@ Checking for the presence of an integration in relation to an uninstalled integr
 	As a standalone utility `hasIntegration` can receive the position and relative reference as optional fields in its parameter.
 	When a position is given, a relative reference must also be given, otherwise the utility will throw an error.
 
-	```ts title="my-integration/index.ts" ins=/position: .*,$/ ins=/relativeTo: .*,$/
+	```ts title="my-integration/index.ts" {9-14,17-22}
 	import type { AstroIntegration } from "astro";
 	import { hasIntegration } from "astro-integration-kit";
 
