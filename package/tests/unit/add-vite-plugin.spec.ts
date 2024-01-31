@@ -1,63 +1,69 @@
+import type { Plugin } from "vite";
 import { describe, expect, test, vi } from "vitest";
-import type { Plugin } from 'vite';
-import { addVitePlugin } from '../../src/utils/add-vite-plugin.js';
+import { addVitePlugin } from "../../src/utils/add-vite-plugin.js";
 
 describe("addVitePlugin", () => {
-    test("Should run", () => {
-        const updateConfig = vi.fn()
+	test("Should run", () => {
+		const updateConfig = vi.fn();
 
-        expect(() => addVitePlugin({
-            plugin: null,
-            updateConfig,
-        })).not.toThrow()
-    });
+		expect(() =>
+			addVitePlugin({
+				plugin: null,
+				updateConfig,
+			}),
+		).not.toThrow();
+	});
 
-    test("Should call updateConfig", () => {
-        const updateConfig = vi.fn()
+	test("Should call updateConfig", () => {
+		const updateConfig = vi.fn();
 
-        addVitePlugin({
-            plugin: null,
-            updateConfig,
-        })
+		addVitePlugin({
+			plugin: null,
+			updateConfig,
+		});
 
-        expect(updateConfig).toHaveBeenCalled()
-    });
+		expect(updateConfig).toHaveBeenCalled();
+	});
 
-    test("Should add vite plugin", () => {
-        let plugin: Plugin;
-        const pluginName = 'test-plugin'
+	test("Should add vite plugin", () => {
+		let plugin: Plugin;
+		const pluginName = "test-plugin";
 
-        const updateConfig = vi.fn(config => plugin = config.vite.plugins[0])
+		const updateConfig = vi.fn((config) => {
+			plugin = config.vite.plugins[0];
+		});
 
-        const expectedPlugin = {
-            name: pluginName,
-        }
+		const expectedPlugin = {
+			name: pluginName,
+		};
 
-        addVitePlugin({
-            plugin: expectedPlugin,
-            updateConfig,
-        })
+		addVitePlugin({
+			plugin: expectedPlugin,
+			updateConfig,
+		});
 
-        // @ts-ignore
-        expect(plugin).toBeDefined()
-    });
+		// @ts-ignore
+		expect(plugin).toBeDefined();
+	});
 
-    test("Plugin name should match", () => {
-        let plugin: Plugin;
-        const pluginName = 'test-plugin'
+	test("Plugin name should match", () => {
+		let plugin: Plugin;
+		const pluginName = "test-plugin";
 
-        const updateConfig = vi.fn(config => plugin = config.vite.plugins[0])
+		const updateConfig = vi.fn((config) => {
+			plugin = config.vite.plugins[0];
+		});
 
-        const expectedPlugin = {
-            name: pluginName,
-        }
+		const expectedPlugin = {
+			name: pluginName,
+		};
 
-        addVitePlugin({
-            plugin: expectedPlugin,
-            updateConfig,
-        })
+		addVitePlugin({
+			plugin: expectedPlugin,
+			updateConfig,
+		});
 
-        // @ts-ignore
-        expect(plugin.name).toBe(pluginName)
-    });
+		// @ts-ignore
+		expect(plugin.name).toBe(pluginName);
+	});
 });

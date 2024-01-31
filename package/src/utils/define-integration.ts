@@ -1,9 +1,9 @@
 import type { AstroIntegration } from "astro";
 import { defu } from "defu";
 import type { ExtendedHooks } from "../types.js";
+import { addDts } from "./add-dts.js";
 import { addVirtualImport } from "./add-virtual-import.js";
 import { addVitePlugin } from "./add-vite-plugin.js";
-import { addDts } from "./add-dts.js";
 import { hasIntegration } from "./has-integration.js";
 import { watchIntegration } from "./watch-integration.js";
 
@@ -69,7 +69,11 @@ export const defineIntegration = <
 						}),
 					addVitePlugin: (plugin) =>
 						addVitePlugin({ plugin, updateConfig: params.updateConfig }),
-					hasIntegration: (_name: string, position?: "before" | "after", relativeTo?: string) =>
+					hasIntegration: (
+						_name: string,
+						position?: "before" | "after",
+						relativeTo?: string,
+					) =>
 						hasIntegration({
 							name: _name,
 							// When `relativeTo` is not set get positions relative the current integration.

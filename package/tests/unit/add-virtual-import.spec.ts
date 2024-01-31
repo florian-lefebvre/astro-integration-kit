@@ -1,10 +1,11 @@
-import { afterEach, type Mock, describe, expect, test, vi } from "vitest";
+import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
 import { addVirtualImport } from "../../src/utils/add-virtual-import.js";
 import { addVitePlugin } from "../../src/utils/add-vite-plugin.js";
 
-vi.mock('../../src/utils/add-vite-plugin.js')
+vi.mock("../../src/utils/add-vite-plugin.js");
 
-const pluginNameStub = <T extends string>(name: T): `vite-plugin-${T}` => `vite-plugin-${name}`
+const pluginNameStub = <T extends string>(name: T): `vite-plugin-${T}` =>
+	`vite-plugin-${name}`;
 
 describe("add-virtual-import", () => {
 	const name = "test-module";
@@ -35,9 +36,9 @@ describe("add-virtual-import", () => {
 			updateConfig,
 		});
 
-		const expectedName = pluginNameStub(name)
-		
-		const { plugin } = (addVitePlugin as Mock).mock.lastCall[0]
+		const expectedName = pluginNameStub(name);
+
+		const { plugin } = (addVitePlugin as Mock).mock.lastCall[0];
 
 		expect(plugin.name).toEqual(expectedName);
 	});
@@ -50,11 +51,11 @@ describe("add-virtual-import", () => {
 			content,
 			updateConfig,
 		});
-		
-		const { plugin } = (addVitePlugin as Mock).mock.lastCall[0]
 
-		const resolvedVirtualModuleId = plugin.resolveId(name)
+		const { plugin } = (addVitePlugin as Mock).mock.lastCall[0];
 
-		expect(resolvedVirtualModuleId).toEqual(`\0${ name }`);
+		const resolvedVirtualModuleId = plugin.resolveId(name);
+
+		expect(resolvedVirtualModuleId).toEqual(`\0${name}`);
 	});
 });

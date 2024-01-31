@@ -1,6 +1,6 @@
 import { readdirSync, statSync } from "node:fs";
-import { join, relative, resolve } from "pathe";
 import type { HookParameters } from "astro";
+import { join, relative, resolve } from "pathe";
 
 const getFilesRecursively = (dir: string, baseDir = dir) => {
 	const files = readdirSync(dir);

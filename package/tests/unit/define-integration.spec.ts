@@ -1,353 +1,363 @@
-import { describe, expect, test, vi, afterEach, type Mock } from "vitest";
-import type { AstroIntegrationLogger, HookParameters } from "astro";
-import { defineIntegration } from '../../src/utils/define-integration.js';
-import type { ExtendedHooks } from '../../src/types.js';
+import type {
+	AstroConfig,
+	AstroIntegrationLogger,
+	HookParameters,
+} from "astro";
+import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
+import type { ExtendedHooks } from "../../src/types.js";
+import { defineIntegration } from "../../src/utils/define-integration.js";
 
-import { addVirtualImport as  mockAddVirtualImport } from "../../src/utils/add-virtual-import.js";
-import { addVitePlugin as mockAddVitePlugin } from "../../src/utils/add-vite-plugin.js";
 import { addDts as mockAddDts } from "../../src/utils/add-dts.js";
+import { addVirtualImport as mockAddVirtualImport } from "../../src/utils/add-virtual-import.js";
+import { addVitePlugin as mockAddVitePlugin } from "../../src/utils/add-vite-plugin.js";
 import { hasIntegration as mockHasIntegration } from "../../src/utils/has-integration.js";
 import { watchIntegration as mockWatchIntegration } from "../../src/utils/watch-integration.js";
 
-vi.mock("../../src/utils/add-virtual-import.js")
-vi.mock("../../src/utils/add-vite-plugin.js")
-vi.mock("../../src/utils/add-dts.js")
-vi.mock("../../src/utils/has-integration.js")
-vi.mock("../../src/utils/watch-integration.js")
+vi.mock("../../src/utils/add-virtual-import.js");
+vi.mock("../../src/utils/add-vite-plugin.js");
+vi.mock("../../src/utils/add-dts.js");
+vi.mock("../../src/utils/has-integration.js");
+vi.mock("../../src/utils/watch-integration.js");
 
-const astroConfigSetupParamsStub = (params?: HookParameters<"astro:config:setup">): HookParameters<"astro:config:setup"> => ({
-    logger: vi.fn() as unknown as AstroIntegrationLogger,
-    addClientDirective: vi.fn(),
-    addDevToolbarApp: vi.fn(),
-    addMiddleware: vi.fn(),
-    addRenderer: vi.fn(),
-    addWatchFile: vi.fn(),
-    command: "dev",
-    injectRoute: vi.fn(),
-    injectScript: vi.fn(),
-    isRestart: false,
-    updateConfig: vi.fn(),
-    addDevOverlayPlugin: vi.fn(),
-    config: {} as unknown as any,
-    ...(params || {}),
-})
+const astroConfigSetupParamsStub = (
+	params?: HookParameters<"astro:config:setup">,
+): HookParameters<"astro:config:setup"> => ({
+	logger: vi.fn() as unknown as AstroIntegrationLogger,
+	addClientDirective: vi.fn(),
+	addDevToolbarApp: vi.fn(),
+	addMiddleware: vi.fn(),
+	addRenderer: vi.fn(),
+	addWatchFile: vi.fn(),
+	command: "dev",
+	injectRoute: vi.fn(),
+	injectScript: vi.fn(),
+	isRestart: false,
+	updateConfig: vi.fn(),
+	addDevOverlayPlugin: vi.fn(),
+	config: {} as unknown as AstroConfig,
+	...(params || {}),
+});
 
 describe("defineIntegration", () => {
-    afterEach(() => {
-        vi.resetAllMocks()
-    });
+	afterEach(() => {
+		vi.resetAllMocks();
+	});
 
-    test("Should run", () => {
-        const name = 'my-integration';
-        const setup = () => ({} as ExtendedHooks)
+	test("Should run", () => {
+		const name = "my-integration";
+		const setup = () => ({}) as ExtendedHooks;
 
-        expect(() => defineIntegration({
-            name,
-            setup,
-        })).not.toThrow()
-    })
+		expect(() =>
+			defineIntegration({
+				name,
+				setup,
+			}),
+		).not.toThrow();
+	});
 
-    test("Setup should get called", () => {
-        const name = 'my-integration';
-        const defaults = {foo: 'bar'};
-        const setup = vi.fn(() => {
-            return {} as ExtendedHooks;
-        })
+	test("Setup should get called", () => {
+		const name = "my-integration";
+		const defaults = { foo: "bar" };
+		const setup = vi.fn(() => {
+			return {} as ExtendedHooks;
+		});
 
-        defineIntegration({
-            name,
-            defaults,
-            setup,
-        })({...defaults});
+		defineIntegration({
+			name,
+			defaults,
+			setup,
+		})({ ...defaults });
 
-        expect(setup).toBeCalled();
-    });
+		expect(setup).toBeCalled();
+	});
 
-    test("Setup should get called with correct name", () => {
-        const name = 'my-integration';
-        const defaults = {foo: 'bar'};
-        const setup = vi.fn(() => {
-            return {} as ExtendedHooks;
-        })
+	test("Setup should get called with correct name", () => {
+		const name = "my-integration";
+		const defaults = { foo: "bar" };
+		const setup = vi.fn(() => {
+			return {} as ExtendedHooks;
+		});
 
-        defineIntegration({
-            name,
-            defaults,
-            setup,
-        })({...defaults});
+		defineIntegration({
+			name,
+			defaults,
+			setup,
+		})({ ...defaults });
 
-        const callArgs = setup.mock.lastCall?.[0];
+		const callArgs = setup.mock.lastCall?.[0];
 
-        expect(callArgs?.name).toBe(name); 
-    });
+		expect(callArgs?.name).toBe(name);
+	});
 
-    test("Setup should get called with default args", () => {
-        const name = 'my-integration';
-        const defaults = {foo: 'bar'};
-        const setup = vi.fn(() => {
-            return {} as ExtendedHooks;
-        })
+	test("Setup should get called with default args", () => {
+		const name = "my-integration";
+		const defaults = { foo: "bar" };
+		const setup = vi.fn(() => {
+			return {} as ExtendedHooks;
+		});
 
-        defineIntegration({
-            name,
-            defaults,
-            setup,
-        })({});
+		defineIntegration({
+			name,
+			defaults,
+			setup,
+		})({});
 
-        const callArgs = setup.mock.lastCall?.[0];
+		const callArgs = setup.mock.lastCall?.[0];
 
-        expect(callArgs?.options).toEqual(defaults); 
-    });
+		expect(callArgs?.options).toEqual(defaults);
+	});
 
-    test("Setup should get called with overwritten args", () => {
-        const name = 'my-integration';
-        const defaults = {foo: 'bar'};
-        const setup = vi.fn(() => {
-            return {} as ExtendedHooks;
-        })
+	test("Setup should get called with overwritten args", () => {
+		const name = "my-integration";
+		const defaults = { foo: "bar" };
+		const setup = vi.fn(() => {
+			return {} as ExtendedHooks;
+		});
 
-        const expectedOptions = {
-            ...defaults,
-            foo: 'baz',
-        }
+		const expectedOptions = {
+			...defaults,
+			foo: "baz",
+		};
 
-        defineIntegration({
-            name,
-            defaults,
-            setup,
-        })({
-            ...expectedOptions,
-        });
+		defineIntegration({
+			name,
+			defaults,
+			setup,
+		})({
+			...expectedOptions,
+		});
 
-        const callArgs = setup.mock.lastCall?.[0];
+		const callArgs = setup.mock.lastCall?.[0];
 
-        expect(callArgs?.options).toEqual(expectedOptions); 
-    });
+		expect(callArgs?.options).toEqual(expectedOptions);
+	});
 
-    test("Integration should have correct name", () => {
-        const name = 'my-integration';
-        const setup = vi.fn(() => {
-            return {} as ExtendedHooks;
-        })
+	test("Integration should have correct name", () => {
+		const name = "my-integration";
+		const setup = vi.fn(() => {
+			return {} as ExtendedHooks;
+		});
 
+		const integration = defineIntegration({
+			name,
+			setup,
+		})({});
 
-        const integration = defineIntegration({
-            name,
-            setup,
-        })({});
+		expect(integration.name).toBe(name);
+	});
 
-        expect(integration.name).toBe(name);
-    });
+	describe("astro:config:setup", () => {
+		describe("addDts", () => {
+			test("Should pass the correct name", () => {
+				const name = "my-integration";
+				const dtsName = `virtual:${name}`;
+				const dtsContent = "declare module {}";
 
-    describe("astro:config:setup", () => {
-        describe("addDts", () => {
-            test("Should pass the correct name", () => {
-                const name = "my-integration";
-                const dtsName = `virtual:${ name }`;
-                const dtsContent = "declare module {}";
-    
-                const setup = (): ExtendedHooks => {
-                    return {
-                        "astro:config:setup": ({ addDts }) => {
-                            addDts({
-                                name: dtsName,
-                                content: dtsContent,
-                            });
-                        },
-                    }
-                }
-    
-                const integration = defineIntegration({
-                    name,
-                    setup,
-                })({});
-    
-                const params = astroConfigSetupParamsStub()
-    
-                integration.hooks['astro:config:setup']?.(params);
-    
-                const dtsCallArgs = (mockAddDts as Mock).mock.lastCall[0]
-        
-                expect(dtsCallArgs.name).toBe(dtsName);
-            });
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addDts }) => {
+							addDts({
+								name: dtsName,
+								content: dtsContent,
+							});
+						},
+					};
+				};
 
-            test("Should pass the correct content", () => {
-                const name = "my-integration";
-                const dtsName = `virtual:${ name }`;
-                const dtsContent = "declare module {}";
-    
-                const setup = (): ExtendedHooks => {
-                    return {
-                        "astro:config:setup": ({ addDts }) => {
-                            addDts({
-                                name: dtsName,
-                                content: dtsContent,
-                            });
-                        },
-                    }
-                }
-    
-                const integration = defineIntegration({
-                    name,
-                    setup,
-                })({});
-    
-                const params = astroConfigSetupParamsStub()
-    
-                integration.hooks['astro:config:setup']?.(params);
-    
-                const dtsCallArgs = (mockAddDts as Mock).mock.lastCall[0]
-        
-                expect(dtsCallArgs.content).toBe(dtsContent);
-            });
-        });
+				const integration = defineIntegration({
+					name,
+					setup,
+				})({});
 
-        describe("addVirtualImport", () => {
-            test("Should pass the correct name", () => {
-                const name = "my-integration";
-                const virtualImportName = `virtual:${ name }`;
-                const content = "declare module {}";
-    
-                const setup = (): ExtendedHooks => {
-                    return {
-                        "astro:config:setup": ({ addVirtualImport }) => {
-                            addVirtualImport({
-                                name: virtualImportName,
-                                content: content,
-                            });
-                        },
-                    }
-                }
-    
-                const integration = defineIntegration({
-                    name,
-                    setup,
-                })({});
-    
-                const params = astroConfigSetupParamsStub()
-    
-                integration.hooks['astro:config:setup']?.(params);
-    
-                const addVirtualImportCallArgs = (mockAddVirtualImport as Mock).mock.lastCall[0]
-        
-                expect(addVirtualImportCallArgs.name).toBe(virtualImportName);
-            });
+				const params = astroConfigSetupParamsStub();
 
-            test("Should pass the correct content", () => {
-                const name = "my-integration";
-                const virtualImportName = `virtual:${ name }`;
-                const content = "declare module {}";
-    
-                const setup = (): ExtendedHooks => {
-                    return {
-                        "astro:config:setup": ({ addVirtualImport }) => {
-                            addVirtualImport({
-                                name: virtualImportName,
-                                content: content,
-                            });
-                        },
-                    }
-                }
-    
-                const integration = defineIntegration({
-                    name,
-                    setup,
-                })({});
-    
-                const params = astroConfigSetupParamsStub()
-    
-                integration.hooks['astro:config:setup']?.(params);
-    
-                const addVirtualImportCallArgs = (mockAddVirtualImport as Mock).mock.lastCall[0]
-        
-                expect(addVirtualImportCallArgs.content).toBe(content);
-            });
-        });
+				integration.hooks["astro:config:setup"]?.(params);
 
-        describe("addVitePlugin", () => {
-            test("Should pass the correct plugin name", () => {
-                const name = "my-integration";
-                const plugin = {
-                    name: 'vite-plugin-my-integration',
-                }
-    
-                const setup = (): ExtendedHooks => {
-                    return {
-                        "astro:config:setup": ({ addVitePlugin }) => {
-                            addVitePlugin(plugin);
-                        },
-                    }
-                }
-    
-                const integration = defineIntegration({
-                    name,
-                    setup,
-                })({});
-    
-                const params = astroConfigSetupParamsStub()
-    
-                integration.hooks['astro:config:setup']?.(params);
-    
-                const addVitePluginCallArgs = (mockAddVitePlugin as Mock).mock.lastCall[0]
+				const dtsCallArgs = (mockAddDts as Mock).mock.lastCall[0];
 
-                expect(addVitePluginCallArgs.plugin.name).toBe(plugin.name);
-            });
-        });
+				expect(dtsCallArgs.name).toBe(dtsName);
+			});
 
-        describe("hasIntegration", () => {
-            test("Should pass the correct name", () => {
-                const name = "my-integration";
-                const integrationName = "@astrojs/tailwind";
-    
-                const setup = (): ExtendedHooks => {
-                    return {
-                        "astro:config:setup": ({ hasIntegration }) => {
-                            hasIntegration(integrationName);
-                        },
-                    }
-                }
-    
-                const integration = defineIntegration({
-                    name,
-                    setup,
-                })({});
-    
-                const params = astroConfigSetupParamsStub()
-    
-                integration.hooks['astro:config:setup']?.(params);
-    
-                const callArgs = (mockHasIntegration as Mock).mock.lastCall[0]
+			test("Should pass the correct content", () => {
+				const name = "my-integration";
+				const dtsName = `virtual:${name}`;
+				const dtsContent = "declare module {}";
 
-                expect(callArgs.name).toBe(integrationName);
-            });
-        });
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addDts }) => {
+							addDts({
+								name: dtsName,
+								content: dtsContent,
+							});
+						},
+					};
+				};
 
-        describe("watchIntegration", () => {
-            test("Should pass the correct name", () => {
-                const name = "my-integration";
-                const dir = "./src";
-    
-                const setup = (): ExtendedHooks => {
-                    return {
-                        "astro:config:setup": ({ watchIntegration }) => {
-                            watchIntegration(dir);
-                        },
-                    }
-                }
-    
-                const integration = defineIntegration({
-                    name,
-                    setup,
-                })({});
-    
-                const params = astroConfigSetupParamsStub()
-    
-                integration.hooks['astro:config:setup']?.(params);
-    
-                const callArgs = (mockWatchIntegration as Mock).mock.lastCall[0]
+				const integration = defineIntegration({
+					name,
+					setup,
+				})({});
 
-                expect(callArgs.dir).toBe(dir);
-            });
-        });
-    })
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const dtsCallArgs = (mockAddDts as Mock).mock.lastCall[0];
+
+				expect(dtsCallArgs.content).toBe(dtsContent);
+			});
+		});
+
+		describe("addVirtualImport", () => {
+			test("Should pass the correct name", () => {
+				const name = "my-integration";
+				const virtualImportName = `virtual:${name}`;
+				const content = "declare module {}";
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addVirtualImport }) => {
+							addVirtualImport({
+								name: virtualImportName,
+								content: content,
+							});
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+				})({});
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const addVirtualImportCallArgs = (mockAddVirtualImport as Mock).mock
+					.lastCall[0];
+
+				expect(addVirtualImportCallArgs.name).toBe(virtualImportName);
+			});
+
+			test("Should pass the correct content", () => {
+				const name = "my-integration";
+				const virtualImportName = `virtual:${name}`;
+				const content = "declare module {}";
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addVirtualImport }) => {
+							addVirtualImport({
+								name: virtualImportName,
+								content: content,
+							});
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+				})({});
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const addVirtualImportCallArgs = (mockAddVirtualImport as Mock).mock
+					.lastCall[0];
+
+				expect(addVirtualImportCallArgs.content).toBe(content);
+			});
+		});
+
+		describe("addVitePlugin", () => {
+			test("Should pass the correct plugin name", () => {
+				const name = "my-integration";
+				const plugin = {
+					name: "vite-plugin-my-integration",
+				};
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addVitePlugin }) => {
+							addVitePlugin(plugin);
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+				})({});
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const addVitePluginCallArgs = (mockAddVitePlugin as Mock).mock
+					.lastCall[0];
+
+				expect(addVitePluginCallArgs.plugin.name).toBe(plugin.name);
+			});
+		});
+
+		describe("hasIntegration", () => {
+			test("Should pass the correct name", () => {
+				const name = "my-integration";
+				const integrationName = "@astrojs/tailwind";
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ hasIntegration }) => {
+							hasIntegration(integrationName);
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+				})({});
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const callArgs = (mockHasIntegration as Mock).mock.lastCall[0];
+
+				expect(callArgs.name).toBe(integrationName);
+			});
+		});
+
+		describe("watchIntegration", () => {
+			test("Should pass the correct name", () => {
+				const name = "my-integration";
+				const dir = "./src";
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ watchIntegration }) => {
+							watchIntegration(dir);
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+				})({});
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const callArgs = (mockWatchIntegration as Mock).mock.lastCall[0];
+
+				expect(callArgs.dir).toBe(dir);
+			});
+		});
+	});
 });
