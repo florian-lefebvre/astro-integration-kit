@@ -75,7 +75,7 @@ export interface ExtendedHooks {
 			 *
 			 * @param {string} name - Name of the integration to look up.
 			 * @param {undefined | "before" | "after"} position - Position in relation to the current integration to check.
-			 * @param {undefined | string} relativeTo - What integration to check the position against. Defaults to the calling integration.
+			 * @param {undefined | string} relativeTo - The integration to check the position against. Defaults to the current integration.
 			 *
 			 * @returns {boolean}
 			 *
