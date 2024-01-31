@@ -69,8 +69,14 @@ export const defineIntegration = <
 						}),
 					addVitePlugin: (plugin) =>
 						addVitePlugin({ plugin, updateConfig: params.updateConfig }),
-					hasIntegration: (name) =>
-						hasIntegration({ name, config: params.config }),
+					hasIntegration: (_name: string, position?: "before" | "after", relativeTo?: string) =>
+						hasIntegration({
+							name: _name,
+							// When `relativeTo` is not set get positions relative the current integration.
+							relativeTo: relativeTo ?? name,
+							position,
+							config: params.config,
+						}),
 					watchIntegration: (dir) =>
 						watchIntegration({
 							command: params.command,
