@@ -1,8 +1,8 @@
 import type { AstroIntegration } from "astro";
 import { defu } from "defu";
 import type { ExtendedHooks } from "../types.js";
-import { addVirtualImport } from "../utils/add-virtual-import.js";
-import { addVitePlugin } from "../utils/add-vite-plugin.js";
+import { addVirtualImport } from "./add-virtual-import.js";
+import { addVitePlugin } from "./add-vite-plugin.js";
 import { addDts } from "./add-dts.js";
 import { hasIntegration } from "./has-integration.js";
 import { watchIntegration } from "./watch-integration.js";
