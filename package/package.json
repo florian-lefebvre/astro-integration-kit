@@ -23,7 +23,6 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"build": "tsc && vite build",
 		"test": "vitest"
 	},
 	"type": "module",
