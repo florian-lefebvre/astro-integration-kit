@@ -1,5 +1,12 @@
 # astro-integration-kit
 
+## 0.0.9
+
+### Patch Changes
+
+- 3276ecc: Adds the `addDts` utility
+- d1b5cd3: Makes `defineIntegration` option `defaults` optional
+
 ## 0.0.8
 
 ### Patch Changes

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import {
 	addVirtualImport,
 	createResolver,
@@ -20,8 +21,14 @@ const testIntegration = defineIntegration<{ name?: string | undefined }>({
 				updateConfig,
 				watchIntegration,
 				hasIntegration,
+				addDts,
 			}) => {
 				watchIntegration(resolve());
+
+				addDts({
+					name: "test-integration",
+					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
+				});
 
 				addVirtualImport({
 					name: "virtual:astro-integration-kit-playground/config",
