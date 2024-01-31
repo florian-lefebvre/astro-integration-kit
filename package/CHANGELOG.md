@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.0.11
+
+### Patch Changes
+
+- 08e73d9: Updates imports from `node:path` to `pathe`
+
 ## 0.0.10
 
 ### Patch Changes
