@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-Adds Vitest and tests to current utilities
+Updates imports from `node:path` to `pathe`
