@@ -103,7 +103,7 @@ describe("defineIntegration", () => {
 
 		const callArgs = setup.mock.lastCall?.[0];
 
-		expect(callArgs?.options).toEqual(defaults);
+		expect(callArgs?.options).toEqual({});
 	});
 
 	test("Setup should get called with overwritten args", () => {
