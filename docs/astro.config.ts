@@ -19,17 +19,12 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: "Introduction",
+					label: "Getting started",
 					items: [
 						{
 							label: "Why Astro Integration Kit",
-							link: "/why-aik",
+							link: "/getting-started/why",
 						},
-					],
-				},
-				{
-					label: "Getting started",
-					items: [
 						{
 							label: "Installation",
 							link: "/getting-started/installation/",
