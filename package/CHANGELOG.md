@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.0.12
+
+### Patch Changes
+
+- ea175b0: Fixes impossible types related to `defineIntegration` options
+
 ## 0.0.11
 
 ### Patch Changes
