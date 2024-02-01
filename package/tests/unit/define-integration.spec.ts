@@ -96,14 +96,15 @@ describe("defineIntegration", () => {
 			return {} as ExtendedHooks;
 		});
 
-		defineIntegration({
+		defineIntegration<{ foo: string }>({
 			name,
+			defaults,
 			setup,
 		})();
 
 		const callArgs = setup.mock.lastCall?.[0];
 
-		expect(callArgs?.options).toEqual({});
+		expect(callArgs?.options).toEqual(defaults);
 	});
 
 	test("Setup should get called with overwritten args", () => {

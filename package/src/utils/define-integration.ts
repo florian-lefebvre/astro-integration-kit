@@ -43,9 +43,7 @@ export const defineIntegration = <
 		name: string;
 		options: TOptions;
 	}) => ExtendedHooks;
-}): [TOptions] extends [never]
-	? (options?: TOptions) => AstroIntegration
-	: (options: TOptions) => AstroIntegration => {
+}): ((options?: TOptions) => AstroIntegration) => {
 	return (_options?: TOptions) => {
 		const options = defu(_options ?? {}, defaults ?? {}) as TOptions;
 
