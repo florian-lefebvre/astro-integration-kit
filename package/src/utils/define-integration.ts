@@ -1,11 +1,32 @@
 import type { AstroIntegration } from "astro";
 import { defu } from "defu";
-import type { ExtendedHooks } from "../types.js";
+import type { AnyPlugin, ExtendedHooks } from "../types.js";
 import { addDts } from "./add-dts.js";
 import { addVirtualImport } from "./add-virtual-import.js";
 import { addVitePlugin } from "./add-vite-plugin.js";
 import { hasIntegration } from "./has-integration.js";
 import { watchIntegration } from "./watch-integration.js";
+import { definePlugin } from "./define-plugin.js";
+
+const testPlugin = definePlugin({
+	name: "addVitePlugin",
+	hook: "astro:config:setup",
+	implementation:
+		({ updateConfig }) =>
+		(plugin: Parameters<typeof addVitePlugin>[0]["plugin"]) => {
+			addVitePlugin({ plugin, updateConfig });
+		},
+});
+
+const testIntegration = defineIntegration({
+	name: "test-integration",
+	plugins: [testPlugin],
+	setup() {
+		return {
+			"astro:config:setup": ({ addVitePlugin }) => {},
+		};
+	},
+});
 
 /**
  * Makes creating integrations easier, and adds a few goodies!
@@ -32,63 +53,86 @@ import { watchIntegration } from "./watch-integration.js";
  */
 export const defineIntegration = <
 	TOptions extends Record<string, unknown> = never,
+	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
 	defaults,
 	setup,
+	plugins: _plugins,
 }: {
 	name: string;
 	defaults?: Required<TOptions>;
 	setup: (params: {
 		name: string;
 		options: TOptions;
-	}) => ExtendedHooks;
+	}) => ExtendedHooks<TPlugins>;
+	plugins?: TPlugins;
 }): ((options?: TOptions) => AstroIntegration) => {
 	return (_options?: TOptions) => {
 		const options = defu(_options ?? {}, defaults ?? {}) as TOptions;
+
+		const resolvedPlugins = Object.values(
+			(() => {
+				const plugins: Record<string, AnyPlugin> = {};
+				for (const plugin of _plugins ?? []) {
+					plugins[plugin.name] = plugin;
+				}
+				return plugins;
+			})(),
+		);
 
 		const providedHooks = setup({ name, options });
 
 		const hooks: AstroIntegration["hooks"] = {
 			"astro:config:setup": (params) => {
+				const plugins = resolvedPlugins.filter(
+					(p) => p.hook === "astro:config:setup",
+				);
+
 				return providedHooks["astro:config:setup"]?.({
 					...params,
-					addDts: ({ name, content }) =>
-						addDts({
-							name,
-							content,
-							logger: params.logger,
-							root: params.config.root,
-							srcDir: params.config.srcDir,
-						}),
-					addVirtualImport: ({ name, content }) =>
-						addVirtualImport({
-							name,
-							content,
-							updateConfig: params.updateConfig,
-						}),
-					addVitePlugin: (plugin) =>
-						addVitePlugin({ plugin, updateConfig: params.updateConfig }),
-					hasIntegration: (
-						_name: string,
-						position?: "before" | "after",
-						relativeTo?: string,
-					) =>
-						hasIntegration({
-							name: _name,
-							// When `relativeTo` is not set get positions relative the current integration.
-							relativeTo: relativeTo ?? name,
-							position,
-							config: params.config,
-						}),
-					watchIntegration: (dir) =>
-						watchIntegration({
-							command: params.command,
-							dir,
-							addWatchFile: params.addWatchFile,
-							updateConfig: params.updateConfig,
-						}),
-				});
+					...Object.fromEntries(
+						plugins.map((plugin) => [
+							plugin.name,
+							plugin.implementation(params),
+						]),
+					),
+					// addDts: ({ name, content }) =>
+					// 	addDts({
+					// 		name,
+					// 		content,
+					// 		logger: params.logger,
+					// 		root: params.config.root,
+					// 		srcDir: params.config.srcDir,
+					// 	}),
+					// addVirtualImport: ({ name, content }) =>
+					// 	addVirtualImport({
+					// 		name,
+					// 		content,
+					// 		updateConfig: params.updateConfig,
+					// 	}),
+					// addVitePlugin: (plugin) =>
+					// 	addVitePlugin({ plugin, updateConfig: params.updateConfig }),
+					// hasIntegration: (
+					// 	_name: string,
+					// 	position?: "before" | "after",
+					// 	relativeTo?: string,
+					// ) =>
+					// 	hasIntegration({
+					// 		name: _name,
+					// 		// When `relativeTo` is not set get positions relative the current integration.
+					// 		relativeTo: relativeTo ?? name,
+					// 		position,
+					// 		config: params.config,
+					// 	}),
+					// watchIntegration: (dir) =>
+					// 	watchIntegration({
+					// 		command: params.command,
+					// 		dir,
+					// 		addWatchFile: params.addWatchFile,
+					// 		updateConfig: params.updateConfig,
+					// 	}),
+				} as any);
 			},
 			"astro:config:done": (params) => {
 				return providedHooks["astro:config:done"]?.({ ...params });
