@@ -22,16 +22,16 @@ export default defineConfig({
 					label: "Getting started",
 					items: [
 						{
-							label: "Why Astro Integration Kit",
-							link: "/getting-started/why",
-						},
-						{
 							label: "Installation",
 							link: "/getting-started/installation/",
 						},
 						{
 							label: "Usage",
 							link: "/getting-started/usage/",
+						},
+						{
+							label: "Why Astro Integration Kit",
+							link: "/getting-started/why",
 						},
 						{
 							label: "Showcase",
