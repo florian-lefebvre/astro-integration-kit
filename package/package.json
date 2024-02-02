@@ -20,7 +20,7 @@
 	},
 	"sideEffects": false,
 	"exports": {
-		".": "./src/index.ts"
+		".": "./src/index.js"
 	},
 	"scripts": {
 		"test": "vitest"
