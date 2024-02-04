@@ -42,14 +42,14 @@ type OverridePlugins<T extends Array<AnyPlugin>, U = {}> = T extends []
 			: never
 	  : never;
 
-type AssertPluginsArray<T extends Array<any>> = T extends Array<AnyPlugin>
+type AssertPluginsArray<T extends Array<unknown>> = T extends Array<AnyPlugin>
 	? T
 	: never;
 
-type PluginsToImplementation<TPlugins extends Array<AnyPlugin>> = {
+type PluginsToImplementation<TPlugins extends Record<string, AnyPlugin>> = {
 	[K in keyof TPlugins]: TPlugins[K] extends Plugin<
-		any,
-		any,
+		infer _Name,
+		infer _Hook,
 		infer Implementation
 	>
 		? ReturnType<Implementation>

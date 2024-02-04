@@ -20,9 +20,10 @@ const testIntegration = defineIntegration({
 		return {
 			"astro:config:setup": ({
 				updateConfig,
-				watchIntegration,
-				hasIntegration,
+				// watchIntegration,
+				// hasIntegration,
 				addDts,
+
 			}) => {
 				watchIntegration(resolve());
 
