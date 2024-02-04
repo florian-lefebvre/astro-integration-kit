@@ -6,9 +6,16 @@ import {
 } from "astro-integration-kit";
 import { corePlugins } from "astro-integration-kit/plugins";
 
+type Options = {
+	/**
+	 * An important comment
+	 */
+	name?: string | undefined
+};
+
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	options: defineOptions<{ name?: string | undefined }>({ name: "abc" }),
+	options: defineOptions<Options>({ name: "abc" }),
 	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
