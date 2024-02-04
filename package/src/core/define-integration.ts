@@ -69,7 +69,7 @@ export const defineIntegration = <
 						...Object.fromEntries(
 							plugins.map((plugin) => [
 								plugin.name,
-								plugin.implementation(params),
+								plugin.implementation(params, { name }),
 							]),
 						),
 					} as any);
