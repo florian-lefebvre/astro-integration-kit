@@ -1,6 +1,6 @@
 import type { AstroIntegration, HookParameters } from "astro";
 import { defu } from "defu";
-import type { AnyOptions, AnyPlugin, ExtendedHooks, Options } from "./types.js";
+import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
 
 /**

@@ -1,7 +1,5 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
-import { fileURLToPath } from "url";
 import type { AstroIntegrationLogger } from "astro";
-import { dirname } from "pathe";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { addDts } from "../../src/utilities/add-dts.js";
 import { createResolver } from "../../src/core/create-resolver.js";
