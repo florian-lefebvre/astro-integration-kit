@@ -1,5 +1,9 @@
 import type { HookParameters } from "astro";
-import type { UnionToArray, UnionToIntersection } from "../internal/types.js";
+import type {
+	Prettify,
+	UnionToArray,
+	UnionToIntersection,
+} from "../internal/types.js";
 
 export type Plugin<
 	TName extends string,
@@ -23,7 +27,7 @@ type FilterPluginsByHook<
 > = Extract<TPlugins[number], { hook: THook }>;
 
 // biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
-type  OverridePlugins<T extends Array<AnyPlugin>, U = {}> = T extends []
+type OverridePlugins<T extends Array<AnyPlugin>, U = {}> = T extends []
 	? UnionToIntersection<U>
 	: T extends [infer Head, ...infer Tail]
 	  ? Head extends AnyPlugin
@@ -37,10 +41,6 @@ type  OverridePlugins<T extends Array<AnyPlugin>, U = {}> = T extends []
 				: never
 			: never
 	  : never;
-
-type Prettify<T> = {
-	[K in keyof T]: T[K];
-} & {};
 
 type AssertPluginsArray<T extends Array<any>> = T extends Array<AnyPlugin>
 	? T
@@ -118,3 +118,10 @@ export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
 		AddedParam<TPlugins, "astro:build:done">
 	>;
 }
+
+export type Options<TOptions extends Record<string, unknown>> = {
+	options: TOptions;
+	defaults: Required<TOptions>;
+};
+
+export type AnyOptions = Options<any>;

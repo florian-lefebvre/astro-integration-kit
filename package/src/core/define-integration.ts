@@ -1,6 +1,6 @@
 import type { AstroIntegration, HookParameters } from "astro";
 import { defu } from "defu";
-import type { AnyPlugin, ExtendedHooks } from "./types.js";
+import type { AnyOptions, AnyPlugin, ExtendedHooks, Options } from "./types.js";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
 
 /**
@@ -27,24 +27,24 @@ import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
  * ```
  */
 export const defineIntegration = <
-	TOptions extends Record<string, unknown> = never,
+	TOptions extends AnyOptions = never,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
-	defaults,
+	options: optionsDef,
 	setup,
 	plugins: _plugins,
 }: {
 	name: string;
-	defaults?: Required<TOptions>;
+	options?: TOptions;
+	plugins?: TPlugins;
 	setup: (params: {
 		name: string;
 		options: TOptions;
 	}) => ExtendedHooks<TPlugins>;
-	plugins?: TPlugins;
-}): ((options?: TOptions) => AstroIntegration) => {
-	return (_options?: TOptions) => {
-		const options = defu(_options ?? {}, defaults ?? {}) as TOptions;
+}): ((options?: TOptions["options"]) => AstroIntegration) => {
+	return (_options?: TOptions["options"]) => {
+		const options = defu(_options ?? {}, optionsDef?.defaults ?? {}) as TOptions["options"];
 
 		const resolvedPlugins = Object.values(
 			(() => {
@@ -62,9 +62,7 @@ export const defineIntegration = <
 			DEFAULT_HOOK_NAMES.map((hookName) => [
 				hookName,
 				(params: HookParameters<typeof hookName>) => {
-					const plugins = resolvedPlugins.filter(
-						(p) => p.hook === hookName,
-					);
+					const plugins = resolvedPlugins.filter((p) => p.hook === hookName);
 
 					return providedHooks[hookName]?.({
 						...params,
