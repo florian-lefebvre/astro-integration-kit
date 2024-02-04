@@ -4,14 +4,14 @@ import type {
 	HookParameters,
 } from "astro";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
-import type { ExtendedHooks } from "../../src/types.js";
-import { defineIntegration } from "../../src/utils/define-integration.js";
+import type { ExtendedHooks } from "../../src/core/types.js";
+import { defineIntegration } from "../../src/core/define-integration.js";
 
-import { addDts as mockAddDts } from "../../src/utils/add-dts.js";
-import { addVirtualImport as mockAddVirtualImport } from "../../src/utils/add-virtual-import.js";
-import { addVitePlugin as mockAddVitePlugin } from "../../src/utils/add-vite-plugin.js";
-import { hasIntegration as mockHasIntegration } from "../../src/utils/has-integration.js";
-import { watchIntegration as mockWatchIntegration } from "../../src/utils/watch-integration.js";
+import { addDts as mockAddDts } from "../../src/utilities/add-dts.js";
+import { addVirtualImport as mockAddVirtualImport } from "../../src/utilities/add-virtual-import.js";
+import { addVitePlugin as mockAddVitePlugin } from "../../src/utilities/add-vite-plugin.js";
+import { hasIntegration as mockHasIntegration } from "../../src/utilities/has-integration.js";
+import { watchIntegration as mockWatchIntegration } from "../../src/utilities/watch-integration.js";
 
 vi.mock("../../src/utils/add-virtual-import.js");
 vi.mock("../../src/utils/add-vite-plugin.js");

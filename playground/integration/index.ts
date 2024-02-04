@@ -1,15 +1,14 @@
 import { readFileSync } from "node:fs";
-import {
-	addVirtualImport,
-	createResolver,
-	defineIntegration,
-} from "astro-integration-kit";
+import { createResolver, defineIntegration } from "astro-integration-kit";
+import { addVirtualImport } from "astro-integration-kit/utilities";
+import { addDtsPlugin } from "astro-integration-kit/plugins";
 
 const testIntegration = defineIntegration<{ name?: string | undefined }>({
 	name: "test-integration",
 	defaults: {
 		name: "abc",
 	},
+	plugins: [addDtsPlugin],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
 

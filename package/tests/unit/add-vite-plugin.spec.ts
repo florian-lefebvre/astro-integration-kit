@@ -1,6 +1,6 @@
 import type { Plugin } from "vite";
 import { describe, expect, test, vi } from "vitest";
-import { addVitePlugin } from "../../src/utils/add-vite-plugin.js";
+import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 
 describe("addVitePlugin", () => {
 	test("Should run", () => {

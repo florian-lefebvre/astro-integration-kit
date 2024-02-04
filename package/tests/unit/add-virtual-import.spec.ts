@@ -1,6 +1,6 @@
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
-import { addVirtualImport } from "../../src/utils/add-virtual-import.js";
-import { addVitePlugin } from "../../src/utils/add-vite-plugin.js";
+import { addVirtualImport } from "../../src/utilities/add-virtual-import.js";
+import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 
 vi.mock("../../src/utils/add-vite-plugin.js");
 

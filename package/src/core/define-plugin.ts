@@ -1,5 +1,5 @@
 import type { HookParameters } from "astro";
-import type { Hooks, Plugin } from "../types.js";
+import type { Hooks, Plugin } from "./types.js";
 
 export const definePlugin = <
 	TName extends string,
