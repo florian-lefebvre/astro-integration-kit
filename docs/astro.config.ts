@@ -30,6 +30,10 @@ export default defineConfig({
 							link: "/getting-started/usage/",
 						},
 						{
+							label: "Why Astro Integration Kit",
+							link: "/getting-started/why",
+						},
+						{
 							label: "Showcase",
 							link: "/getting-started/showcase/",
 						},
