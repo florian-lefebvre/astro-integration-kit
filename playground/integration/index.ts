@@ -4,13 +4,12 @@ import {
 	defineIntegration,
 	defineOptions,
 } from "astro-integration-kit";
-import { addVirtualImport } from "astro-integration-kit/utilities";
-import { addDtsPlugin } from "astro-integration-kit/plugins";
+import { corePlugins } from "astro-integration-kit/plugins";
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
 	options: defineOptions<{ name?: string | undefined }>({ name: "abc" }),
-	plugins: [addDtsPlugin],
+	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
 
@@ -19,11 +18,10 @@ const testIntegration = defineIntegration({
 
 		return {
 			"astro:config:setup": ({
-				updateConfig,
+				addVirtualImport,
 				// watchIntegration,
 				// hasIntegration,
 				addDts,
-
 			}) => {
 				watchIntegration(resolve());
 
@@ -35,7 +33,6 @@ const testIntegration = defineIntegration({
 				addVirtualImport({
 					name: "virtual:astro-integration-kit-playground/config",
 					content: `export default ${JSON.stringify({ foo: "bar" })}`,
-					updateConfig,
 				});
 
 				if (hasIntegration("@astrojs/tailwind")) {

@@ -1,5 +1,5 @@
-import { definePlugin } from "../core";
-import { addDts } from "../utilities";
+import { definePlugin } from "../core/define-plugin.js";
+import { addDts } from "../utilities/add-dts.js";
 
 export const addDtsPlugin = definePlugin({
 	name: "addDts",

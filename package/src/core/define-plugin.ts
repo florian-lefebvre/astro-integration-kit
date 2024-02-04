@@ -5,7 +5,7 @@ export const definePlugin = <
 	TName extends string,
 	THook extends keyof Hooks,
 	TImplementation extends (
-		params: HookParameters<THook> & Record<string, any>,
+		params: HookParameters<THook>,
 	) => (...args: Array<any>) => any,
 >(
 	plugin: Plugin<TName, THook, TImplementation>,
