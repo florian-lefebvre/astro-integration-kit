@@ -19,7 +19,7 @@ const testIntegration = defineIntegration({
 		return {
 			"astro:config:setup": ({
 				addVirtualImport,
-				// watchIntegration,
+				watchIntegration,
 				hasIntegration,
 				addDts,
 			}) => {
