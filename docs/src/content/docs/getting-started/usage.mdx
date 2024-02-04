@@ -7,19 +7,18 @@ Astro Integration Kit can be used in 2 ways: as **extended hooks** or as **stand
 
 ## Extended hooks
 
-To define your integration, use the `defineIntegration` utility. Hooks now have additional utilities:
+To define your integration, use the `defineIntegration` utility. You can now register plugins
+(we export `corePlugins`) that will add new arguments to the Astro hooks:
 
-```ts title="my-integration/index.ts" "watchIntegration"
+```ts title="my-integration/index.ts" "corePlugins" "watchIntegration"
 import { createResolver, defineIntegration } from "astro-integration-kit";
+import { corePlugins } from "astro-integration-kit/plugins"
 
-export default defineIntegration<{ foo?: string }>({
+export default defineIntegration({
     name: "my-integration",
-    defaults: {
-        foo: "bar"
-    },
-    setup({ options }) {
+    plugins: [...corePlugins],
+    setup() {
         const { resolve } = createResolver(import.meta.url);
-
         return {
             "astro:config:setup": ({ watchIntegration }) => {
                 watchIntegration(resolve())
@@ -39,7 +38,6 @@ import { createResolver, watchIntegration } from "astro-integration-kit";
 
 export default function myIntegration(): AstroIntegration {
     const { resolve } = createResolver(import.meta.url);
-
     return {
         name: "my-integration",
         hooks: {
