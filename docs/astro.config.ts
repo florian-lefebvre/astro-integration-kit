@@ -1,5 +1,6 @@
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
+import { version } from "../package/package.json";
 
 const badge = (type: "new" | "updated" | "soon") => ({
 	variant: {
@@ -32,6 +33,26 @@ export default defineConfig({
 				baseUrl:
 					"https://github.com/florian-lefebvre/astro-integration-kit/edit/main/docs/",
 			},
+			customCss: ["./src/styles/main.css"],
+			head: [
+				{
+					tag: "link",
+					attrs: {
+						rel: "preconnect",
+						href: "https://rsms.me/",
+					},
+				},
+				{
+					tag: "link",
+					attrs: {
+						rel: "stylesheet",
+						href: "https://rsms.me/inter/inter.css",
+					},
+				},
+			],
+			expressiveCode: {
+				themes: ["one-dark-pro", "starlight-light"]
+			},
 			sidebar: [
 				{
 					label: "Getting started",
@@ -60,10 +81,6 @@ export default defineConfig({
 					label: "Core",
 					items: [
 						{
-							label: "createResolver",
-							link: "/core/create-resolver/",
-						},
-						{
 							label: "defineIntegration",
 							link: "/core/define-integration/",
 							badge: badge("updated"),
@@ -72,6 +89,10 @@ export default defineConfig({
 							label: "defineOptions",
 							link: "/core/define-options/",
 							badge: badge("new"),
+						},
+						{
+							label: "createResolver",
+							link: "/core/create-resolver/",
 						},
 						{
 							label: "definePlugin",
@@ -102,7 +123,7 @@ export default defineConfig({
 							badge: badge("updated"),
 						},
 						{
-							label: "watchIntegration",
+							label: "watchIntegration (HMR)",
 							link: "/utilities/watch-integration/",
 						},
 					],
@@ -121,6 +142,20 @@ export default defineConfig({
 							badge: badge("soon"),
 						},
 					],
+				},
+				{
+					label: `v${version} changelog`,
+					link: `https://github.com/florian-lefebvre/astro-integration-kit/blob/main/package/CHANGELOG.md#${version.replaceAll(
+						".",
+						"",
+					)}`,
+					attrs: {
+						target: "_blank",
+					},
+					badge: {
+						variant: "note",
+						text: "Latest",
+					},
 				},
 			],
 			lastUpdated: true,

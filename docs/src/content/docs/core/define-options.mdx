@@ -5,4 +5,27 @@ description: Allows defining an integration options while keeping the whole thin
 
 Allows defining an integration options while keeping the whole thing type-safe.
 
-WIP
+- why a separate utility (TS madness)
+- explicit generic (extracted)
+- defaults handling (deep-merged)
+- runtime validation + future plans: built-in zod
+- be (type) strict
+
+:::caution
+When typing optional properties within your `IntegrationOptions`, make sure to specify `undefined` as a possible value.
+
+```ts "undefined"
+interface IntegrationOptions {
+    foo?: string | undefined;
+}
+```
+
+We recommend that you extend the strictest Astro TSConfig. This will help you create a more stable integration across many platforms and environments.
+
+```diff lang="json"
+{
+-  "extends": "astro/tsconfigs/strict"
++  "extends": "astro/tsconfigs/strictest"
+}
+```
+:::

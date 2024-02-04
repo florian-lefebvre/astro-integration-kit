@@ -5,18 +5,22 @@ description: Makes creating integrations easier, and adds a few goodies!
 
 `defineIntegration` makes creating integrations easier, and adds a few goodies!
 
-:::caution
-`defineIntegration` is required to use **extended hooks**.
-:::
-
 ```ts title="my-integration/index.ts" "defineIntegration"
-import { createResolver, defineIntegration } from "astro-integration-kit";
+import {
+    createResolver,
+    defineIntegration,
+    defineOptions,
+} from "astro-integration-kit";
+import { corePlugins } from "astro-integration-kit/plugins";
+
+type Options = {
+    foo?: string | undefined;
+}
 
 export default defineIntegration<{ foo?: string }>({
     name: "my-integration",
-    defaults: {
-        foo: "bar"
-    },
+    options: defineOptions<Options>({ foo: "bar" }),
+    plugins: [...corePlugins],
     setup({ options }) {
         const { resolve } = createResolver(import.meta.url);
 
@@ -31,31 +35,26 @@ export default defineIntegration<{ foo?: string }>({
 
 ## Features
 
-### Options
+### Defining an integration
 
-`defineIntegration` accepts a generic that will properly type the integration options.
+- basic usage
+- never pass generics directly
+- link to guide
 
-### Defaults
+### Handling options and defaults
 
-The `defaults` configuration accepts the default values for your integration's options.
-`defaults` will be deeply merged with the options provided by the user. Please note that
-this is not runtime safe, it's good practice to check the types of your options inside `setup`.
+- quick snippet
+- alert type note: really read defineOptions docs, super important
+- link to defineOptions
 
-:::caution
-When typing optional properties within your `IntegrationOptions`, make sure to specify `undefined` as a possible value.
+### Using plugins
 
-```ts "undefined"
-interface IntegrationOptions {
-    foo?: string | undefined;
-}
-```
+- how they work
+- corePlugins
+- link to guide to learn how to author them
 
-We recommend that you extend the strictest Astro TSConfig. This will help you create a more stable integration across many platforms and environments.
+### Adding the logic with `setup`
 
-```diff lang="json"
-{
--  "extends": "astro/tsconfigs/strict"
-+  "extends": "astro/tsconfigs/strictest"
-}
-```
-:::
+- arguments passed to setup
+- what to do in setup
+- what to return
