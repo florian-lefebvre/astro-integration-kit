@@ -3,14 +3,9 @@ title: createResolver
 description: Allows resolving paths relatively to the integration folder easily.
 ---
 
-`createResolver` allows you to resolve paths relatively to the integration folder easily. For example:
+`createResolver` allows you to resolve paths relatively to the integration folder easily.
 
-- quick snippet (overview)
-- why it's important / what it allows
-- why should you only pass `import.meta.url`
-- where to call it
-
-```ts title="integration/index.ts"
+```ts title="integration/index.ts" "createResolver" "resolve"
 import type { AstroIntegration } from "astro";
 import { createResolver } from "astro-integration-kit";
 
@@ -28,4 +23,51 @@ export default function myIntegration(): AstroIntegration {
 }
 ```
 
-This way, you do not have to add your plugin to your package.json `exports`.
+## Why should you use it?
+
+We think it provides a better DX. Instead of having to do some back and forth between
+your code and your `package.json` `exports` fields, you can just use some intuitive
+relative paths!
+
+```json title="package.json" del={4}
+{
+    "name": "package-name",
+    "exports": {
+        "pages/my-route.astro": "./src/pages/my-route.astro",
+        "plugin.ts": "./src/plugin.ts"
+    }
+}
+```
+
+```ts title="integration/index.ts" del={12,16} ins={5,13,17}
+import type { AstroIntegration } from "astro";
+import { createResolver } from "astro-integration-kit";
+
+export default function myIntegration(): AstroIntegration {
+    const { resolve } = createResolver(import.meta.url);
+    return {
+        name: "my-integration",
+        hooks: {
+            "astro:config:setup": ({ injectRoute, addDevToolbarApp }) => {
+                injectRoute({
+                    pattern: "/my-route",
+                    entrypoint: "package-name/pages/my-route.astro"
+                    entrypoint: resolve("./pages/my-route.astro")
+                })
+                addDevToolbarApp(
+                    "package-name/plugin.ts"
+                    resolve("./plugin.ts")
+                )
+            }
+        }
+    }
+}
+```
+
+## Usage
+
+Always pass `import.meta.url` to `createResolver`! That's the equivalent of the
+old `__filename`. This way, `resolve` will always create a valid path relatively,
+no matter its location in `node_modules`, package managers madness etc
+
+We recommend calling it in `setup` to easily access `resolve` in any hook.
