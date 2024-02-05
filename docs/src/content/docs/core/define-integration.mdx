@@ -35,9 +35,7 @@ export default defineIntegration({
 })
 ```
 
-## Features
-
-### Defining an integration
+## Defining an integration
 
 To define an integration, use the `defineIntegration` utility:
 
@@ -65,7 +63,7 @@ TypeScript magic of options and plugins.
 
 It accepts a few arguments, whose usage is explained in the sections below.
 
-### Handling options and defaults
+## Handling options and defaults
 
 `defineIntegration` accepts an `option` argument that you need to use with `defineOptions`.
 
@@ -93,7 +91,7 @@ description="Allows defining an integration options while keeping the whole thin
 href="/core/define-options/"
 />
 
-### Using plugins
+## Using plugins
 
 Plugins allow us (and you!) to make Astro Integration Kit really powerful. It allows to add arguments
 to built-in hooks in a type-safe way. Get started by using our `corePlugins`:
@@ -118,7 +116,7 @@ Under the hood, those plugins define using `definePlugin` pass "metadata" as typ
     />
 </Disabled>
 
-### Adding the logic with `setup`
+## Adding the logic with `setup`
 
 If you've written an integration before by returning an `AstroIntegration` from a function, that exactly
 the same with `setup`! This is where all the logic lives:

@@ -3,13 +3,44 @@ title: defineOptions
 description: Allows defining an integration options while keeping the whole thing type-safe.
 ---
 
-Allows defining an integration options while keeping the whole thing type-safe.
+`defineOptions` allows defining an integration options while keeping the whole thing type-safe.
 
-- why a separate utility (TS madness)
-- explicit generic (extracted)
-- defaults handling (deep-merged)
-- runtime validation + future plans: built-in zod
-- be (type) strict
+```ts title="my-integration/index.ts" "defineOptions" ins={3-5,9}
+import { defineIntegration, defineOptions } from "astro-integration-kit";
+
+type Options = {
+    foo?: string | undefined;
+}
+
+export default defineIntegration({
+    // ...
+    options: defineOptions<Options>({ foo: "bar" })
+})
+```
+
+## Usage
+
+Pass an explicit generic type to `defineOptions`. We recommend that you extract it so that:
+
+1. Your users can consume it
+2. You can add JSDoc annotations easily
+
+```ts title="my-integration/index.ts" ins={3-6,10}
+import { defineIntegration, defineOptions } from "astro-integration-kit";
+
+type Options = {
+    /** An insightful comment */
+    foo?: string | undefined;
+}
+
+export default defineIntegration({
+    // ...
+    options: defineOptions<Options>({ foo: "bar" })
+})
+```
+
+`defineOptions` also requires an argument to handle defaults. It will be deep merged
+with the user provided options.
 
 :::caution
 When typing optional properties within your `IntegrationOptions`, make sure to specify `undefined` as a possible value.
@@ -20,7 +51,8 @@ interface IntegrationOptions {
 }
 ```
 
-We recommend that you extend the strictest Astro TSConfig. This will help you create a more stable integration across many platforms and environments.
+We recommend that you extend the strictest Astro TSConfig. This will help you create a more stable
+integration across many platforms and environments.
 
 ```diff lang="json"
 {
@@ -29,3 +61,45 @@ We recommend that you extend the strictest Astro TSConfig. This will help you cr
 }
 ```
 :::
+
+## Runtime validation
+
+`defineOptions` only check your options on type level. If you want runtime validation,
+we recommend that you validate the user input using `zod` inside `setup`:
+
+```ts title="my-integration/index.ts"
+import { defineIntegration, defineOptions } from "astro-integration-kit";
+import { z } from "astro/zod";
+
+const OptionsSchema = z.object({
+    foo: z.union([z.array(z.string()), z.literal(undefined)]).optional()
+})
+
+type Options = {
+    /** An insightful comment */
+    foo?: z.infer<typeof OptionsSchema>["foo"]
+}
+
+
+export default defineIntegration({
+    // ...
+    options: defineOptions<Options>({ foo: undefined }),
+    setup({ options: inputOptions }) {
+        const options = optionsSchema.parse(inputOptions);
+
+        return {}
+    }
+})
+```
+
+:::note
+We may change this in the future and update `defineOptions` argument to let you provide
+a `zod` schema. Reach out if you're interested in this!
+:::
+
+## Why do I need a distinct utility?
+
+Because we need plugins types to be inferred by TypeScript, we can't pass a type for
+options as an explicit generic. Using a distinct utility allows us to work around that
+issue and also make the API more powerful. In the future, it may not be a utility but a
+function returned by `defineIntegration`, who knows!
