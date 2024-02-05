@@ -4,14 +4,15 @@ import type {
 	HookParameters,
 } from "astro";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
-import type { ExtendedHooks } from "../../src/core/types.js";
+import type { ExtendedHooks as _ExtendedHooks } from "../../src/core/types.js";
 import { defineIntegration } from "../../src/core/define-integration.js";
-
 import { addDts as mockAddDts } from "../../src/utilities/add-dts.js";
 import { addVirtualImport as mockAddVirtualImport } from "../../src/utilities/add-virtual-import.js";
 import { addVitePlugin as mockAddVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 import { hasIntegration as mockHasIntegration } from "../../src/utilities/has-integration.js";
 import { watchIntegration as mockWatchIntegration } from "../../src/utilities/watch-integration.js";
+import { corePlugins } from "../../src/plugins/index.js";
+import { defineOptions } from "../../src/core/define-options.js";
 
 vi.mock("../../src/utils/add-virtual-import.js");
 vi.mock("../../src/utils/add-vite-plugin.js");
@@ -38,6 +39,10 @@ const astroConfigSetupParamsStub = (
 	...(params || {}),
 });
 
+const plugins = [...corePlugins]
+
+type ExtendedHooks = _ExtendedHooks<typeof plugins>;
+
 describe("defineIntegration", () => {
 	afterEach(() => {
 		vi.resetAllMocks();
@@ -45,11 +50,12 @@ describe("defineIntegration", () => {
 
 	test("Should run", () => {
 		const name = "my-integration";
-		const setup = () => ({}) as ExtendedHooks;
+		const setup = () => ({})
 
 		expect(() =>
 			defineIntegration({
 				name,
+				plugins,
 				setup,
 			}),
 		).not.toThrow();
@@ -57,32 +63,30 @@ describe("defineIntegration", () => {
 
 	test("Setup should get called", () => {
 		const name = "my-integration";
-		const defaults = { foo: "bar" };
 		const setup = vi.fn(() => {
 			return {} as ExtendedHooks;
 		});
 
 		defineIntegration({
 			name,
-			defaults,
+			plugins,
 			setup,
-		})({ ...defaults });
+		})();
 
 		expect(setup).toBeCalled();
 	});
 
 	test("Setup should get called with correct name", () => {
 		const name = "my-integration";
-		const defaults = { foo: "bar" };
 		const setup = vi.fn(() => {
 			return {} as ExtendedHooks;
 		});
 
 		defineIntegration({
 			name,
-			defaults,
+			plugins,
 			setup,
-		})({ ...defaults });
+		})();
 
 		const callArgs = setup.mock.lastCall?.[0];
 
@@ -96,9 +100,9 @@ describe("defineIntegration", () => {
 			return {} as ExtendedHooks;
 		});
 
-		defineIntegration<{ foo: string }>({
+		defineIntegration({
 			name,
-			defaults,
+			options: defineOptions<{ foo: string }>(defaults),
 			setup,
 		})();
 
@@ -121,7 +125,7 @@ describe("defineIntegration", () => {
 
 		defineIntegration({
 			name,
-			defaults,
+			options: defineOptions(defaults),
 			setup,
 		})({
 			...expectedOptions,
@@ -166,6 +170,7 @@ describe("defineIntegration", () => {
 
 				const integration = defineIntegration({
 					name,
+					plugins,
 					setup,
 				})();
 
@@ -197,6 +202,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
+					plugins,
 				})();
 
 				const params = astroConfigSetupParamsStub();
@@ -229,6 +235,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
+					plugins,
 				})();
 
 				const params = astroConfigSetupParamsStub();
@@ -260,6 +267,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
+					plugins,
 				})();
 
 				const params = astroConfigSetupParamsStub();
@@ -291,6 +299,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
+					plugins,
 				})();
 
 				const params = astroConfigSetupParamsStub();
@@ -320,6 +329,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
+					plugins,
 				})();
 
 				const params = astroConfigSetupParamsStub();
@@ -348,6 +358,7 @@ describe("defineIntegration", () => {
 				const integration = defineIntegration({
 					name,
 					setup,
+					plugins,
 				})();
 
 				const params = astroConfigSetupParamsStub();
