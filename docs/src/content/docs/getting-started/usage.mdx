@@ -2,6 +2,7 @@
 title: Usage
 description: Learn how to use astro-integration-kit in your project.
 ---
+import Disabled from "~/components/Disabled.astro"
 import { LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Astro Integration Kit can be used in 2 ways: as **extended hooks** or as **standalone utilities**.
@@ -64,15 +65,13 @@ or one by one as needed.
 
 This allows other developers to easily add their own plugins.
 
-<div style="cursor:not-allowed">
-    <div style="opacity: .5;pointer-events:none">
-        <LinkCard
-        title="Using plugins (soon)"
-        description="Learn how to use plugins to fully take advantage of Astro Integration Kit."
-        href="#"
-        />
-    </div>
-</div>
+<Disabled>
+    <LinkCard
+    title="Using plugins (soon)"
+    description="Learn how to use plugins to fully take advantage of Astro Integration Kit."
+    href="#"
+    />
+</Disabled>
 
 ### Defining an integration
 

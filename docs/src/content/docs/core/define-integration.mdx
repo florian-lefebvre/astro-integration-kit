@@ -2,6 +2,8 @@
 title: defineIntegration
 description: Makes creating integrations easier, and adds a few goodies!
 ---
+import Disabled from "~/components/Disabled.astro"
+import { LinkCard } from '@astrojs/starlight/components';
 
 `defineIntegration` makes creating integrations easier, and adds a few goodies!
 
@@ -17,7 +19,7 @@ type Options = {
     foo?: string | undefined;
 }
 
-export default defineIntegration<{ foo?: string }>({
+export default defineIntegration({
     name: "my-integration",
     options: defineOptions<Options>({ foo: "bar" }),
     plugins: [...corePlugins],
@@ -37,24 +39,116 @@ export default defineIntegration<{ foo?: string }>({
 
 ### Defining an integration
 
-- basic usage
-- never pass generics directly
-- link to guide
+To define an integration, use the `defineIntegration` utility:
+
+```ts title="my-integration/index.ts" "defineIntegration"
+import { defineIntegration } from "astro-integration-kit";
+
+export default defineIntegration({
+    // ...
+    name: "my-integration"
+})
+```
+
+:::caution
+Never pass generics manually to `defineIntegration` or it will break all the
+TypeScript magic of options and plugins.
+:::
+
+<Disabled>
+    <LinkCard
+    title="Authoring an integration (soon)"
+    description="Learn how to write an integration the right way using Astro Integration Kit."
+    href="#"
+    />
+</Disabled>
+
+It accepts a few arguments, whose usage is explained in the sections below.
 
 ### Handling options and defaults
 
-- quick snippet
-- alert type note: really read defineOptions docs, super important
-- link to defineOptions
+`defineIntegration` accepts an `option` argument that you need to use with `defineOptions`.
+
+```ts title="my-integration/index.ts" "defineOptions" ins={3-5,9}
+import { defineIntegration, defineOptions } from "astro-integration-kit";
+
+type Options = {
+    foo?: string | undefined;
+}
+
+export default defineIntegration({
+    // ...
+    options: defineOptions<Options>({ foo: "bar" })
+})
+```
+
+:::note
+Really read the docs about `defineOptions` through the link below, there are limitations and stuff
+you need to know about.
+:::
+
+<LinkCard
+title="Read more about defineOptions"
+description="Allows defining an integration options while keeping the whole thing type-safe."
+href="/core/define-options/"
+/>
 
 ### Using plugins
 
-- how they work
-- corePlugins
-- link to guide to learn how to author them
+Plugins allow us (and you!) to make Astro Integration Kit really powerful. It allows to add arguments
+to built-in hooks in a type-safe way. Get started by using our `corePlugins`:
+
+```ts title="my-integration/index.ts" ins={2,6}
+import { defineIntegration } from "astro-integration-kit";
+import { corePlugins } from "astro-integration-kit/plugins";
+
+export default defineIntegration({
+    // ...
+    plugins: [...corePlugins]
+})
+```
+
+Under the hood, those plugins define using `definePlugin` pass "metadata" as types thanks to generics.
+
+<Disabled>
+    <LinkCard
+    title="Authoring a plugin (soon)"
+    description="Learn how to write an Astro Integration Kit plugin the right way."
+    href="#"
+    />
+</Disabled>
 
 ### Adding the logic with `setup`
 
-- arguments passed to setup
-- what to do in setup
-- what to return
+If you've written an integration before by returning an `AstroIntegration` from a function, that exactly
+the same with `setup`! This is where all the logic lives:
+
+```ts title="my-integration/index.ts" ins={5-7}
+import { defineIntegration } from "astro-integration-kit";
+
+export default defineIntegration({
+    // ...
+    setup() {
+        return {}
+    }
+})
+```
+It accepts an object with data from the integration definition:
+
+```ts title="my-integration/index.ts" "{ options, name }"
+import { defineIntegration } from "astro-integration-kit";
+
+export default defineIntegration({
+    // ...
+    setup({ options, name }) {
+        return {}
+    }
+})
+```
+
+In setup, you'll want to add any logic that is shared between any hook, for example:
+
+- Calling `createResolver`
+- Save the `config` from `astro:config:done` to be used in later hooks
+
+It needs to return Astro hooks. 

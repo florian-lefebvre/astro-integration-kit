@@ -51,7 +51,7 @@ export default defineConfig({
 				},
 			],
 			expressiveCode: {
-				themes: ["one-dark-pro", "starlight-light"]
+				themes: ["one-dark-pro", "starlight-light"],
 			},
 			sidebar: [
 				{
@@ -144,17 +144,13 @@ export default defineConfig({
 					],
 				},
 				{
-					label: `v${version} changelog`,
+					label: `v${version} changelog ↗`,
 					link: `https://github.com/florian-lefebvre/astro-integration-kit/blob/main/package/CHANGELOG.md#${version.replaceAll(
 						".",
 						"",
 					)}`,
 					attrs: {
 						target: "_blank",
-					},
-					badge: {
-						variant: "note",
-						text: "Latest",
 					},
 				},
 			],
