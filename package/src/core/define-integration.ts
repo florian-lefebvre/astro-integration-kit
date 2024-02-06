@@ -4,7 +4,8 @@ import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
 
 /**
- * Makes creating integrations easier, and adds a few goodies!
+ * A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality
+ * and best-practices when creating Astro Integrations.
  *
  * @param {object} params
  * @param {string} params.name - The name of your integration
@@ -44,7 +45,10 @@ export const defineIntegration = <
 	}) => ExtendedHooks<TPlugins>;
 }): ((options?: TOptions["options"]) => AstroIntegration) => {
 	return (_options?: TOptions["options"]) => {
-		const options = defu(_options ?? {}, optionsDef?.defaults ?? {}) as TOptions["options"];
+		const options = defu(
+			_options ?? {},
+			optionsDef?.defaults ?? {},
+		) as TOptions["options"];
 
 		const resolvedPlugins = Object.values(
 			(() => {
