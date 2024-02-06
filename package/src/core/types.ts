@@ -10,7 +10,7 @@ export type Plugin<
 	THook extends keyof Hooks,
 	TImplementation extends (
 		params: HookParameters<THook>,
-		integrationOptions: { name: string }
+		integrationOptions: { name: string },
 	) => (...args: Array<any>) => any,
 > = {
 	name: TName;
@@ -71,11 +71,11 @@ export type AddedParam<
 	>
 >;
 
-type AddParam<Func, Param = Record<never, never>> = Func extends (
-	params: infer Params,
-) => infer ReturnType
-	? (params: Params & Param) => ReturnType
-	: never;
+type AddParam<Func, Param = never> = [Param] extends [never]
+	? Func
+	: Func extends (params: infer Params) => infer ReturnType
+	  ? (params: Params & Param) => ReturnType
+	  : never;
 
 export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
 	"astro:config:setup"?: AddParam<
