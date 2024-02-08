@@ -18,15 +18,31 @@ export type Plugin<
 	implementation: TImplementation;
 };
 
+// To avoud having to call this manually for every generic
 export type AnyPlugin = Plugin<string, keyof Hooks, any>;
 
 export type Hooks = NonNullable<import("astro").AstroIntegration["hooks"]>;
 
+// From an array of plugins, returns an array of plugin where the hook
+// is the same as the THook generic. Otherwise, returns never.
 type FilterPluginsByHook<
 	TPlugins extends Array<AnyPlugin>,
 	THook extends keyof Hooks,
 > = Extract<TPlugins[number], { hook: THook }>;
 
+// This type is pretty crazy. It's a recursive type that allows to override
+// plugins based on their name and hook. For instance, if we have:
+// type A = Plugin<"test", "astro:config:setup", () => (param: number) => void>
+// type B = Plugin<"test", "astro:config:done", () => () => void>
+// type C = Plugin<"test", "astro:config:setup", () => (param: string) => void>
+// type Input = [A,B,C]
+// type Output = OverridePlugins<Input>
+// 			^? [B,C]
+//
+// Basically, all the A extends ? B : never allow to narrow the types to make sure
+// we get the right ones as input. Then, if there's already a plugin with the same
+// name and hook as the currently checked plugin (Head), we Omit it and put the current
+// type instead.
 // biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
 type OverridePlugins<T extends Array<AnyPlugin>, U = {}> = T extends []
 	? UnionToIntersection<U>
@@ -43,10 +59,17 @@ type OverridePlugins<T extends Array<AnyPlugin>, U = {}> = T extends []
 			: never
 	  : never;
 
+// The result of UnionToArray if effectively an Array<AnyPlugin> but TS struggles
+// to properly infer the right type. AssertPluginsArray just helps TS.
 type AssertPluginsArray<T extends Array<unknown>> = T extends Array<AnyPlugin>
 	? T
 	: never;
 
+// When we extend the params, we really only want to have this shape:
+// {
+//	  test: (param: string) => void	
+// }
+// So this type maps over the object to actually return what we want.
 type PluginsToImplementation<TPlugins extends Record<string, AnyPlugin>> = {
 	[K in keyof TPlugins]: TPlugins[K] extends Plugin<
 		infer _Name,

@@ -1,3 +1,4 @@
+// Source: https://catchts.com/union-array
 export type UnionToIntersection<U> = (
 	U extends any
 		? (k: U) => void
@@ -6,7 +7,6 @@ export type UnionToIntersection<U> = (
 	? I
 	: never;
 
-// Converts union to overloaded function
 type UnionToOvlds<U> = UnionToIntersection<
 	U extends any ? (f: U) => void : never
 >;
@@ -15,7 +15,6 @@ type PopUnion<U> = UnionToOvlds<U> extends (a: infer A) => void ? A : never;
 
 type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true;
 
-// Finally me)
 export type UnionToArray<
 	T,
 	A extends Array<unknown> = [],
@@ -23,6 +22,7 @@ export type UnionToArray<
 	? UnionToArray<Exclude<T, PopUnion<T>>, [PopUnion<T>, ...A]>
 	: [T, ...A];
 
+// Source: https://www.totaltypescript.com/concepts/the-prettify-helper
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 } & {};
