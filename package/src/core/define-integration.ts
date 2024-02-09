@@ -18,9 +18,6 @@ import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
  * ```ts
  * export default defineIntergration({
  *		name: "my-integration",
- *		defaults: {
- *    		foo: "bar",
- * 		},
  * 		setup({ options }) {
  * 			console.log(options.foo); // "bar"
  * 		}
