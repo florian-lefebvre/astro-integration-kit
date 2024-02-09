@@ -23,7 +23,7 @@ export type AnyPlugin = Plugin<string, keyof Hooks, any>;
 
 export type Hooks = NonNullable<import("astro").AstroIntegration["hooks"]>;
 
-// From an array of plugins, returns an array of plugin where the hook
+// From an array of plugins, returns an array of plugins where the hook
 // is the same as the THook generic. Otherwise, returns never.
 type FilterPluginsByHook<
 	TPlugins extends Array<AnyPlugin>,
