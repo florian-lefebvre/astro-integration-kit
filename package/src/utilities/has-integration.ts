@@ -30,8 +30,8 @@ type HasIntegrationParams = (
  * @example
  * ```ts
  * hasIntegration({
- * 		name: "@astrojs/tailwind",
- * 		config
+ * name: "@astrojs/tailwind",
+ * config
  * })
  * ```
  */
