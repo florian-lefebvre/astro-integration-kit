@@ -14,8 +14,8 @@ import type { PluginOption } from "vite";
  * @example
  * ```ts
  * addVitePlugin({
- * plugin,
- * updateConfig
+ * 		plugin,
+ * 		updateConfig
  * })
  * ```
  */
