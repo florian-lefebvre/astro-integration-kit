@@ -13,6 +13,10 @@ type UnionToOvlds<U> = UnionToIntersection<
 
 type PopUnion<U> = UnionToOvlds<U> extends (a: infer A) => void ? A : never;
 
+// Depending on usage, this could not work:
+// type A = { a: 'a' | 'b' };
+// type B = { a: "a" } | { a: "b" };
+// Only B works here, but it's fine for our usage.
 type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true;
 
 export type UnionToArray<T> = IsUnion<T> extends true
