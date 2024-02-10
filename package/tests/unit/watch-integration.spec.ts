@@ -2,8 +2,8 @@ import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, normalize } from "pathe";
 import type { Plugin } from "vite";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
-import { createResolver } from "../../src/utils/create-resolver.js";
-import { watchIntegration } from "../../src/utils/watch-integration.js";
+import { createResolver } from "../../src/core/create-resolver.js";
+import { watchIntegration } from "../../src/utilities/watch-integration.js";
 
 const tempFolderName = ".TMP_WATCHINTEGRATION";
 

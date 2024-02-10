@@ -1,6 +1,7 @@
 import type { Plugin } from "vite";
 import { describe, expect, test, vi } from "vitest";
-import { addVitePlugin } from "../../src/utils/add-vite-plugin.js";
+import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
+import type { HookParameters } from "astro";
 
 describe("addVitePlugin", () => {
 	test("Should run", () => {
@@ -31,7 +32,7 @@ describe("addVitePlugin", () => {
 
 		const updateConfig = vi.fn((config) => {
 			plugin = config.vite.plugins[0];
-		});
+		}) as unknown as HookParameters<"astro:config:setup">["updateConfig"];
 
 		const expectedPlugin = {
 			name: pluginName,
@@ -52,7 +53,7 @@ describe("addVitePlugin", () => {
 
 		const updateConfig = vi.fn((config) => {
 			plugin = config.vite.plugins[0];
-		});
+		}) as unknown as HookParameters<"astro:config:setup">["updateConfig"];
 
 		const expectedPlugin = {
 			name: pluginName,

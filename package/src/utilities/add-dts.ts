@@ -62,11 +62,11 @@ const injectEnvDTS = ({
  * @example
  * ```ts
  * addDts({
- * 	 name: "my-integration",
- * 	 content: `declare module "virtual:my-integration" {}`,
- * 	 root,
- * 	 srcDir,
- * 	 logger
+ * 		name: "my-integration",
+ * 	 	content: `declare module "virtual:my-integration" {}`,
+ * 	 	root,
+ * 	 	srcDir,
+ * 	 	logger
  * })
  * ```
  *

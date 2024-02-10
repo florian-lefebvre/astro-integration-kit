@@ -1,6 +1,6 @@
 import { dirname } from "pathe";
 import { describe, expect, test } from "vitest";
-import { createResolver } from "../../src/utils/create-resolver.js";
+import { createResolver } from "../../src/core/create-resolver.js";
 
 describe("createResolver", () => {
 	const directory = dirname(import.meta.url).replace("file:///", "");

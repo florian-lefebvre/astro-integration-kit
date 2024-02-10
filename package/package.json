@@ -20,7 +20,9 @@
 	},
 	"sideEffects": false,
 	"exports": {
-		".": "./src/index.ts"
+		".": "./src/core/index.ts",
+		"./utilities": "./src/utilities/index.ts",
+		"./plugins": "./src/plugins/index.ts"
 	},
 	"scripts": {
 		"test": "vitest"

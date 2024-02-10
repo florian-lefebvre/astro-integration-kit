@@ -1,0 +1,68 @@
+---
+title: definePlugin
+description: Allows defining a type-safe plugin that can be used in defineIntegration.
+---
+import Disabled from "~/components/Disabled.astro"
+import { LinkCard } from '@astrojs/starlight/components';
+
+Allows defining a type-safe plugin that can be used in `defineIntegration`.
+
+:::caution
+This utility is for advanced use-cases. It's useful for developers that want to create
+3rd party plugins for Astro Integration Kit, or if you want to learn a little bit more
+about the internals.
+:::
+
+```ts title="package/plugins/add-vite-plugin.ts"
+import { definePlugin } from "../core/define-plugin.js";
+import { addVitePlugin } from "../utilities/add-vite-plugin.js";
+import type { Plugin as VitePlugin } from "vite"
+
+export const addVitePluginPlugin = definePlugin({
+	name: "addVitePlugin",
+	hook: "astro:config:setup",
+	implementation:
+		({ updateConfig }) =>
+		(plugin: VitePlugin) =>
+			addVitePlugin({ plugin, updateConfig }),
+});
+```
+
+You can then use it in `defineIntegration`:
+
+```ts title="my-integration/index.ts" "addVitePluginPlugin"
+import { defineIntegration } from "astro-integration-kit";
+import { addVitePluginPlugin } from "../package/plugins/add-vite-plugin.js";
+
+export default defineIntegration({
+    name: "my-integration",
+    plugins: [addVitePluginPlugin],
+    setup() {
+        return {
+            "astro:config:setup": ({ addVitePlugin }) => {}
+        }
+    }
+})
+```
+
+
+## Limitations
+
+1. A plugin only defines a utility that will be injected for a given hook
+2. A plugin can only use the built-in utilities (ie. the ones from the official
+    [Integration API](https://docs.astro.build/en/reference/integrations-reference/))
+3. Plugins support overrides. That means that if 2 plugins declare the same `name` and
+    `hook`, the latest will be kept.
+
+## Practical examples
+
+Astro Integration Kit uses `definePlugin` for its core plugins under the hood,
+have a look at our source for practical examples!
+
+<Disabled>
+    <LinkCard
+    title="Authoring a plugin (soon)"
+    description="Learn how to write an Astro Integration Kit plugin the right way."
+    href="#"
+    />
+</Disabled>
