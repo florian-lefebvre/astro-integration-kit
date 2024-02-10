@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.1.0
+
+### Minor Changes
+
+- f05c7ab: Introduces plugins and improves documentation
+
 ## 0.0.12
 
 ### Patch Changes
