@@ -12,12 +12,12 @@ import type { Options } from "../core/types.js";
  *
  * ```ts
  * type Options = {
- * 	name?: string | undefined
+ * 		name?: string | undefined
  * };
  * 
  * export default defineIntegration({
- * 	// ...
- * 	options: defineOptions<Options>({ name: "abc" }),
+ * 		// ...
+ * 		options: defineOptions<Options>({ name: "abc" }),
  * })
  * ```
  */

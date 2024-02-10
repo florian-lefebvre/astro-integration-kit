@@ -39,10 +39,10 @@ const getFilesRecursively = (dir: string, baseDir = dir) => {
  * @example
  * ```ts
  * watchIntegration({
- *    dir: resolve(),
- *    addWatchFile,
- *    command,
- *    updateConfig,
+ * 		dir: resolve(),
+ * 		addWatchFile,
+ * 		command,
+ * 		updateConfig,
  * })
  * ```
  */

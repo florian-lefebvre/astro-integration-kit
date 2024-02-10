@@ -17,12 +17,9 @@ import type { Hooks, Plugin } from "./types.js";
  * import type { Plugin as VitePlugin } from "vite"
  * 
  * export const addVitePluginPlugin = definePlugin({
- * 	name: "addVitePlugin",
- * 	hook: "astro:config:setup",
- * 	implementation:
- * 		({ updateConfig }) =>
- * 		(plugin: VitePlugin) =>
- * 		addVitePlugin({ plugin, updateConfig }),
+ * 		name: "addVitePlugin",
+ * 		hook: "astro:config:setup",
+ * 		implementation: ({ updateConfig }) => (plugin: VitePlugin) => addVitePlugin({ plugin, updateConfig }),
  * });
  * ```
  */

@@ -41,9 +41,9 @@ const createVirtualModule = (name: string, content: string): Plugin => {
  * import { addVirtualImport } from "astro-integration-kit";
  *
  * addVirtualImport(
- *   name: 'virtual:my-integration/config',
- *   content: `export default ${ JSON.stringify({foo: "bar"}) }`,
- *   updateConfig
+ * 		name: 'virtual:my-integration/config',
+ *   	content: `export default ${ JSON.stringify({foo: "bar"}) }`,
+ * 		updateConfig
  * );
  * ```
  *

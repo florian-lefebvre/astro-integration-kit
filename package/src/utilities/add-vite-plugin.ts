@@ -13,10 +13,10 @@ import type { PluginOption } from "vite";
  *
  * @example
  * ```ts
- *  addVitePlugin({
+ * addVitePlugin({
  * 		plugin,
  * 		updateConfig
- * 	})
+ * })
  * ```
  */
 export const addVitePlugin = ({

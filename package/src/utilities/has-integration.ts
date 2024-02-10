@@ -29,10 +29,10 @@ type HasIntegrationParams = (
  *
  * @example
  * ```ts
- *  hasIntegration({
+ * hasIntegration({
  * 		name: "@astrojs/tailwind",
  * 		config
- * 	})
+ * })
  * ```
  */
 export const hasIntegration = ({
