@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.1.1
+
+### Patch Changes
+
+- a3e5230: Fixes type definition for integration setup `options`
+
 ## 0.1.0
 
 ### Minor Changes
