@@ -9,11 +9,13 @@ create a file inside `.astro` and reference it from `src/env.d.ts`. For example:
 
 <Tabs>
     <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" "addDts"
+    ```ts title="my-integration/index.ts" /addDts\\b/ {2,6}
     import { defineIntegration } from "astro-integration-kit";
+    import { addDtsPlugin } from "astro-integration-kit/plugins";
 
     export default defineIntegration({
         name: "my-integration",
+        plugins: [addDtsPlugin],
         setup(options) {
             return {
                 "astro:config:setup": ({ addDts }) => {

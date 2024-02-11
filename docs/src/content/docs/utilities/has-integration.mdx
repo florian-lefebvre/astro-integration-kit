@@ -8,11 +8,13 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 <Tabs>
 	<TabItem label="Extended hooks">
-	```ts title="my-integration/index.ts" "hasIntegration"
+	```ts title="my-integration/index.ts" /hasIntegration\\b/ {2,6}
 	import { defineIntegration } from "astro-integration-kit";
+	import { hasIntegrationPlugin } from "astro-integration-kit/plugins";
 
 	export default defineIntegration({
 		name: "my-integration",
+		plugins: [hasIntegrationPlugin],
 		setup() {
 			return {
 				"astro:config:setup": ({ hasIntegration, logger }) => {

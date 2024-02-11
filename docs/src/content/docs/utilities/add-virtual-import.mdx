@@ -8,11 +8,13 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 <Tabs>
     <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" "addVirtualImport"
+    ```ts title="my-integration/index.ts" /addVirtualImport\\b/ {2,6}
     import { defineIntegration } from "astro-integration-kit";
+    import { addVirtualImportPlugin } from "astro-integration-kit/plugins";
 
     export default defineIntegration({
         name: "my-integration",
+        plugins: [addVirtualImportPlugin],
         setup() {
             return {
                 "astro:config:setup": ({ addVirtualImport }) => {
