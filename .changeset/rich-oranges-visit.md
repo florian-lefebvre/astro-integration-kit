@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-Fix type definition for integration setup parameters
+Fixes type definition for integration setup `options`
