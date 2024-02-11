@@ -9,12 +9,14 @@ to the Astro config. For example:
 
 <Tabs>
     <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" "addVitePlugin"
+    ```ts title="my-integration/index.ts" /addVitePlugin\\b/ {2,7}
     import { defineIntegration } from "astro-integration-kit";
+    import { addVitePluginPlugin } from "astro-integration-kit/plugins";
     import { VitePWA } from 'vite-plugin-pwa'
 
     export default defineIntegration({
         name: "my-integration",
+        plugins: [addVitePluginPlugin],
         setup(options) {
             return {
                 "astro:config:setup": ({ addVitePlugin }) => {

@@ -9,11 +9,13 @@ the integration directory has changed. For example:
 
 <Tabs>
     <TabItem label="Extended hooks">
-	```ts title="my-integration/index.ts" "watchIntegration"
+	```ts title="my-integration/index.ts" /watchIntegration\\b/ {2,6}
 	import { createResolver, defineIntegration } from "astro-integration-kit";
+	import { watchIntegrationPlugin } from "astro-integration-kit/plugins";
 
 	export default defineIntegration({
 		name: "my-integration",
+		plugins: [watchIntegrationPlugin],
 		setup() {
 			const { resolve } = createResolver(import.meta.url);
 
