@@ -38,7 +38,7 @@ export const defineIntegration = <
 	plugins?: TPlugins;
 	setup: (params: {
 		name: string;
-		options: TOptions;
+		options: TOptions["options"];
 	}) => ExtendedHooks<TPlugins>;
 }): ((options?: TOptions["options"]) => AstroIntegration) => {
 	return (_options?: TOptions["options"]) => {
