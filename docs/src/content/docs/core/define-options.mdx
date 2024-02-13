@@ -85,7 +85,7 @@ export default defineIntegration({
     // ...
     options: defineOptions<Options>({ foo: undefined }),
     setup({ options: inputOptions }) {
-        const options = optionsSchema.parse(inputOptions);
+        const options = OptionsSchema.parse(inputOptions);
 
         return {}
     }
