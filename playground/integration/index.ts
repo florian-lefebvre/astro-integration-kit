@@ -5,17 +5,24 @@ import {
 	defineOptions,
 } from "astro-integration-kit";
 import { corePlugins } from "astro-integration-kit/plugins";
+import { z } from "astro/zod";
+
+const OptionsSchema = z.object({
+	name: z.string().optional().default("abc")
+})
 
 type Options = {
 	/**
 	 * An important comment
 	 */
-	name?: string | undefined
+	name?: z.infer<typeof OptionsSchema>["name"]
 };
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	options: defineOptions<Options>({ name: "abc" }),
+	options: defineOptions<Options>({
+		schema: OptionsSchema
+	}),
 	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);

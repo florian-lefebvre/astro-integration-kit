@@ -64,12 +64,10 @@ export default defineConfig({
 						{
 							label: "Usage",
 							link: "/getting-started/usage/",
-							badge: badge("updated"),
 						},
 						{
 							label: "Why Astro Integration Kit",
 							link: "/getting-started/why",
-							badge: badge("new"),
 						},
 						{
 							label: "Showcase",
@@ -83,12 +81,11 @@ export default defineConfig({
 						{
 							label: "defineIntegration",
 							link: "/core/define-integration/",
-							badge: badge("updated"),
 						},
 						{
 							label: "defineOptions",
 							link: "/core/define-options/",
-							badge: badge("new"),
+							badge: badge("updated"),
 						},
 						{
 							label: "createResolver",
@@ -97,7 +94,6 @@ export default defineConfig({
 						{
 							label: "definePlugin",
 							link: "/core/define-plugin/",
-							badge: badge("new"),
 						},
 					],
 				},
@@ -107,7 +103,6 @@ export default defineConfig({
 						{
 							label: "addDts",
 							link: "/utilities/add-dts/",
-							badge: badge("new"),
 						},
 						{
 							label: "addVirtualImport",
@@ -120,7 +115,6 @@ export default defineConfig({
 						{
 							label: "hasIntegration",
 							link: "/utilities/has-integration/",
-							badge: badge("updated"),
 						},
 						{
 							label: "watchIntegration (HMR)",

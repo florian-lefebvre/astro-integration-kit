@@ -145,7 +145,7 @@ export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
 
 export type Options<TOptions extends Record<string, unknown>> = {
 	options: TOptions;
-	defaults: Required<TOptions>;
+	schema: import('astro/zod').AnyZodObject
 };
 
 export type AnyOptions = Options<any>;

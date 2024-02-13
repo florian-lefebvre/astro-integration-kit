@@ -1,5 +1,4 @@
 import type { AstroIntegration, HookParameters } from "astro";
-import { defu } from "defu";
 import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
 
@@ -42,9 +41,8 @@ export const defineIntegration = <
 	}) => ExtendedHooks<TPlugins>;
 }): ((options?: TOptions["options"]) => AstroIntegration) => {
 	return (_options?: TOptions["options"]) => {
-		const options = defu(
+		const options = optionsDef?.schema.parse(
 			_options ?? {},
-			optionsDef?.defaults ?? {},
 		) as TOptions["options"];
 
 		const resolvedPlugins = Object.values(

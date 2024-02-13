@@ -38,7 +38,6 @@
 		"vitest": "^1.2.1"
 	},
 	"dependencies": {
-		"defu": "^6.1.4",
 		"pathe": "^1.1.2"
 	}
 }
