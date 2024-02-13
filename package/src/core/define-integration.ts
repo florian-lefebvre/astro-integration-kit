@@ -1,6 +1,7 @@
 import type { AstroIntegration, HookParameters } from "astro";
-import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
+import type { z } from "astro/zod";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
+import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
 
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality
@@ -37,13 +38,13 @@ export const defineIntegration = <
 	plugins?: TPlugins;
 	setup: (params: {
 		name: string;
-		options: TOptions["options"];
+		options: z.output<TOptions["schema"]>;
 	}) => ExtendedHooks<TPlugins>;
-}): ((options?: TOptions["options"]) => AstroIntegration) => {
-	return (_options?: TOptions["options"]) => {
-		const options = optionsDef?.schema.parse(
-			_options ?? {},
-		) as TOptions["options"];
+}): ((options?: z.input<TOptions["schema"]>) => AstroIntegration) => {
+	return (_options?: z.input<TOptions["schema"]>) => {
+		const options = optionsDef?.schema.parse(_options ?? {}) as z.output<
+			TOptions["schema"]
+		>;
 
 		const resolvedPlugins = Object.values(
 			(() => {

@@ -22,9 +22,8 @@ import type { Options } from "../core/types.js";
  * })
  * ```
  */
-export const defineOptions = <TOptions extends Record<string, unknown>>({
+export const defineOptions = <Schema extends import("astro/zod").AnyZodObject>({
 	schema,
-}: { schema: import("astro/zod").AnyZodObject }): Options<TOptions> => ({
-	options: {} as TOptions,
+}: { schema: Schema }): Options<Schema> => ({
 	schema,
 });
