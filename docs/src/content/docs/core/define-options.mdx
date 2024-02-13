@@ -71,13 +71,13 @@ we recommend that you validate the user input using `zod` inside `setup`:
 import { defineIntegration, defineOptions } from "astro-integration-kit";
 import { z } from "astro/zod";
 
-const optionsSchema = z.object({
+const OptionsSchema = z.object({
     foo: z.union([z.array(z.string()), z.literal(undefined)]).optional()
 })
 
 type Options = {
     /** An insightful comment */
-    foo?: z.infer<typeof optionsSchema>["foo"]
+    foo?: z.infer<typeof OptionsSchema>["foo"]
 }
 
 
@@ -85,7 +85,7 @@ export default defineIntegration({
     // ...
     options: defineOptions<Options>({ foo: undefined }),
     setup({ options: inputOptions }) {
-        const options = optionsSchema.parse(inputOptions);
+        const options = OptionsSchema.parse(inputOptions);
 
         return {}
     }
