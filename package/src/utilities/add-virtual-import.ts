@@ -65,6 +65,17 @@ export const addVirtualImport = ({
 	content: string;
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
+	const disallowedNames = [
+		'astro:',
+	];
+
+	const nameStartsWithDisallowedName: string | undefined = disallowedNames
+		.find(disallowedName => name.startsWith(disallowedName));
+
+	if (nameStartsWithDisallowedName) {
+		throw new Error(`[addVirtualImport] - Virtual import is not allowed to start with "${ nameStartsWithDisallowedName }"`)
+	}
+
 	addVitePlugin({
 		plugin: createVirtualModule(name, content),
 		updateConfig,

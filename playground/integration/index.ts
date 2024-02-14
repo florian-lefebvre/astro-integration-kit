@@ -61,6 +61,12 @@ const testIntegration = defineIntegration({
 				if (hasIntegration("integration-b", "after", "integration-a")) {
 					console.log("Integration B is installed after Integration A");
 				}
+
+				// Test addVirtualImport disallowed list
+				// addVirtualImport({
+				// 	name: "astro:test",
+				// 	content: "export default {}"
+				// });
 			},
 		};
 	},
