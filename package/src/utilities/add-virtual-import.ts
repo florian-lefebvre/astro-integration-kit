@@ -1,4 +1,5 @@
 import type { HookParameters } from "astro";
+import { AstroError } from "astro/errors";
 import type { Plugin } from "vite";
 import { addVitePlugin } from "./add-vite-plugin.js";
 
@@ -65,15 +66,9 @@ export const addVirtualImport = ({
 	content: string;
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
-	const disallowedNames = ["astro:"];
-
-	const nameStartsWithDisallowedName: string | undefined = disallowedNames.find(
-		(disallowedName) => name.startsWith(disallowedName),
-	);
-
-	if (nameStartsWithDisallowedName) {
-		throw new Error(
-			`[addVirtualImport] - Virtual import is not allowed to start with "${nameStartsWithDisallowedName}"`,
+	if (name.startsWith("astro:")) {
+		throw new AstroError(
+			"[addVirtualImport] - Virtual import is not allowed to start with 'astro:' because it's an interval prefix.",
 		);
 	}
 
