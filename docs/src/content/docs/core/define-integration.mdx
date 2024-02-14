@@ -12,23 +12,15 @@ extra hooks, functionality and best-practices when creating Astro Integrations.
 import {
     createResolver,
     defineIntegration,
-    defineOptions,
 } from "astro-integration-kit";
 import { corePlugins } from "astro-integration-kit/plugins";
 import { z } from "astro/zod";
 
-const OptionsSchema = z.object({
-    foo: z.string().optional().default("bar"),
-});
-
-export type Options = {
-    foo?: z.infer<typeof OptionsSchema>["foo"];
-}
-
 export default defineIntegration({
     name: "my-integration",
-    options: defineOptions<Options>({
-        schema: OptionsSchema,
+    optionsSchema: z.object({
+        /** A comment */
+        foo: z.string().optional().default("bar"),
     }),
     plugins: [...corePlugins],
     setup({ options }) {
@@ -73,38 +65,30 @@ It accepts a few arguments, whose usage is explained in the sections below.
 
 ## Handling options and defaults
 
-`defineIntegration` accepts an `option` argument that you need to use with `defineOptions`.
+`defineIntegration` accepts an `optionSchema` argument that is a `zod` schema.
 
-```ts title="my-integration/index.ts" "defineOptions" ins={2,4-6,8-10,14-16}
-import { defineIntegration, defineOptions } from "astro-integration-kit";
+```ts title="my-integration/index.ts" ins={2,6-13}
+import { defineIntegration } from "astro-integration-kit";
 import { z } from "astro/zod";
-
-const OptionsSchema = z.object({
-    foo: z.string().optional().default("bar"),
-});
-
-type Options = {
-    foo?: z.infer<typeof OptionsSchema>["foo"];
-}
 
 export default defineIntegration({
     // ...
-    options: defineOptions<Options>({
-        schema: OptionsSchema,
+    optionsSchema: z.object({
+        /**
+         * A comment
+         *
+         * @default `"bar"`
+         */
+        foo: z.string().optional().default("bar"),
     }),
 })
 ```
 
-:::note
-Really read the docs about `defineOptions` through the link below, there are limitations and stuff
-you need to know about.
-:::
+This way, you can:
 
-<LinkCard
-title="Read more about defineOptions"
-description="Allows defining an integration options while keeping the whole thing type-safe."
-href="/core/define-options/"
-/>
+- Add proper documentation using JSDoc annotations
+- Provide defaults
+- Well, take dull advantage of `zod`'s power!
 
 ## Using plugins
 

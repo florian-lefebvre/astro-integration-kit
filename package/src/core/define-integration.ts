@@ -9,7 +9,8 @@ import type { AnyPlugin, ExtendedHooks } from "./types.js";
  *
  * @param {object} params
  * @param {string} params.name - The name of your integration
- * @param {object} params.object - Any default config options you want to set
+ * @param {import("astro/zod").AnyZodObject} params.optionsSchema - An optional zod schema to handle your integration options
+ * @param {Array<AnyPlugin>} params.plugins - An optional array of plugins
  * @param {function} params.setup - This will be called from your `astro:config:setup` call with the user options
  *
  * @see https://astro-integration-kit.netlify.app/utilities/define-integration/
@@ -25,7 +26,7 @@ import type { AnyPlugin, ExtendedHooks } from "./types.js";
  * ```
  */
 export const defineIntegration = <
-	TOptions extends import("astro/zod").AnyZodObject,
+	TOptionsSchema extends import("astro/zod").AnyZodObject,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
@@ -34,15 +35,15 @@ export const defineIntegration = <
 	plugins: _plugins,
 }: {
 	name: string;
-	optionsSchema?: TOptions;
+	optionsSchema?: TOptionsSchema;
 	plugins?: TPlugins;
 	setup: (params: {
 		name: string;
-		options: z.output<TOptions>;
+		options: z.output<TOptionsSchema>;
 	}) => ExtendedHooks<TPlugins>;
-}): ((options?: z.input<TOptions>) => AstroIntegration) => {
-	return (_options?: z.input<TOptions>) => {
-		const options = optionsSchema?.parse(_options ?? {}) as z.output<TOptions>;
+}): ((options?: z.input<TOptionsSchema>) => AstroIntegration) => {
+	return (_options: z.input<TOptionsSchema> = {}) => {
+		const options = optionsSchema?.parse(_options) as z.output<TOptionsSchema>;
 
 		const resolvedPlugins = Object.values(
 			(() => {

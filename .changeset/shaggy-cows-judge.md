@@ -2,4 +2,6 @@
 "astro-integration-kit": minor
 ---
 
-Updates `defineOptions` to include runtime options validation by default using `zod`
+Removes `defineOptions` and adds a new `optionsSchema` argument to `defineIntegration`
+
+Check out the [migration guide](https://astro-integration-kit.netlify.app/core/define-options/).

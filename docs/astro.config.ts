@@ -2,16 +2,18 @@ import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 import { version } from "../package/package.json";
 
-const badge = (type: "new" | "updated" | "soon") => ({
+const badge = (type: "new" | "updated" | "soon" | "removed") => ({
 	variant: {
 		new: "success" as const,
 		updated: "caution" as const,
 		soon: "tip" as const,
+		removed: "danger" as const,
 	}[type],
 	text: {
 		new: "New",
 		updated: "Updated",
 		soon: "Soon",
+		removed: "Removed",
 	}[type],
 });
 
@@ -81,11 +83,12 @@ export default defineConfig({
 						{
 							label: "defineIntegration",
 							link: "/core/define-integration/",
+							badge: badge("updated"),
 						},
 						{
 							label: "defineOptions",
 							link: "/core/define-options/",
-							badge: badge("updated"),
+							badge: badge("removed"),
 						},
 						{
 							label: "createResolver",
