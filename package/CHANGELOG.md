@@ -1,5 +1,13 @@
 # astro-integration-kit
 
+## 0.2.0
+
+### Minor Changes
+
+- f36fead: Removes `defineOptions` and replaces the `options` argument with a new `optionsSchema` argument on `defineIntegration`
+
+  Check out the [migration guide](https://astro-integration-kit.netlify.app/core/define-options/).
+
 ## 0.1.2
 
 ### Patch Changes
