@@ -68,7 +68,7 @@ export const addVirtualImport = ({
 }) => {
 	if (name.startsWith("astro:")) {
 		throw new AstroError(
-			"[addVirtualImport] - Virtual import is not allowed to start with 'astro:' because it's an interval prefix.",
+			`Virtual import name prefix can't be "astro:" (for "${name}") because it's reserved for Astro core.`,
 		);
 	}
 
