@@ -14,11 +14,11 @@ import { addVitePlugin as mockAddVitePlugin } from "../../src/utilities/add-vite
 import { hasIntegration as mockHasIntegration } from "../../src/utilities/has-integration.js";
 import { watchIntegration as mockWatchIntegration } from "../../src/utilities/watch-integration.js";
 
-vi.mock("../../src/utils/add-virtual-import.js");
-vi.mock("../../src/utils/add-vite-plugin.js");
-vi.mock("../../src/utils/add-dts.js");
-vi.mock("../../src/utils/has-integration.js");
-vi.mock("../../src/utils/watch-integration.js");
+vi.mock("../../src/utilities/add-virtual-import.js");
+vi.mock("../../src/utilities/add-vite-plugin.js");
+vi.mock("../../src/utilities/add-dts.js");
+vi.mock("../../src/utilities/has-integration.js");
+vi.mock("../../src/utilities/watch-integration.js");
 
 const astroConfigSetupParamsStub = (
 	params?: HookParameters<"astro:config:setup">,
