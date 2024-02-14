@@ -10,12 +10,12 @@ import type { Hooks, Plugin } from "./types.js";
  * @param {Function} plugin.implementation - The actual function definition. Refer to docs for usage
  *
  * @see https://astro-integration-kit.netlify.app/utilities/define-plugin/
- * 
+ *
  * ```ts
  * import { definePlugin } from "../core/define-plugin.js";
  * import { addVitePlugin } from "../utilities/add-vite-plugin.js";
  * import type { Plugin as VitePlugin } from "vite"
- * 
+ *
  * export const addVitePluginPlugin = definePlugin({
  * 		name: "addVitePlugin",
  * 		hook: "astro:config:setup",

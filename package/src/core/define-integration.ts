@@ -1,7 +1,7 @@
 import type { AstroIntegration, HookParameters } from "astro";
 import type { z } from "astro/zod";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
-import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
+import type { AnyPlugin, ExtendedHooks } from "./types.js";
 
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality

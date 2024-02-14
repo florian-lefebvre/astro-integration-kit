@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import {
 	createResolver,
 	defineIntegration,
-	defineOptions,
 } from "astro-integration-kit";
 import { corePlugins } from "astro-integration-kit/plugins";
 import { z } from "astro/zod";
@@ -19,7 +18,7 @@ const OptionsSchema = z.object({
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	options: OptionsSchema,
+	optionsSchema: OptionsSchema,
 	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
@@ -66,6 +65,12 @@ const testIntegration = defineIntegration({
 				if (hasIntegration("integration-b", "after", "integration-a")) {
 					console.log("Integration B is installed after Integration A");
 				}
+
+				// Test addVirtualImport disallowed list
+				// addVirtualImport({
+				// 	name: "astro:test",
+				// 	content: "export default {}"
+				// });
 			},
 		};
 	},

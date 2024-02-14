@@ -4,21 +4,21 @@ import type {
 	HookParameters,
 } from "astro";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
-import type { ExtendedHooks as _ExtendedHooks } from "../../src/core/types.js";
 import { defineIntegration } from "../../src/core/define-integration.js";
+import { defineOptions } from "../../src/core/define-options.js";
+import type { ExtendedHooks as _ExtendedHooks } from "../../src/core/types.js";
+import { corePlugins } from "../../src/plugins/index.js";
 import { addDts as mockAddDts } from "../../src/utilities/add-dts.js";
 import { addVirtualImport as mockAddVirtualImport } from "../../src/utilities/add-virtual-import.js";
 import { addVitePlugin as mockAddVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 import { hasIntegration as mockHasIntegration } from "../../src/utilities/has-integration.js";
 import { watchIntegration as mockWatchIntegration } from "../../src/utilities/watch-integration.js";
-import { corePlugins } from "../../src/plugins/index.js";
-import { defineOptions } from "../../src/core/define-options.js";
 
-vi.mock("../../src/utils/add-virtual-import.js");
-vi.mock("../../src/utils/add-vite-plugin.js");
-vi.mock("../../src/utils/add-dts.js");
-vi.mock("../../src/utils/has-integration.js");
-vi.mock("../../src/utils/watch-integration.js");
+vi.mock("../../src/utilities/add-virtual-import.js");
+vi.mock("../../src/utilities/add-vite-plugin.js");
+vi.mock("../../src/utilities/add-dts.js");
+vi.mock("../../src/utilities/has-integration.js");
+vi.mock("../../src/utilities/watch-integration.js");
 
 const astroConfigSetupParamsStub = (
 	params?: HookParameters<"astro:config:setup">,
@@ -39,7 +39,7 @@ const astroConfigSetupParamsStub = (
 	...(params || {}),
 });
 
-const plugins = [...corePlugins]
+const plugins = [...corePlugins];
 
 type ExtendedHooks = _ExtendedHooks<typeof plugins>;
 
@@ -50,7 +50,7 @@ describe("defineIntegration", () => {
 
 	test("Should run", () => {
 		const name = "my-integration";
-		const setup = () => ({})
+		const setup = () => ({});
 
 		expect(() =>
 			defineIntegration({

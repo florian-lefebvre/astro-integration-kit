@@ -1,4 +1,4 @@
-import type { Plugin, AddedParam } from "../src/core/types.js";
+import type { AddedParam, Plugin } from "../src/core/types.js";
 import { addDtsPlugin } from "../src/plugins/add-dts.js";
 
 type A = Plugin<"a", "astro:config:setup", () => (param: string) => boolean>;
@@ -15,6 +15,6 @@ type Plugins = [A, B, C, AOverride, D];
 type X1 = AddedParam<Plugins, "astro:config:setup">;
 type X2 = AddedParam<Plugins, "astro:config:done">;
 
-const plugins = [addDtsPlugin]
+const plugins = [addDtsPlugin];
 
-type X3 = AddedParam<typeof plugins, "astro:config:setup">
+type X3 = AddedParam<typeof plugins, "astro:config:setup">;

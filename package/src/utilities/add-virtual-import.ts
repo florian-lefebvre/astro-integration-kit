@@ -1,4 +1,5 @@
 import type { HookParameters } from "astro";
+import { AstroError } from "astro/errors";
 import type { Plugin } from "vite";
 import { addVitePlugin } from "./add-vite-plugin.js";
 
@@ -65,6 +66,12 @@ export const addVirtualImport = ({
 	content: string;
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
+	if (name.startsWith("astro:")) {
+		throw new AstroError(
+			`Virtual import name prefix can't be "astro:" (for "${name}") because it's reserved for Astro core.`,
+		);
+	}
+
 	addVitePlugin({
 		plugin: createVirtualModule(name, content),
 		updateConfig,

@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.1.2
+
+### Patch Changes
+
+- 79200b4: Prevents virtual imports name from starting with "astro:" (reserved for Astro core)
+
 ## 0.1.1
 
 ### Patch Changes
