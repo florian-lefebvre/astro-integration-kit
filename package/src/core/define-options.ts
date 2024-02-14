@@ -14,7 +14,7 @@ import type { Options } from "../core/types.js";
  * type Options = {
  * 		name?: string | undefined
  * };
- * 
+ *
  * export default defineIntegration({
  * 		// ...
  * 		options: defineOptions<Options>({ name: "abc" }),

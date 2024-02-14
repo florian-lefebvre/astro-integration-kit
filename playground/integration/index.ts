@@ -10,7 +10,7 @@ type Options = {
 	/**
 	 * An important comment
 	 */
-	name?: string | undefined
+	name?: string | undefined;
 };
 
 const testIntegration = defineIntegration({
