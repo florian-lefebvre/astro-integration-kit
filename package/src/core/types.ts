@@ -67,7 +67,7 @@ type AssertPluginsArray<T extends Array<unknown>> = T extends Array<AnyPlugin>
 
 // When we extend the params, we really only want to have this shape:
 // {
-//	  test: (param: string) => void	
+//	  test: (param: string) => void
 // }
 // So this type maps over the object to actually return what we want.
 type PluginsToImplementation<TPlugins extends Record<string, AnyPlugin>> = {
