@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-disallows virtual imports to start with "astro:"
+Prevents virtual imports name from starting with "astro:" (reserved for Astro core)
