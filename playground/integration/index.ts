@@ -1,24 +1,25 @@
 import { readFileSync } from "node:fs";
-import {
-	createResolver,
-	defineIntegration,
-	defineOptions,
-} from "astro-integration-kit";
+import { createResolver, defineIntegration } from "astro-integration-kit";
 import { corePlugins } from "astro-integration-kit/plugins";
+import { z } from "astro/zod";
 
-type Options = {
+const OptionsSchema = z.object({
 	/**
-	 * An important comment
+	 * The name of the resource.
 	 */
-	name?: string | undefined;
-};
+	resource: z
+		.string()
+		.default("abc")
+		.transform((val) => val.length),
+});
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	options: defineOptions<Options>({ name: "abc" }),
+	optionsSchema: OptionsSchema,
 	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
+		options.resource;
 
 		const pluginPath = resolve("./plugin.ts");
 		console.log({ options, pluginPath });

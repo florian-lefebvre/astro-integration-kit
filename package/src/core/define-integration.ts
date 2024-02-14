@@ -1,7 +1,7 @@
 import type { AstroIntegration, HookParameters } from "astro";
-import { defu } from "defu";
+import type { z } from "astro/zod";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
-import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
+import type { AnyPlugin, ExtendedHooks } from "./types.js";
 
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality
@@ -9,7 +9,8 @@ import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
  *
  * @param {object} params
  * @param {string} params.name - The name of your integration
- * @param {object} params.object - Any default config options you want to set
+ * @param {import("astro/zod").AnyZodObject} params.optionsSchema - An optional zod schema to handle your integration options
+ * @param {Array<AnyPlugin>} params.plugins - An optional array of plugins
  * @param {function} params.setup - This will be called from your `astro:config:setup` call with the user options
  *
  * @see https://astro-integration-kit.netlify.app/utilities/define-integration/
@@ -25,27 +26,24 @@ import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
  * ```
  */
 export const defineIntegration = <
-	TOptions extends AnyOptions = never,
+	TOptionsSchema extends import("astro/zod").AnyZodObject,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
-	options: optionsDef,
+	optionsSchema,
 	setup,
 	plugins: _plugins,
 }: {
 	name: string;
-	options?: TOptions;
+	optionsSchema?: TOptionsSchema;
 	plugins?: TPlugins;
 	setup: (params: {
 		name: string;
-		options: TOptions["options"];
+		options: z.output<TOptionsSchema>;
 	}) => ExtendedHooks<TPlugins>;
-}): ((options?: TOptions["options"]) => AstroIntegration) => {
-	return (_options?: TOptions["options"]) => {
-		const options = defu(
-			_options ?? {},
-			optionsDef?.defaults ?? {},
-		) as TOptions["options"];
+}): ((options?: z.input<TOptionsSchema>) => AstroIntegration) => {
+	return (_options: z.input<TOptionsSchema> = {}) => {
+		const options = optionsSchema?.parse(_options) as z.output<TOptionsSchema>;
 
 		const resolvedPlugins = Object.values(
 			(() => {
