@@ -1,6 +1,7 @@
 import type { AstroIntegration, HookParameters } from "astro";
-import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
+import type { z } from "astro/zod";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
+import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
 
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality
@@ -24,26 +25,24 @@ import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
  * ```
  */
 export const defineIntegration = <
-	TOptions extends AnyOptions = never,
+	TOptions extends import("astro/zod").AnyZodObject,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
-	options: optionsDef,
+	optionsSchema,
 	setup,
 	plugins: _plugins,
 }: {
 	name: string;
-	options?: TOptions;
+	optionsSchema?: TOptions;
 	plugins?: TPlugins;
 	setup: (params: {
 		name: string;
-		options: TOptions["options"];
+		options: z.output<TOptions>;
 	}) => ExtendedHooks<TPlugins>;
-}): ((options?: TOptions["options"]) => AstroIntegration) => {
-	return (_options?: TOptions["options"]) => {
-		const options = optionsDef?.schema.parse(
-			_options ?? {},
-		) as TOptions["options"];
+}): ((options?: z.input<TOptions>) => AstroIntegration) => {
+	return (_options?: z.input<TOptions>) => {
+		const options = optionsSchema?.parse(_options ?? {}) as z.output<TOptions>;
 
 		const resolvedPlugins = Object.values(
 			(() => {

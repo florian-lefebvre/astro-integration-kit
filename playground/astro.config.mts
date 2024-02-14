@@ -6,7 +6,9 @@ import testIntegration from "./integration";
 export default defineConfig({
 	integrations: [
 		tailwind(),
-		testIntegration({ name: "ced" }),
+		testIntegration({
+			resource: "abc",
+		}),
 		{ name: "integration-a", hooks: {} },
 		{ name: "integration-b", hooks: {} },
 	],
