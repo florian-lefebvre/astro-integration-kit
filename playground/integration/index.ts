@@ -8,24 +8,22 @@ import { corePlugins } from "astro-integration-kit/plugins";
 import { z } from "astro/zod";
 
 const OptionsSchema = z.object({
-	name: z.string().optional().default("abc")
-})
-
-type Options = {
 	/**
-	 * An important comment
+	 * The name of the resource.
 	 */
-	name?: z.infer<typeof OptionsSchema>["name"]
-};
+	resource: z
+		.string()
+		.default("abc")
+		.transform((val) => val.length),
+});
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	options: defineOptions<Options>({
-		schema: OptionsSchema
-	}),
+	options: OptionsSchema,
 	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
+		options.resource;
 
 		const pluginPath = resolve("./plugin.ts");
 		console.log({ options, pluginPath });

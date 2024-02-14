@@ -25,26 +25,24 @@ import type { AnyOptions, AnyPlugin, ExtendedHooks } from "./types.js";
  * ```
  */
 export const defineIntegration = <
-	TOptions extends AnyOptions = never,
+	TOptions extends import("astro/zod").AnyZodObject,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
-	options: optionsDef,
+	optionsSchema,
 	setup,
 	plugins: _plugins,
 }: {
 	name: string;
-	options?: TOptions;
+	optionsSchema?: TOptions;
 	plugins?: TPlugins;
 	setup: (params: {
 		name: string;
-		options: z.output<TOptions["schema"]>;
+		options: z.output<TOptions>;
 	}) => ExtendedHooks<TPlugins>;
-}): ((options?: z.input<TOptions["schema"]>) => AstroIntegration) => {
-	return (_options?: z.input<TOptions["schema"]>) => {
-		const options = optionsDef?.schema.parse(_options ?? {}) as z.output<
-			TOptions["schema"]
-		>;
+}): ((options?: z.input<TOptions>) => AstroIntegration) => {
+	return (_options?: z.input<TOptions>) => {
+		const options = optionsSchema?.parse(_options ?? {}) as z.output<TOptions>;
 
 		const resolvedPlugins = Object.values(
 			(() => {

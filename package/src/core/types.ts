@@ -142,9 +142,3 @@ export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
 		AddedParam<TPlugins, "astro:build:done">
 	>;
 }
-
-export type Options<Schema extends import("astro/zod").AnyZodObject> = {
-	schema: Schema;
-};
-
-export type AnyOptions = Options<any>;
