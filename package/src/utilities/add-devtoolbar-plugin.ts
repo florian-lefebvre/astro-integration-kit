@@ -41,7 +41,7 @@ type addDevToolbarPluginParams = addDevToolbarPluginUserParams & {
  * });
  * ```
  *
- * @see https://astro-integration-kit.netlify.app/utilities/add-dts/
+ * @see https://astro-integration-kit.netlify.app/utilities/add-devtoolbar-plugin/
  */
 export const addDevToolbarPlugin = ({
     id,
