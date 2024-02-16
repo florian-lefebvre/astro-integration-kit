@@ -1,6 +1,6 @@
-// https://github.com/withastro/astro/blob/d278e66ec6ded7a3ad441e6c3c5f9c265217936f/packages/astro/src/content/error-map.ts
-
 import type { ZodErrorMap } from "astro/zod";
+
+// Source: https://github.com/withastro/astro/blob/d278e66ec6ded7a3ad441e6c3c5f9c265217936f/packages/astro/src/content/error-map.ts
 
 type TypeOrLiteralErrByPathEntry = {
 	code: "invalid_type" | "invalid_literal";
