@@ -49,7 +49,7 @@ export const defineIntegration = <
 
 		if (parsedOptions && !parsedOptions.success) {
 			throw new AstroError(
-				`Invalid configuration passed to '${name}' integration\n`,
+				`Invalid options passed to "${name}" integration\n`,
 				parsedOptions.error.issues.map((i) => i.message).join("\n"),
 			);
 		}

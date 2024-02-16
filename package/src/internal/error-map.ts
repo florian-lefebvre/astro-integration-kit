@@ -5,7 +5,7 @@ import type { ZodErrorMap } from "astro/zod";
 type TypeOrLiteralErrByPathEntry = {
 	code: "invalid_type" | "invalid_literal";
 	received: unknown;
-	expected: unknown[];
+	expected: Array<unknown>;
 };
 
 export const errorMap: ZodErrorMap = (baseError, ctx) => {
