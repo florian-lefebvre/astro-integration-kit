@@ -32,7 +32,7 @@ export const defineIntegration = <
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
-	optionsSchema = z.object({}) as TOptionsSchema,
+	optionsSchema,
 	setup,
 	plugins: _plugins,
 }: {
@@ -45,7 +45,7 @@ export const defineIntegration = <
 	}) => ExtendedHooks<TPlugins>;
 }): ((options?: z.input<TOptionsSchema>) => AstroIntegration) => {
 	return (_options: z.input<TOptionsSchema> = {}) => {
-		const parsedOptions = optionsSchema.safeParse(_options, { errorMap });
+		const parsedOptions = (optionsSchema || z.record(z.any())).safeParse(_options, { errorMap });
 
 		if (!parsedOptions.success) {
 			throw new AstroError(
