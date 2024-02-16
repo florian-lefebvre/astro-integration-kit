@@ -1,6 +1,6 @@
 import type { AstroIntegration, HookParameters } from "astro";
 import { AstroError } from "astro/errors";
-import type { z } from "astro/zod";
+import { z } from "astro/zod";
 import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
 import { errorMap } from "../internal/error-map.js";
 import type { AnyPlugin, ExtendedHooks } from "./types.js";
@@ -32,7 +32,7 @@ export const defineIntegration = <
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
-	optionsSchema,
+	optionsSchema = z.object({}) as TOptionsSchema,
 	setup,
 	plugins: _plugins,
 }: {
@@ -45,17 +45,16 @@ export const defineIntegration = <
 	}) => ExtendedHooks<TPlugins>;
 }): ((options?: z.input<TOptionsSchema>) => AstroIntegration) => {
 	return (_options: z.input<TOptionsSchema> = {}) => {
-		const parsedOptions = optionsSchema?.safeParse(_options, { errorMap });
+		const parsedOptions = optionsSchema.safeParse(_options, { errorMap });
 
-		if (parsedOptions && !parsedOptions.success) {
+		if (!parsedOptions.success) {
 			throw new AstroError(
 				`Invalid options passed to "${name}" integration\n`,
 				parsedOptions.error.issues.map((i) => i.message).join("\n"),
 			);
 		}
 
-		const options = (parsedOptions?.data ||
-			_options) as z.output<TOptionsSchema>;
+		const options = parsedOptions.data as z.output<TOptionsSchema>;
 
 		const resolvedPlugins = Object.values(
 			(() => {
