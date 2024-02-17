@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.2.1
+
+### Patch Changes
+
+- b3a72c0: Improves error messages for `optionsSchema` parsing
+
 ## 0.2.0
 
 ### Minor Changes
