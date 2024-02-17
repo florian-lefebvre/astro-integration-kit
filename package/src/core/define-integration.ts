@@ -28,7 +28,7 @@ import type { AnyPlugin, ExtendedHooks } from "./types.js";
  * ```
  */
 export const defineIntegration = <
-	TOptionsSchema extends import("astro/zod").AnyZodObject,
+	TOptionsSchema extends z.AnyZodObject = z.AnyZodObject,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
