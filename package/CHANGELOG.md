@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.3.0
+
+### Minor Changes
+
+- 8369363: Adds a new utility, `injectDevRoute`
+
 ## 0.2.1
 
 ### Patch Changes
