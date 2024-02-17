@@ -1,5 +1,5 @@
-import react, { createElement, startTransition } from 'react';
-import { createRoot, hydrateRoot } from 'react-dom/client';
+import react, { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
 import Component from "@@COMPONENT_SRC@@";
 
 export default {
@@ -12,11 +12,17 @@ export default {
         const myWindow = document.createElement("astro-dev-toolbar-window");
         
         canvas.appendChild(myWindow);
+
+        myWindow.insertAdjacentHTML('beforebegin', `<style>@@STYLE@@</style>`);
         
         const root = createRoot(myWindow)
 
         const componentElement = createElement(Component, {}, [])
 
-        root.render(componentElement)
+        root.render(componentElement);
+
+        (
+            (canvas, window)=>{}//@@CALLBACK@@
+        )(canvas, myWindow);
     }
 }

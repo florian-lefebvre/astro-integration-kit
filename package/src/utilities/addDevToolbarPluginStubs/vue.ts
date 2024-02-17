@@ -25,7 +25,13 @@ export default {
 
         canvas.appendChild(myWindow);
         
-        app.mount(myWindow, true)
+        myWindow.insertAdjacentHTML('beforebegin', `<style>@@STYLE@@</style>`);
+
+        app.mount(myWindow, true);
+
+        (
+            (canvas, window)=>{}//@@CALLBACK@@
+        )(canvas, myWindow);
     }
 }
 

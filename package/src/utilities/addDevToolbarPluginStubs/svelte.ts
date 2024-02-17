@@ -1,4 +1,3 @@
-import { h, render } from 'preact';
 import Component from "@@COMPONENT_SRC@@";
 
 export default {
@@ -7,17 +6,16 @@ export default {
     
     // biome-ignore lint: Using backticks here because most likely copy+pasted svg paths will use double quotes
     icon: `@@ICON@@`,
-    init: async (canvas) => {
+    init: async canvas => {
         const myWindow = document.createElement("astro-dev-toolbar-window");
         
         canvas.appendChild(myWindow);
 
-        myWindow.insertAdjacentHTML('beforebegin', `<style>@@STYLE@@</style>`);
+		myWindow.insertAdjacentHTML('beforebegin', `<style>@@STYLE@@</style>`);
 
-        render(
-            h(Component, {}, []),
-            myWindow,
-        );
+        const component = new Component({
+			target: myWindow,
+		});
 
         (
             (canvas, window)=>{}//@@CALLBACK@@

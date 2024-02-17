@@ -40,6 +40,7 @@
 	"dependencies": {
 		"@vitejs/plugin-react": "^4.2.1",
 		"defu": "^6.1.4",
-		"pathe": "^1.1.2"
+		"pathe": "^1.1.2",
+		"solid-js": "^1.8.15"
 	}
 }

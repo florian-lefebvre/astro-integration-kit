@@ -1,5 +1,5 @@
-import { h, render } from 'preact';
 import Component from "@@COMPONENT_SRC@@";
+import { createComponent, render } from "solid-js/web";
 
 export default {
     id: "@@ID@@",
@@ -14,10 +14,10 @@ export default {
 
         myWindow.insertAdjacentHTML('beforebegin', `<style>@@STYLE@@</style>`);
 
-        render(
-            h(Component, {}, []),
-            myWindow,
-        );
+		render(() => createComponent(Component, {
+            props: {},
+            slots: {},
+        }), myWindow);
 
         (
             (canvas, window)=>{}//@@CALLBACK@@
