@@ -120,6 +120,10 @@ export default defineConfig({
 							link: "/utilities/has-integration/",
 						},
 						{
+							label: "injectDevRoute",
+							link: "/utilities/inject-dev-route/",
+						},
+						{
 							label: "watchIntegration (HMR)",
 							link: "/utilities/watch-integration/",
 						},

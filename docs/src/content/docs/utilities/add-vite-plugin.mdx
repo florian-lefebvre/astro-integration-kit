@@ -30,7 +30,7 @@ to the Astro config. For example:
     <TabItem label="Standalone utilities">
     ```ts title="integration/index.ts" "addVitePlugin"
     import type { AstroIntegration } from "astro";
-    import { addVitePlugin } from "astro-integration-kit";
+    import { addVitePlugin } from "astro-integration-kit/utilities";
     import { VitePWA } from 'vite-plugin-pwa'
 
     export default function myIntegration(): AstroIntegration {
