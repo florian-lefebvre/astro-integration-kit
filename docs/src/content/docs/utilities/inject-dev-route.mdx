@@ -1,27 +1,29 @@
 ---
-title: watchIntegration
-description: In development, will reload the Astro dev server if any files within the integration directory has changed.
+title: injectDevRoute
+description: Allows to inject a route in development only.
 ---
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-In development, `watchIntegration` will reload the Astro dev server if any files within
-the integration directory has changed. For example:
+`injectDevRoute` allows to inject a route in development only. For example:
 
 <Tabs>
     <TabItem label="Extended hooks">
-	```ts title="my-integration/index.ts" /watchIntegration\\b/ {2,6}
+	```ts title="my-integration/index.ts" /injectDevRoute\\b/ {2,6}
 	import { createResolver, defineIntegration } from "astro-integration-kit";
-	import { watchIntegrationPlugin } from "astro-integration-kit/plugins";
+	import { injectDevRoutePlugin } from "astro-integration-kit/plugins";
 
 	export default defineIntegration({
 		name: "my-integration",
-		plugins: [watchIntegrationPlugin],
+		plugins: [injectDevRoutePlugin],
 		setup() {
 			const { resolve } = createResolver(import.meta.url);
 
 			return {
-				"astro:config:setup": ({ watchIntegration }) => {
-					watchIntegration(resolve())
+				"astro:config:setup": ({ injectDevRoute }) => {
+					injectDevRoute({
+						pattern: "/foo",
+						entrypoint: resolve("./pages/foo.astro")
+					})
 				}
 			}
 		}
@@ -32,7 +34,7 @@ the integration directory has changed. For example:
 	```ts title="integration/index.ts" "watchIntegration"
 	import type { AstroIntegration } from "astro";
 	import { createResolver } from "astro-integration-kit";
-	import { watchIntegration } from "astro-integration-kit/utilities";
+	import { injectDevRoute } from "astro-integration-kit/utilities";
 
 	export default function myIntegration(): AstroIntegration {
 		const { resolve } = createResolver(import.meta.url);
@@ -40,13 +42,15 @@ the integration directory has changed. For example:
 		return {
 			name: "my-integration",
 			hooks: {
-				"astro:config:setup": ({ addWatchFile, command, updateConfig }) => {
-					watchIntegration({
-						addWatchFile,
+				"astro:config:setup": ({ command, injectRoute }) => {
+					injectDevRoute({
 						command,
-						dir: resolve(),
-						updateConfig,
-					});
+						injectRoute,
+						injectedRoute: {
+							pattern: "/foo",
+							entrypoint: resolve("./pages/foo.astro")
+						},
+					})
 				},
 			}
 		}

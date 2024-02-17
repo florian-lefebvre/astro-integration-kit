@@ -32,7 +32,7 @@ create a file inside `.astro` and reference it from `src/env.d.ts`. For example:
     <TabItem label="Standalone utilities">
     ```ts title="integration/index.ts" "addDts"
     import type { AstroIntegration } from "astro";
-    import { addDts } from "astro-integration-kit";
+    import { addDts } from "astro-integration-kit/utilities";
 
     export default function myIntegration(): AstroIntegration {
         return {

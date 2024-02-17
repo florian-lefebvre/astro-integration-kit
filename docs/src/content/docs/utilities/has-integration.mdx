@@ -30,7 +30,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 	<TabItem label="Standalone utilities">
 	```ts title="my-integration/index.ts" "hasIntegration"
 	import type { AstroIntegration } from "astro";
-	import { hasIntegration } from "astro-integration-kit";
+	import { hasIntegration } from "astro-integration-kit/utilities";
 
 	export default function myIntegration(): AstroIntegration {
 		return {
