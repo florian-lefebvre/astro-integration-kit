@@ -122,6 +122,7 @@ export default defineConfig({
 						{
 							label: "injectDevRoute",
 							link: "/utilities/inject-dev-route/",
+							badge: badge("new"),
 						},
 						{
 							label: "watchIntegration (HMR)",
