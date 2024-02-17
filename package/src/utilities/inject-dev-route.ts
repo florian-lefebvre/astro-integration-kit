@@ -1,7 +1,7 @@
 import type { HookParameters, InjectedRoute } from "astro";
 
 /**
- * Allows to inject a route in development only
+ * Allows you to inject a route in development only
  *
  * @param {object} params
  * @param {import("astro").HookParameters<"astro:config:setup">["command"]} params.command
