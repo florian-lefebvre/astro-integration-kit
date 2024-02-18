@@ -1,5 +1,8 @@
 import { definePlugin } from "../core/define-plugin.js";
-import { addDevToolbarPlugin, type addDevToolbarPluginUserParams } from "../utilities/add-devtoolbar-plugin.js";
+import {
+	addDevToolbarPlugin,
+	type addDevToolbarPluginUserParams,
+} from "../utilities/add-devtoolbar-plugin.js";
 
 export const addDevToolbarPluginPlugin = definePlugin({
 	name: "addDevToolbarPlugin",
@@ -8,9 +11,9 @@ export const addDevToolbarPluginPlugin = definePlugin({
 		({ addDevToolbarApp, updateConfig, injectScript }) =>
 		(params: addDevToolbarPluginUserParams) =>
 			addDevToolbarPlugin({
-                ...params,
-                addDevToolbarApp,
-                updateConfig,
-                injectScript,
-            }),
+				...params,
+				addDevToolbarApp,
+				updateConfig,
+				injectScript,
+			}),
 });

@@ -1,21 +1,17 @@
 import { readFileSync } from "node:fs";
+import { createResolver, defineIntegration } from "astro-integration-kit";
 import {
-	createResolver,
-	defineIntegration,
-} from "astro-integration-kit";
-import {
-	corePlugins,
-	addVirtualImportPlugin,
 	addDevToolbarPluginPlugin,
 	addIntegrationPlugin,
-} from 'astro-integration-kit/plugins';
+	addVirtualImportPlugin,
+	corePlugins,
+} from "astro-integration-kit/plugins";
 
-
-import Vue from "@astrojs/vue";
-import React from "@astrojs/react";
 import Preact from "@astrojs/preact";
-import Svelte from "@astrojs/svelte";
+import React from "@astrojs/react";
 import Solid from "@astrojs/solid-js";
+import Svelte from "@astrojs/svelte";
+import Vue from "@astrojs/vue";
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
@@ -76,22 +72,28 @@ const testIntegration = defineIntegration({
 				updateConfig({
 					vite: {
 						optimizeDeps: {
-							exclude: ["virtual:@astrojs/vue/app"]
-						}
-					}
-				})
+							exclude: ["virtual:@astrojs/vue/app"],
+						},
+					},
+				});
 
-				addIntegration(Vue())
-				addIntegration(React({
-					include: ["**/*.react.jsx"],
-				}));
-				addIntegration(Preact({
-					include: ["**/*.preact.jsx"],
-				}));
-				addIntegration(Svelte())
-				addIntegration(Solid({
-					include: ["**/*.solid.jsx"],
-				}));
+				addIntegration(Vue());
+				addIntegration(
+					React({
+						include: ["**/*.react.jsx"],
+					}),
+				);
+				addIntegration(
+					Preact({
+						include: ["**/*.preact.jsx"],
+					}),
+				);
+				addIntegration(Svelte());
+				addIntegration(
+					Solid({
+						include: ["**/*.solid.jsx"],
+					}),
+				);
 
 				addDevToolbarPlugin({
 					framework: "vue",
@@ -138,10 +140,10 @@ const testIntegration = defineIntegration({
 					`,
 					src: resolve("./devToolbarPlugins/Test.svelte"),
 					callback: (canvas, window) => {
-						console.log('FROM THE SVELTE TOOLBAR PLUGIN', canvas, window);
+						console.log("FROM THE SVELTE TOOLBAR PLUGIN", canvas, window);
 					},
 				});
-				
+
 				addDevToolbarPlugin({
 					framework: "solid",
 					name: "Test Solid Plugin",

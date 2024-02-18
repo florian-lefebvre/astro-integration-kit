@@ -14,7 +14,7 @@ describe("createResolver", () => {
 	// TODO: make it work
 	test.skip("`resolve()` should return the `import.meta.url`", () => {
 		const resolver = createResolver(import.meta.url);
-		
+
 		expect(resolver.resolve()).toEqual(directory);
 	});
 

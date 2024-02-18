@@ -1,5 +1,8 @@
 import { definePlugin } from "../core/define-plugin.js";
-import { addIntegration, type addIntegrationUserParams } from '../utilities/add-integration.js';
+import {
+	addIntegration,
+	type addIntegrationUserParams,
+} from "../utilities/add-integration.js";
 
 export const addIntegrationPlugin = definePlugin({
 	name: "addIntegration",
@@ -7,10 +10,10 @@ export const addIntegrationPlugin = definePlugin({
 	implementation:
 		({ updateConfig, config, logger }) =>
 		(integration: addIntegrationUserParams) =>
-            addIntegration({
-                integration,
-                updateConfig,
-                config,
-                logger,
-            }),
+			addIntegration({
+				integration,
+				updateConfig,
+				config,
+				logger,
+			}),
 });

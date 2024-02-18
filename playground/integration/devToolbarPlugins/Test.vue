@@ -6,5 +6,5 @@
 
 <template>
     <h1>Count is: {{ count }}</h1>
-    <button @click="count++">Increment</button>
+    <button type="button" @click="count++">Increment</button>
 </template>

@@ -29,18 +29,28 @@
 	},
 	"type": "module",
 	"peerDependencies": {
-		"astro": "^4.0.0"
+		"@vitejs/plugin-react": "^4.2.1",
+		"astro": "^4.0.0",
+		"preact": "^10.19.4",
+		"react": "^18.2.0",
+		"solid-js": "^1.8.15",
+		"svelte": "^4.2.11",
+		"vue": "^3.4.19"
 	},
 	"devDependencies": {
 		"@types/node": "^20.11.0",
+		"@vitejs/plugin-react": "^4.2.1",
+		"preact": "^10.19.4",
+		"react": "^18.2.0",
+		"solid-js": "^1.8.15",
+		"svelte": "^4.2.11",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.11",
-		"vitest": "^1.2.1"
+		"vitest": "^1.2.1",
+		"vue": "^3.4.19"
 	},
 	"dependencies": {
-		"@vitejs/plugin-react": "^4.2.1",
 		"defu": "^6.1.4",
-		"pathe": "^1.1.2",
-		"solid-js": "^1.8.15"
+		"pathe": "^1.1.2"
 	}
 }
