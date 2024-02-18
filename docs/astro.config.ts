@@ -106,7 +106,7 @@ export default defineConfig({
 					items: [
 						{
 							label: "addDevToolbarPlugin",
-							link: "/utilities/add-dev-toolbar-plugin/",
+							link: "/utilities/add-devtoolbar-plugin/",
 							badge: badge("new"),
 						},
 						{
