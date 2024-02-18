@@ -105,8 +105,18 @@ export default defineConfig({
 					label: "Utilities",
 					items: [
 						{
+							label: "addDevToolbarPlugin",
+							link: "/utilities/add-dev-toolbar-plugin/",
+							badge: badge("new"),
+						},
+						{
 							label: "addDts",
 							link: "/utilities/add-dts/",
+							badge: badge("new"),
+						},
+						{
+							label: "addIntegration",
+							link: "/utilities/add-integration/",
 							badge: badge("new"),
 						},
 						{

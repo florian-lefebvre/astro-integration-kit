@@ -1,0 +1,61 @@
+---
+title: addIntegration
+description:  allows you to add an integration from within an integration.
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+`addIntegration` allows you to add an integration from within an integration.
+
+It will also do a check using `hasIntegration` to check whether the integration you're trying to add has already been added. If it has, it won't add it again.
+
+<Tabs>
+    <TabItem label="Extended hooks">
+    ```ts title="my-integration/index.ts" /addIntegration\\b/ {4,12}
+    import { defineIntegration } from "astro-integration-kit";
+    import { addIntegrationPlugin } from "astro-integration-kit/plugins";
+
+    import Vue from "@astrojs/vue";
+
+    export default defineIntegration({
+        name: "my-integration",
+        plugins: [addIntegrationPlugin],
+        setup(options) {
+            return {
+                "astro:config:setup": ({ addIntegration }) => {
+                    addIntegration(Vue())
+                }
+            }
+        }
+    })
+    ```
+    </TabItem>
+    <TabItem label="Standalone utilities">
+    ```ts title="integration/index.ts" "addIntegration"
+    import type { AstroIntegration } from "astro";
+    import { addIntegration } from "astro-integration-kit";
+
+    import Vue from "@astrojs/vue";
+
+    export default function myIntegration(): AstroIntegration {
+        return {
+            name: "my-integration",
+            hooks: {
+                "astro:config:setup": ({
+                    addIntegration,
+                    updateConfig,
+                    config,
+                    logger,
+                }) => {
+                    addIntegration({
+                        integration: Vue(),
+                        updateConfig,
+                        config,
+                        logger,
+                    })
+                }
+            }
+        }
+    }
+    ```
+    </TabItem>
+</Tabs>
