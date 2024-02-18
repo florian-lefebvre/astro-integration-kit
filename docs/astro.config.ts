@@ -2,16 +2,18 @@ import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 import { version } from "../package/package.json";
 
-const badge = (type: "new" | "updated" | "soon") => ({
+const badge = (type: "new" | "updated" | "soon" | "removed") => ({
 	variant: {
 		new: "success" as const,
 		updated: "caution" as const,
 		soon: "tip" as const,
+		removed: "danger" as const,
 	}[type],
 	text: {
 		new: "New",
 		updated: "Updated",
 		soon: "Soon",
+		removed: "Removed",
 	}[type],
 });
 
@@ -64,12 +66,10 @@ export default defineConfig({
 						{
 							label: "Usage",
 							link: "/getting-started/usage/",
-							badge: badge("updated"),
 						},
 						{
 							label: "Why Astro Integration Kit",
 							link: "/getting-started/why",
-							badge: badge("new"),
 						},
 						{
 							label: "Showcase",
@@ -88,7 +88,7 @@ export default defineConfig({
 						{
 							label: "defineOptions",
 							link: "/core/define-options/",
-							badge: badge("new"),
+							badge: badge("removed"),
 						},
 						{
 							label: "createResolver",
@@ -97,7 +97,6 @@ export default defineConfig({
 						{
 							label: "definePlugin",
 							link: "/core/define-plugin/",
-							badge: badge("new"),
 						},
 					],
 				},
@@ -112,7 +111,6 @@ export default defineConfig({
 						{
 							label: "addDts",
 							link: "/utilities/add-dts/",
-							badge: badge("new"),
 						},
 						{
 							label: "addIntegration",
@@ -130,7 +128,11 @@ export default defineConfig({
 						{
 							label: "hasIntegration",
 							link: "/utilities/has-integration/",
-							badge: badge("updated"),
+						},
+						{
+							label: "injectDevRoute",
+							link: "/utilities/inject-dev-route/",
+							badge: badge("new"),
 						},
 						{
 							label: "watchIntegration (HMR)",

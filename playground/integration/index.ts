@@ -1,11 +1,7 @@
 import { readFileSync } from "node:fs";
 import { createResolver, defineIntegration } from "astro-integration-kit";
-import {
-	addDevToolbarPluginPlugin,
-	addIntegrationPlugin,
-	addVirtualImportPlugin,
-	corePlugins,
-} from "astro-integration-kit/plugins";
+import { corePlugins } from "astro-integration-kit/plugins";
+import { z } from "astro/zod";
 
 import Preact from "@astrojs/preact";
 import React from "@astrojs/react";
@@ -13,16 +9,23 @@ import Solid from "@astrojs/solid-js";
 import Svelte from "@astrojs/svelte";
 import Vue from "@astrojs/vue";
 
+const OptionsSchema = z.object({
+	/**
+	 * The name of the resource.
+	 */
+	resource: z
+		.string()
+		.default("abc")
+		.transform((val) => val.length),
+});
+
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	plugins: [
-		...corePlugins,
-		addVirtualImportPlugin,
-		addIntegrationPlugin,
-		addDevToolbarPluginPlugin,
-	],
+	optionsSchema: OptionsSchema,
+	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
+		options.resource;
 
 		const pluginPath = resolve("./plugin.ts");
 		console.log({ options, pluginPath });
@@ -218,6 +221,12 @@ const testIntegration = defineIntegration({
 					`,
 					src: resolve("./devToolbarPlugins/Test.solid.jsx"),
 				});
+
+				// Test addVirtualImport disallowed list
+				// addVirtualImport({
+				// 	name: "astro:test",
+				// 	content: "export default {}"
+				// });
 			},
 		};
 	},

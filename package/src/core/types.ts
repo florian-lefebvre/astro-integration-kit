@@ -142,10 +142,3 @@ export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
 		AddedParam<TPlugins, "astro:build:done">
 	>;
 }
-
-export type Options<TOptions extends Record<string, unknown>> = {
-	options: TOptions;
-	defaults: Required<TOptions>;
-};
-
-export type AnyOptions = Options<any>;

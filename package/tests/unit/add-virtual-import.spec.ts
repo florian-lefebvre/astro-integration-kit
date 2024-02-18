@@ -1,8 +1,9 @@
+import { AstroError } from "astro/errors";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
 import { addVirtualImport } from "../../src/utilities/add-virtual-import.js";
 import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 
-vi.mock("../../src/utils/add-vite-plugin.js");
+vi.mock("../../src/utilities/add-vite-plugin.js");
 
 const pluginNameStub = <T extends string>(name: T): `vite-plugin-${T}` =>
 	`vite-plugin-${name}`;
@@ -10,14 +11,13 @@ const pluginNameStub = <T extends string>(name: T): `vite-plugin-${T}` =>
 describe("add-virtual-import", () => {
 	const name = "test-module";
 	const content = "export default {}";
+	const updateConfig = vi.fn();
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
 	test("It should call `addVitePlugin`", () => {
-		const updateConfig = vi.fn();
-
 		addVirtualImport({
 			name,
 			content,
@@ -28,8 +28,6 @@ describe("add-virtual-import", () => {
 	});
 
 	test("`addVitePlugin` should get called with the correct plugin name", () => {
-		const updateConfig = vi.fn();
-
 		addVirtualImport({
 			name,
 			content,
@@ -44,8 +42,6 @@ describe("add-virtual-import", () => {
 	});
 
 	test("Virtual module should resolve correct name", () => {
-		const updateConfig = vi.fn();
-
 		addVirtualImport({
 			name,
 			content,
@@ -57,5 +53,27 @@ describe("add-virtual-import", () => {
 		const resolvedVirtualModuleId = plugin.resolveId(name);
 
 		expect(resolvedVirtualModuleId).toEqual(`\0${name}`);
+	});
+
+	test("It should throw an error if you try and prefix your virtual import with 'astro:'", () => {
+		const testFunction = () =>
+			addVirtualImport({
+				name: `astro:${name}`,
+				content,
+				updateConfig,
+			});
+
+		expect(testFunction).toThrowError();
+	});
+
+	test("It should throw an AstroError if you try and prefix your virtual import with 'astro:'", () => {
+		const testFunction = () =>
+			addVirtualImport({
+				name: `astro:${name}`,
+				content,
+				updateConfig,
+			});
+
+		expect(testFunction).toThrowError(AstroError);
 	});
 });

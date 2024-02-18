@@ -1,5 +1,31 @@
 # astro-integration-kit
 
+## 0.3.0
+
+### Minor Changes
+
+- 8369363: Adds a new utility, `injectDevRoute`
+
+## 0.2.1
+
+### Patch Changes
+
+- b3a72c0: Improves error messages for `optionsSchema` parsing
+
+## 0.2.0
+
+### Minor Changes
+
+- f36fead: Removes `defineOptions` and replaces the `options` argument with a new `optionsSchema` argument on `defineIntegration`
+
+  Check out the [migration guide](https://astro-integration-kit.netlify.app/core/define-options/).
+
+## 0.1.2
+
+### Patch Changes
+
+- 79200b4: Prevents virtual imports name from starting with "astro:" (reserved for Astro core)
+
 ## 0.1.1
 
 ### Patch Changes

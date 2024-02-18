@@ -1,0 +1,60 @@
+---
+title: injectDevRoute
+description: Allows to inject a route in development only.
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+`injectDevRoute` allows you to inject a route in development only. For example:
+
+<Tabs>
+    <TabItem label="Extended hooks">
+	```ts title="my-integration/index.ts" /injectDevRoute\\b/ {2,6}
+	import { createResolver, defineIntegration } from "astro-integration-kit";
+	import { injectDevRoutePlugin } from "astro-integration-kit/plugins";
+
+	export default defineIntegration({
+		name: "my-integration",
+		plugins: [injectDevRoutePlugin],
+		setup() {
+			const { resolve } = createResolver(import.meta.url);
+
+			return {
+				"astro:config:setup": ({ injectDevRoute }) => {
+					injectDevRoute({
+						pattern: "/foo",
+						entrypoint: resolve("./pages/foo.astro")
+					})
+				}
+			}
+		}
+	})
+	```
+	</TabItem>
+	<TabItem label="Standalone utilities">
+	```ts title="integration/index.ts" "injectDevRoute"
+	import type { AstroIntegration } from "astro";
+	import { createResolver } from "astro-integration-kit";
+	import { injectDevRoute } from "astro-integration-kit/utilities";
+
+	export default function myIntegration(): AstroIntegration {
+		const { resolve } = createResolver(import.meta.url);
+
+		return {
+			name: "my-integration",
+			hooks: {
+				"astro:config:setup": ({ command, injectRoute }) => {
+					injectDevRoute({
+						command,
+						injectRoute,
+						injectedRoute: {
+							pattern: "/foo",
+							entrypoint: resolve("./pages/foo.astro")
+						},
+					})
+				},
+			}
+		}
+	}
+	``` 
+	</TabItem>
+</Tabs>

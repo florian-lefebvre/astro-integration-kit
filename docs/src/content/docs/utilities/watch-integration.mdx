@@ -31,7 +31,8 @@ the integration directory has changed. For example:
 	<TabItem label="Standalone utilities">
 	```ts title="integration/index.ts" "watchIntegration"
 	import type { AstroIntegration } from "astro";
-	import { createResolver, watchIntegration } from "astro-integration-kit";
+	import { createResolver } from "astro-integration-kit";
+	import { watchIntegration } from "astro-integration-kit/utilities";
 
 	export default function myIntegration(): AstroIntegration {
 		const { resolve } = createResolver(import.meta.url);
