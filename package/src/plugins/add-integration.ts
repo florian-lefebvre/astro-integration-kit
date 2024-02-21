@@ -13,7 +13,7 @@ export const addIntegrationPlugin = definePlugin({
 		(integration: AstroIntegration, options?: addIntegrationUserOptionalParams) =>
 			addIntegration({
 				integration,
-				options,
+				...( options ? options : {} ),
 				updateConfig,
 				config,
 				logger,
