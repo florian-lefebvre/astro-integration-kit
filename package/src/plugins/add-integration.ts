@@ -1,7 +1,8 @@
+import type { AstroIntegration } from 'astro';
 import { definePlugin } from "../core/define-plugin.js";
 import {
 	addIntegration,
-	type addIntegrationUserParams,
+	type addIntegrationUserOptionalParams,
 } from "../utilities/add-integration.js";
 
 export const addIntegrationPlugin = definePlugin({
@@ -9,9 +10,10 @@ export const addIntegrationPlugin = definePlugin({
 	hook: "astro:config:setup",
 	implementation:
 		({ updateConfig, config, logger }) =>
-		(integration: addIntegrationUserParams) =>
+		(integration: AstroIntegration, options?: addIntegrationUserOptionalParams) =>
 			addIntegration({
 				integration,
+				options,
 				updateConfig,
 				config,
 				logger,

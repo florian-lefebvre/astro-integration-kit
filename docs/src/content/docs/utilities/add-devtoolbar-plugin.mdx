@@ -2,7 +2,7 @@
 title: addDevToolbarPlugin
 description:  Allows you to register a framework component as a Dev Toolbar Plugin.
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem, LinkCard } from '@astrojs/starlight/components';
 
 `addDevToolbarPlugin` allows you to register a framework component as a Dev Toolbar Plugin! You can now use a React, Preact, Solid, Vue or Svelte component instead of manipulating the DOM imperatively!
 
@@ -46,12 +46,15 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     })
     ```
     ```vue title="my-integration/my-plugin.vue"
-    <script>
+    <script setup lang="ts">
+        import { ref } from 'vue'
 
+        const count = ref(0)
     </script>
 
     <template>
-        <h1>Room with a Vue</h1>
+        <h1>Count is: {{ count }}</h1>
+        <button type="button" @click="count++">Increment</button>
     </template>
     ```
     </TabItem>
@@ -108,12 +111,15 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     }
     ```
     ```vue title="integration/my-plugin.vue"
-    <script>
+    <script setup lang="ts">
+        import { ref } from 'vue'
 
+        const count = ref(0)
     </script>
 
     <template>
-        <h1>Room with a Vue</h1>
+        <h1>Count is: {{ count }}</h1>
+        <button type="button" @click="count++">Increment</button>
     </template>
     ```
     </TabItem>
@@ -125,6 +131,12 @@ It's recommended to manually add the official Astro integration for your chosen 
 using the [addIntegration](/utilities/add-integration) utility instead of relying on your users
 to install and add it. `addIntegration` won't re-add integrations, so you're safe to call it even
 if your user _has_ added it already.
+
+<LinkCard
+    title="addIntegration"
+    description="The addIntegration is used to add integrations from an integration."
+    href="/utilities/add-integration"
+/>
 
 This also means it's a good idea to have the `@astrojs/*` framework package be a dependency of your
 integration package so the correct dependencies will definitely be installed.
@@ -198,9 +210,23 @@ the file in your component.
 
 ```ts title="my-integration/src/my-plugin.svelte"
 <script>
+  let count = 0;
+
+  function increment() {
+    count += 1;
+  }
+
+  function decrement() {
+    count -= 1;
+  }
 </script>
 
-<h1 class="p-4 mb-4 font-black">Hello, world!</h1>
+<div>
+  <h1 class="font-black text-5xl">Counter</h1>
+  <p>Count: {count}</p>
+  <button on:click={increment}>Increment</button>
+  <button on:click={decrement}>Decrement</button>
+</div>
 ```
 
 ```js title="tailwind.config.js"

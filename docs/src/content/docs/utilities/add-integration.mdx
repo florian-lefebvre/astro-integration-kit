@@ -1,12 +1,12 @@
 ---
 title: addIntegration
-description:  allows you to add an integration from within an integration.
+description:  Allows you to add an integration from within an integration.
 ---
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `addIntegration` allows you to add an integration from within an integration.
 
-It will also do a check using `hasIntegration` to check whether the integration you're trying to add has already been added. If it has, it won't add it again.
+It will also do a check using [hasIntegration](/utilities/has-integration) to check whether the integration you're trying to add has already been added. If it has, it won't add it again.
 
 <Tabs>
     <TabItem label="Extended hooks">
@@ -59,3 +59,16 @@ It will also do a check using `hasIntegration` to check whether the integration 
     ```
     </TabItem>
 </Tabs>
+
+## Ensuring unique integrations
+
+By default `addIntegration` will fail if you try to add an integration that's already
+been added.
+
+You can bypass this and add it anyway with the `ensureUnique` flag.
+
+```ts title="integration.ts"
+addIntegration(Vue(), {
+    ensureUnique: false
+})
+```

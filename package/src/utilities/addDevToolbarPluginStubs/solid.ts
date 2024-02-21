@@ -7,23 +7,24 @@ export default {
 
 	// biome-ignore lint/style/noUnusedTemplateLiteral: Using backticks here because most likely copy+pasted svg paths will use double quotes
 	icon: `@@ICON@@`,
-	init: async (canvas) => {
-		const myWindow = document.createElement("astro-dev-toolbar-window");
+	init: (canvas) => {
+		const renderWindow = document.createElement("astro-dev-toolbar-window");
 
-		canvas.appendChild(myWindow);
+		canvas.appendChild(renderWindow);
 
 		// biome-ignore lint/style/noUnusedTemplateLiteral: We want to be able to support multiline strings here
-		myWindow.insertAdjacentHTML("beforebegin", `<style>@@STYLE@@</style>`);
+		renderWindow.insertAdjacentHTML("beforebegin", `<style>@@STYLE@@</style>`);
 
 		render(
 			() =>
 				createComponent(Component, {
-					props: {},
+					props: {
+						canvas,
+						renderWindow,
+					},
 					slots: {},
 				}),
-			myWindow,
+			renderWindow,
 		);
-
-		((canvas, window) => {})(canvas, myWindow); //@@CALLBACK@@
 	},
 };

@@ -142,9 +142,6 @@ const testIntegration = defineIntegration({
 						}
 					`,
 					src: resolve("./devToolbarPlugins/Test.svelte"),
-					callback: (canvas, window) => {
-						console.log("FROM THE SVELTE TOOLBAR PLUGIN", canvas, window);
-					},
 				});
 
 				addDevToolbarPlugin({

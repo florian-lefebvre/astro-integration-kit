@@ -10,7 +10,6 @@ export type addDevToolbarPluginUserParams = {
 	framework: "react" | "preact" | "vue" | "svelte" | "solid";
 	src: string;
 	style?: string;
-	callback?: (canvas: ShadowRoot, window: HTMLElement) => void;
 };
 
 export type addDevToolbarPluginParams = addDevToolbarPluginUserParams & {
@@ -46,7 +45,6 @@ export type addDevToolbarPluginParams = addDevToolbarPluginUserParams & {
  *              background-color: rebeccapurple;
  *          }
  *      `,
- *      callback: (canvas, window) => {},
  * });
  * ```
  *
@@ -59,7 +57,6 @@ export const addDevToolbarPlugin = ({
 	framework,
 	src,
 	style,
-	callback,
 	addDevToolbarApp,
 	updateConfig,
 	injectScript,
@@ -78,11 +75,7 @@ export const addDevToolbarPlugin = ({
 		.replace("@@ID@@", id)
 		.replace("@@NAME@@", name)
 		.replace("@@ICON@@", icon)
-		.replace("@@STYLE@@", style || "")
-		.replace(
-			"(canvas, window)=>{}//@@CALLBACK@@",
-			callback?.toString() || "()=>{}",
-		);
+		.replace("@@STYLE@@", style ?? "")
 
 	addVirtualImport({
 		name: virtualModuleName,
@@ -100,14 +93,6 @@ export const addDevToolbarPlugin = ({
 
 			break;
 	}
-
-	updateConfig({
-		vite: {
-			optimizeDeps: {
-				exclude: [virtualModuleName],
-			},
-		},
-	});
 
 	addDevToolbarApp(virtualModuleName);
 };

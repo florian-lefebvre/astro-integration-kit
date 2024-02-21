@@ -1,9 +1,16 @@
 import { type AstroIntegration, type HookParameters } from "astro";
 import { hasIntegration } from "./has-integration.js";
 
-export type addIntegrationUserParams = AstroIntegration;
+export type addIntegrationUserOptionalParams = {
+	ensureUnique?: boolean;
+};
 
-type AddIntegrationParams = { integration: addIntegrationUserParams } & {
+export type addIntegrationUserParams = {
+	integration: AstroIntegration;
+	options?: addIntegrationUserOptionalParams
+}
+
+type AddIntegrationParams = addIntegrationUserParams & {
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 	config: HookParameters<"astro:config:setup">["config"];
 	logger: HookParameters<"astro:config:setup">["logger"];
@@ -28,11 +35,15 @@ type AddIntegrationParams = { integration: addIntegrationUserParams } & {
  */
 export const addIntegration = ({
 	integration,
+	options,
 	updateConfig,
 	config,
 	logger,
 }: AddIntegrationParams) => {
+	const ensureUnique = options?.ensureUnique ?? true;
+
 	if (
+		ensureUnique &&
 		hasIntegration({
 			name: integration.name,
 			config,
@@ -41,6 +52,8 @@ export const addIntegration = ({
 		logger.warn(
 			`Trying to add integration "${integration.name}. Already added to Astro."`,
 		);
+
+		return;
 	}
 
 	updateConfig({
