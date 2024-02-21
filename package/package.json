@@ -28,11 +28,17 @@
 		"test": "vitest"
 	},
 	"type": "module",
+	"peerDependencies": {
+		"@vitejs/plugin-react": "^4.2.1",
+		"astro": "^4.4.1",
+		"preact": "^10.19.4",
+		"react": "^18.2.0",
+		"solid-js": "^1.8.15",
+		"svelte": "^4.2.11",
+		"vue": "^3.4.19"
+	},
 	"peerDependenciesMeta": {
 		"@vitejs/plugin-react": {
-			"optional": true
-		},
-		"astro": {
 			"optional": true
 		},
 		"preact": {
@@ -54,6 +60,7 @@
 	"devDependencies": {
 		"@types/node": "^20.11.0",
 		"@vitejs/plugin-react": "^4.2.1",
+		"astro": "^4.4.1",
 		"preact": "^10.19.4",
 		"react": "^18.2.0",
 		"solid-js": "^1.8.15",

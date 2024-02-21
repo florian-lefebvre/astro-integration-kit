@@ -1,13 +1,34 @@
 import { readFileSync } from "fs";
 import { type HookParameters } from "astro";
+import { AstroError } from "astro/errors";
 import { createResolver } from "../core/create-resolver.js";
 import { addVirtualImport } from "./add-virtual-import.js";
+
+type SupportedFrameworks = "react" | "preact" | "vue" | "svelte" | "solid";
+
+async function checkMissingDependencies(deps: string[]): Promise<string[]> {
+	const missingDeps: string[] = [];
+
+	await Promise.all(
+		deps.map((dep) => import(dep).catch(() => missingDeps.push(dep))),
+	);
+
+	return missingDeps;
+}
+
+const missingImports: Record<SupportedFrameworks, Array<string>> = {
+	preact: await checkMissingDependencies(["preact"]),
+	react: await checkMissingDependencies(["react", "@vitejs/plugin-react"]),
+	svelte: await checkMissingDependencies(["svelte"]),
+	solid: await checkMissingDependencies(["solid-js"]),
+	vue: await checkMissingDependencies(["vue"]),
+};
 
 export type addDevToolbarPluginUserParams = {
 	id: string;
 	name: string;
 	icon: string;
-	framework: "react" | "preact" | "vue" | "svelte" | "solid";
+	framework: SupportedFrameworks;
 	src: string;
 	style?: string;
 };
@@ -63,6 +84,15 @@ export const addDevToolbarPlugin = ({
 }: addDevToolbarPluginParams) => {
 	const virtualModuleName = `virtual:astro-devtoolbar-app-${id}`;
 
+	const missingImportsForFramework = missingImports[framework];
+	if (missingImportsForFramework.length > 0) {
+		throw new AstroError(
+			`Missing dependencies for ${framework} framework: ${missingImportsForFramework.join(
+				", ",
+			)}`,
+		);
+	}
+
 	const { resolve } = createResolver(import.meta.url);
 
 	let content = readFileSync(
@@ -75,7 +105,7 @@ export const addDevToolbarPlugin = ({
 		.replace("@@ID@@", id)
 		.replace("@@NAME@@", name)
 		.replace("@@ICON@@", icon)
-		.replace("@@STYLE@@", style ?? "")
+		.replace("@@STYLE@@", style ?? "");
 
 	addVirtualImport({
 		name: virtualModuleName,
