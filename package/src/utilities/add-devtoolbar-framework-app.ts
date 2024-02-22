@@ -10,7 +10,7 @@ async function checkMissingDependencies(deps: string[]): Promise<string[]> {
 	const missingDeps: string[] = [];
 
 	await Promise.all(
-		deps.map((dep) => import(dep).catch(() => missingDeps.push(dep))),
+		deps.map((dep) => import(/* @vite-ignore */dep).catch(() => missingDeps.push(dep))),
 	);
 
 	return missingDeps;
@@ -24,7 +24,7 @@ const missingImports: Record<SupportedFrameworks, Array<string>> = {
 	vue: await checkMissingDependencies(["vue"]),
 };
 
-export type addDevToolbarPluginUserParams = {
+export type addDevToolbarFrameworkAppUserParams = {
 	id: string;
 	name: string;
 	icon: string;
@@ -33,7 +33,7 @@ export type addDevToolbarPluginUserParams = {
 	style?: string;
 };
 
-export type addDevToolbarPluginParams = addDevToolbarPluginUserParams & {
+export type addDevToolbarFrameworkAppParams = addDevToolbarFrameworkAppUserParams & {
 	addDevToolbarApp: HookParameters<"astro:config:setup">["addDevToolbarApp"];
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 	injectScript: HookParameters<"astro:config:setup">["injectScript"];
@@ -55,7 +55,7 @@ export type addDevToolbarPluginParams = addDevToolbarPluginUserParams & {
  *
  * @example
  * ```ts
- * addDevToolbarPlugin({
+ * addDevToolbarFrameworkApp({
  *      framework: "vue",
  *      name: "Test Vue Plugin",
  *      id: "test-vue-plugin",
@@ -71,7 +71,7 @@ export type addDevToolbarPluginParams = addDevToolbarPluginUserParams & {
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-devtoolbar-plugin/
  */
-export const addDevToolbarPlugin = ({
+export const addDevToolbarFrameworkApp = ({
 	id,
 	name,
 	icon,
@@ -81,7 +81,7 @@ export const addDevToolbarPlugin = ({
 	addDevToolbarApp,
 	updateConfig,
 	injectScript,
-}: addDevToolbarPluginParams) => {
+}: addDevToolbarFrameworkAppParams) => {
 	const virtualModuleName = `virtual:astro-devtoolbar-app-${id}`;
 
 	const missingImportsForFramework = missingImports[framework];
@@ -96,7 +96,7 @@ export const addDevToolbarPlugin = ({
 	const { resolve } = createResolver(import.meta.url);
 
 	let content = readFileSync(
-		resolve(`./addDevToolbarPluginStubs/${framework}.ts`),
+		resolve(`./addDevToolbarFrameworkAppStubs/${framework}.ts`),
 		"utf8",
 	);
 

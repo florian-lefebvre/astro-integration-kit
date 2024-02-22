@@ -5,10 +5,12 @@ function Counter() {
 	const increment = () => setCount(count() + 1);
 
 	return (
-		// <p>hi</p>
-		<button type="button" onClick={increment}>
-			{count()}
-		</button>
+		<div>
+			<h1>Count: { count() }</h1>
+			<button type="button" onClick={increment}>
+				Increment
+			</button>
+		</div>
 	);
 }
 
