@@ -44,7 +44,7 @@ export const addIntegration = ({
 		})
 	) {
 		logger.warn(
-			`Trying to add integration "${integration.name}. Already added to Astro."`,
+			`Integration "${integration.name}" has already been added by the user or another integration. Skipping.`,
 		);
 
 		return;
