@@ -100,11 +100,14 @@ export const addDevToolbarFrameworkApp = ({
 		"utf8",
 	);
 
+	const escapedIcon = icon
+		.replace("`", '${"`"}')
+
 	content = content
 		.replace("@@COMPONENT_SRC@@", src)
 		.replace("@@ID@@", id)
 		.replace("@@NAME@@", name)
-		.replace("@@ICON@@", icon)
+		.replace("@@ICON@@", escapedIcon)
 		.replace("@@STYLE@@", style ?? "");
 
 	addVirtualImport({
