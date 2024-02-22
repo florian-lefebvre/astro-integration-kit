@@ -1,14 +1,10 @@
 import { type AstroIntegration, type HookParameters } from "astro";
 import { hasIntegration } from "./has-integration.js";
 
-export type addIntegrationUserOptionalParams = {
-	ensureUnique?: boolean;
-};
-
 export type addIntegrationUserParams = {
 	integration: AstroIntegration;
-	options?: addIntegrationUserOptionalParams
-}
+	ensureUnique?: boolean;
+};
 
 type AddIntegrationParams = addIntegrationUserParams & {
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
@@ -35,13 +31,11 @@ type AddIntegrationParams = addIntegrationUserParams & {
  */
 export const addIntegration = ({
 	integration,
-	options,
+	ensureUnique = true,
 	updateConfig,
 	config,
 	logger,
 }: AddIntegrationParams) => {
-	const ensureUnique = options?.ensureUnique ?? true;
-
 	if (
 		ensureUnique &&
 		hasIntegration({

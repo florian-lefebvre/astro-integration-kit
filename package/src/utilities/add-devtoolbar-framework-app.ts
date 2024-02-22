@@ -10,7 +10,9 @@ async function checkMissingDependencies(deps: string[]): Promise<string[]> {
 	const missingDeps: string[] = [];
 
 	await Promise.all(
-		deps.map((dep) => import(/* @vite-ignore */dep).catch(() => missingDeps.push(dep))),
+		deps.map((dep) =>
+			import(/* @vite-ignore */ dep).catch(() => missingDeps.push(dep)),
+		),
 	);
 
 	return missingDeps;
@@ -33,11 +35,12 @@ export type addDevToolbarFrameworkAppUserParams = {
 	style?: string;
 };
 
-export type addDevToolbarFrameworkAppParams = addDevToolbarFrameworkAppUserParams & {
-	addDevToolbarApp: HookParameters<"astro:config:setup">["addDevToolbarApp"];
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-	injectScript: HookParameters<"astro:config:setup">["injectScript"];
-};
+export type addDevToolbarFrameworkAppParams =
+	addDevToolbarFrameworkAppUserParams & {
+		addDevToolbarApp: HookParameters<"astro:config:setup">["addDevToolbarApp"];
+		updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+		injectScript: HookParameters<"astro:config:setup">["injectScript"];
+	};
 
 /**
  * Add a Dev Toolbar Plugin that uses a Framework component.
@@ -96,12 +99,11 @@ export const addDevToolbarFrameworkApp = ({
 	const { resolve } = createResolver(import.meta.url);
 
 	let content = readFileSync(
-		resolve(`./addDevToolbarFrameworkAppStubs/${framework}.ts`),
+		resolve(`../stubs/add-devtoolbar-framework-app/${framework}.ts`),
 		"utf8",
 	);
 
-	const escapedIcon = icon
-		.replace("`", '${"`"}')
+	const escapedIcon = icon.replace("`", '${"`"}');
 
 	content = content
 		.replace("@@COMPONENT_SRC@@", src)
@@ -116,15 +118,12 @@ export const addDevToolbarFrameworkApp = ({
 		updateConfig,
 	});
 
-	switch (framework) {
-		case "react":
-			import("@vitejs/plugin-react").then((react) => {
-				const FAST_REFRESH_PREAMBLE = react.default.preambleCode;
-				const preamble = FAST_REFRESH_PREAMBLE.replace("__BASE__", "/");
-				injectScript("page", preamble);
-			});
-
-			break;
+	if (framework === "react") {
+		import("@vitejs/plugin-react").then((react) => {
+			const FAST_REFRESH_PREAMBLE = react.default.preambleCode;
+			const preamble = FAST_REFRESH_PREAMBLE.replace("__BASE__", "/");
+			injectScript("page", preamble);
+		});
 	}
 
 	addDevToolbarApp(virtualModuleName);

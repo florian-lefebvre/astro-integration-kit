@@ -142,3 +142,8 @@ export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
 		AddedParam<TPlugins, "astro:build:done">
 	>;
 }
+
+export interface DevToolbarFrameworkAppProps {
+	canvas: ShadowRoot;
+	renderWindow: HTMLElement;
+}
