@@ -1,16 +1,10 @@
 import { type AstroIntegration, type HookParameters } from "astro";
 import { hasIntegration } from "./has-integration.js";
 
-export type addIntegrationUserParams = {
+export type addIntegrationParams = {
 	integration: AstroIntegration;
 	ensureUnique?: boolean;
-};
-
-type AddIntegrationParams = addIntegrationUserParams & {
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-	config: HookParameters<"astro:config:setup">["config"];
-	logger: HookParameters<"astro:config:setup">["logger"];
-};
+} & Pick<HookParameters<"astro:config:setup">, "updateConfig" | "config" | "logger">;
 
 /**
  * Easily add an integration from within an integration.

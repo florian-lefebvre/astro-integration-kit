@@ -26,21 +26,14 @@ const missingImports: Record<SupportedFrameworks, Array<string>> = {
 	vue: await checkMissingDependencies(["vue"]),
 };
 
-export type addDevToolbarFrameworkAppUserParams = {
+export type addDevToolbarFrameworkAppParams = {
 	id: string;
 	name: string;
 	icon: string;
 	framework: SupportedFrameworks;
 	src: string;
 	style?: string;
-};
-
-export type addDevToolbarFrameworkAppParams =
-	addDevToolbarFrameworkAppUserParams & {
-		addDevToolbarApp: HookParameters<"astro:config:setup">["addDevToolbarApp"];
-		updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-		injectScript: HookParameters<"astro:config:setup">["injectScript"];
-	};
+} & Pick<HookParameters<"astro:config:setup">, "addDevToolbarApp" | "updateConfig" | "injectScript">;
 
 /**
  * Add a Dev Toolbar Plugin that uses a Framework component.

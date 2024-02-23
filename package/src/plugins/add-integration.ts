@@ -1,8 +1,7 @@
-import type { AstroIntegration } from "astro";
 import { definePlugin } from "../core/define-plugin.js";
 import {
 	addIntegration,
-	type addIntegrationUserOptionalParams,
+	type addIntegrationParams,
 } from "../utilities/add-integration.js";
 
 export const addIntegrationPlugin = definePlugin({
@@ -11,12 +10,12 @@ export const addIntegrationPlugin = definePlugin({
 	implementation:
 		({ updateConfig, config, logger }) =>
 		(
-			integration: AstroIntegration,
-			options?: addIntegrationUserOptionalParams,
+			integration: Pick<addIntegrationParams, "integration">,
+			ensureUnique?: Pick<addIntegrationParams, "ensureUnique">,
 		) =>
 			addIntegration({
 				integration,
-				...(options ? options : {}),
+				ensureUnique,
 				updateConfig,
 				config,
 				logger,
