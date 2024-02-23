@@ -26,7 +26,7 @@ const missingImports: Record<SupportedFrameworks, Array<string>> = {
 	vue: await checkMissingDependencies(["vue"]),
 };
 
-export type addDevToolbarFrameworkAppParams = {
+export type AddDevToolbarFrameworkAppParams = {
 	id: string;
 	name: string;
 	icon: string;
@@ -65,7 +65,7 @@ export type addDevToolbarFrameworkAppParams = {
  * });
  * ```
  *
- * @see https://astro-integration-kit.netlify.app/utilities/add-devtoolbar-plugin/
+ * @see https://astro-integration-kit.netlify.app/utilities/add-devtoolbar-framework-app/
  */
 export const addDevToolbarFrameworkApp = ({
 	id,
@@ -77,7 +77,7 @@ export const addDevToolbarFrameworkApp = ({
 	addDevToolbarApp,
 	updateConfig,
 	injectScript,
-}: addDevToolbarFrameworkAppParams) => {
+}: AddDevToolbarFrameworkAppParams) => {
 	const virtualModuleName = `virtual:astro-devtoolbar-app-${id}`;
 
 	const missingImportsForFramework = missingImports[framework];

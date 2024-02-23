@@ -6,7 +6,7 @@ export default {
 	name: "@@NAME@@",
 
 	icon: `@@ICON@@`,
-	init: (canvas) => {
+	init: (canvas, eventTarget) => {
 		const renderWindow = document.createElement("astro-dev-toolbar-window");
 
 		canvas.appendChild(renderWindow);
@@ -15,6 +15,7 @@ export default {
 
 		render(h(Component, {
 			canvas,
+			eventTarget,
 			renderWindow,
 		}, []), renderWindow);
 	},

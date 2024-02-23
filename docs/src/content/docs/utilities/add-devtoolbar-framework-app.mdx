@@ -124,19 +124,28 @@ You can now use a React, Preact, Solid, Vue or Svelte component instead of manip
     </TabItem>
 </Tabs>
 
-## Canvas and renderWindow
+## Component Props
 
-All the framework toolbar apps get passed two props: `canvas` and `renderWindow`.
+`addDevToolbarFrameworkApp` initialises your framework component with three props: `canvas`, `eventTarget`, and `renderWindow`.
 
 `canvas` is the root ShadowDOM node that holds your whole application.
 
+`eventTarget` allows you to set and listen to events from the server. See [the Client-side Events docs for more info](https://docs.astro.build/en/reference/dev-toolbar-app-reference/#client-side-events).
+
 `renderWindow` is the physical window shown when your app is opened.
+
+<LinkCard
+    title="Dev Toolbar App docs"
+    description="For more info on these props, see the Dev Toolbar App docs"
+    href="https://docs.astro.build/en/reference/dev-toolbar-app-reference/#client-side-events"
+    target="_blank"
+/>
 
 <Tabs>
     <TabItem label="React">
         ```tsx title="integration/my-app.jsx"
-        export default function App({ canvas, renderWindow }) {
-            console.log(canvas, renderWindow)
+        export default function App({ canvas, eventTarget, renderWindow }) {
+            console.log(canvas, eventTarget, renderWindow)
             
             return ()
         }
@@ -145,7 +154,7 @@ All the framework toolbar apps get passed two props: `canvas` and `renderWindow`
     <TabItem label="Vue">
         ```vue title="integration/my-app.vue"
         <script setup>
-        const props = defineProps(['canvas', 'renderWindow'])
+        const props = defineProps(['canvas', 'eventTarget', 'renderWindow'])
 
         console.log(props.canvas, props.renderWindow)
         </script>
@@ -158,7 +167,7 @@ All the framework toolbar apps get passed two props: `canvas` and `renderWindow`
     </TabItem>
 </Tabs>
 
-The typings for `canvas` and `renderWindow` can be imported:
+The typings for `canvas`, `renderTarget`, and `renderWindow` can be imported from:
 
 ```ts
 import { DevToolbarFrameworkAppProps } from "astro-integration-kit";
