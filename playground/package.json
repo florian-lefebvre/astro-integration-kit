@@ -29,7 +29,7 @@
     "solid-js": "^1.8.15",
     "svelte": "^4.2.11",
     "tailwindcss": "^3.4.1",
-    "vue": "^3.4.20"
+    "test-vue-app": "workspace:*"
   },
   "devDependencies": {
     "@astrojs/check": "^0.4.1",

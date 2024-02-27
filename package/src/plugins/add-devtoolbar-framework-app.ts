@@ -8,11 +8,11 @@ export const addDevToolbarFrameworkAppPlugin = definePlugin({
 	name: "addDevToolbarFrameworkApp",
 	hook: "astro:config:setup",
 	implementation:
-		({ addDevToolbarApp, updateConfig, injectScript }) =>
+		({ addDevToolbarApp, updateConfig, injectScript, config }) =>
 		(
 			params: Omit<
 				AddDevToolbarFrameworkAppParams,
-				"addDevToolbarApp" | "updateConfig" | "injectScript"
+				"addDevToolbarApp" | "updateConfig" | "injectScript" | "config"
 			>,
 		) =>
 			addDevToolbarFrameworkApp({
@@ -20,5 +20,6 @@ export const addDevToolbarFrameworkAppPlugin = definePlugin({
 				addDevToolbarApp,
 				updateConfig,
 				injectScript,
+				config,
 			}),
 });
