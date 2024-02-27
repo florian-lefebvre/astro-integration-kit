@@ -33,7 +33,10 @@ export type AddDevToolbarFrameworkAppParams = {
 	framework: SupportedFrameworks;
 	src: string;
 	style?: string;
-} & Pick<HookParameters<"astro:config:setup">, "addDevToolbarApp" | "updateConfig" | "injectScript">;
+} & Pick<
+	HookParameters<"astro:config:setup">,
+	"addDevToolbarApp" | "updateConfig" | "injectScript"
+>;
 
 /**
  * Add a Dev Toolbar Plugin that uses a Framework component.
