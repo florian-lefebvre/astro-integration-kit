@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.3.1
+
+### Patch Changes
+
+- 9835e32: Fixes issues reported by `tsc --noEmit` in users projects
+
 ## 0.3.0
 
 ### Minor Changes
