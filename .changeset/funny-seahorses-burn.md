@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-Fixed problem with tsc not going through.
+Fixes issues reported by `tsc --noEmit` in users projects
