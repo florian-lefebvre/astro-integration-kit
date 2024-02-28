@@ -39,9 +39,12 @@ const testIntegration = defineIntegration({
 				});
 
 				addVirtualImports({
-					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
-						{ foo: "bar" },
-					)}`,
+					name: "virtual:astro-integration-kit-playground",
+					imports: {
+						"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
+							{ foo: "bar" },
+						)}`,
+					},
 				});
 
 				if (hasIntegration("@astrojs/tailwind")) {
