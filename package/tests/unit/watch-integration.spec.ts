@@ -4,7 +4,6 @@ import type { Plugin } from "vite";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { createResolver } from "../../src/core/create-resolver.js";
 import { watchIntegration } from "../../src/utilities/watch-integration.js";
-import type { AstroConfig } from "astro";
 
 const tempFolderName = ".TMP_WATCHINTEGRATION";
 
@@ -153,7 +152,6 @@ describe("watchIntegration", () => {
 		const addWatchFile = vi.fn();
 		const updateConfig = vi.fn((config) => {
 			plugin = config.vite.plugins[0];
-			return {} as AstroConfig;
 		});
 
 		watchIntegration({
@@ -172,7 +170,6 @@ describe("watchIntegration", () => {
 		const addWatchFile = vi.fn();
 		const updateConfig = vi.fn((config) => {
 			plugin = config.vite.plugins[0];
-			return {} as AstroConfig;
 		});
 
 		watchIntegration({

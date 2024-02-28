@@ -77,7 +77,7 @@ describe("defineIntegration", () => {
 
 	test("Setup should get called with correct name", () => {
 		const name = "my-integration";
-		const setup = vi.fn<[{ name: string }]>(() => {
+		const setup = vi.fn(() => {
 			return {} as ExtendedHooks;
 		});
 
