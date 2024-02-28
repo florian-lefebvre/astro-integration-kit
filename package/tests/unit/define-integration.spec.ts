@@ -265,7 +265,9 @@ describe("defineIntegration", () => {
 				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportsCallArgs.imports).toHaveProperty(virtualImportName);
+				expect(addVirtualImportsCallArgs.imports).toHaveProperty(
+					virtualImportName,
+				);
 			});
 
 			test("Should pass the correct content", () => {
