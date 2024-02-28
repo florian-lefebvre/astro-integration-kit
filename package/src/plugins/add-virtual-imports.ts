@@ -6,6 +6,6 @@ export const addVirtualImportsPlugin = definePlugin({
 	hook: "astro:config:setup",
 	implementation:
 		({ updateConfig }) =>
-		({ name, content }: { name: string; content: string }) =>
-			addVirtualImports({ name, content, updateConfig }),
+		(imports: Record<string, string>) =>
+			addVirtualImports({ imports, updateConfig }),
 });

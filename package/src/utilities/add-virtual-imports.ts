@@ -7,24 +7,33 @@ const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
 };
 
-const createVirtualModule = (name: string, content: string): Plugin => {
-	const pluginName = `vite-plugin-${name}`;
+const createVirtualModule = (imports: Record<string, string>): Plugin => {
+	const importNames = Object.keys(imports) as (keyof typeof imports)[]
+
+	const resolutionMap = Object.fromEntries(
+		importNames.map((importName) => {
+			if (importName.startsWith("astro:")) {
+				throw new AstroError(
+					`Virtual import name prefix can't be "astro:" (for "${importName}") because it's reserved for Astro core.`,
+				);
+			}
+			return [
+				resolveVirtualModuleId(importName),
+				importName,
+			]	
+		})
+	);
 
 	return {
-		name: pluginName,
+		name: `vite-plugin-${importNames[0]}`,
 		resolveId(id) {
-			if (id === name) {
-				return resolveVirtualModuleId(id);
-			}
-
+			if (id in imports) return resolveVirtualModuleId(id);
 			return;
 		},
 		load(id) {
-			if (id === resolveVirtualModuleId(name)) {
-				return content;
-			}
-
-			return;
+			const resolution = resolutionMap[id]
+			if (resolution) return imports[resolution];
+			return
 		},
 	};
 };
@@ -34,8 +43,7 @@ const createVirtualModule = (name: string, content: string): Plugin => {
  * Virtual imports are useful for passing things like config options, or data computed within the integration.
  *
  * @param {object} params
- * @param {string} params.name
- * @param {string} params.content
+ * @param {Object.<string, string>} params.imports
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-imports/
@@ -62,22 +70,14 @@ const createVirtualModule = (name: string, content: string): Plugin => {
  * ```
  */
 export const addVirtualImports = ({
-	name,
-	content,
+	imports,
 	updateConfig,
 }: {
-	name: string;
-	content: string;
+	imports: Record<string, string>;
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
-	if (name.startsWith("astro:")) {
-		throw new AstroError(
-			`Virtual import name prefix can't be "astro:" (for "${name}") because it's reserved for Astro core.`,
-		);
-	}
-
 	addVitePlugin({
-		plugin: createVirtualModule(name, content),
+		plugin: createVirtualModule(imports),
 		updateConfig,
 	});
 };
