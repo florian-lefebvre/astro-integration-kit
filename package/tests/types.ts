@@ -18,6 +18,3 @@ type X2 = AddedParam<Plugins, "astro:config:done">;
 const plugins = [addDtsPlugin];
 
 type X3 = AddedParam<typeof plugins, "astro:config:setup">;
-
-// Countermeasures against unused type deletion errors in tsc
-console.log({} as X1, {} as X2, {} as X3);
