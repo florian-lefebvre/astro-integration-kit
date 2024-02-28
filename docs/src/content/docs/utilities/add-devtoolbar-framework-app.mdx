@@ -2,7 +2,7 @@
 title: addDevToolbarFrameworkApp
 description:  Allows you to register a framework component as a Dev Toolbar App.
 ---
-import { Tabs, TabItem, LinkCard } from '@astrojs/starlight/components';
+import { Tabs, TabItem, LinkCard, Aside } from '@astrojs/starlight/components';
 
 `addDevToolbarFrameworkApp` allows you to register a framework component as a Dev Toolbar App!
 You can now use a React, Preact, Solid, Vue or Svelte component instead of manipulating the DOM imperatively!
@@ -188,6 +188,23 @@ if your user _has_ added it already.
 
 This also means it's a good idea to have the `@astrojs/*` framework package be a dependency of your
 integration package so the correct dependencies will definitely be installed.
+
+<Aside type="caution" title="Installing your app package">
+Astro-Integration-Kit cannot currently allow your DevToolbar Apps to use the framework package installed by your package - even if it's a dependency.
+Unfortunately this won't be picked up from the browser. So your users will need to also install the framework dependencies for the framework you are using.
+
+The dependencies required your users need are:
+
+React: `@astrojs/react`, `react`, `react-dom`
+
+Vue: `@astrojs/vue`, `vue`
+
+Preact: `@astrojs/preact`, `preact`
+
+Svelte: `@astrojs/svelte`, `svelte`
+
+Solid: `@astrojs/solid-js`, `solid-js`
+</Aside>
 
 ```ts title="my-integration/index.ts" /addIntegration\\b/ {17}
 import { defineIntegration, createResolver } from "astro-integration-kit";
