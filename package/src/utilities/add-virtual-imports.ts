@@ -8,7 +8,7 @@ const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 };
 
 const createVirtualModule = (imports: Record<string, string>): Plugin => {
-	const importNames = Object.keys(imports) as (keyof typeof imports)[]
+	const importNames = Object.keys(imports);
 
 	const resolutionMap = Object.fromEntries(
 		importNames.map((importName) => {
@@ -17,11 +17,8 @@ const createVirtualModule = (imports: Record<string, string>): Plugin => {
 					`Virtual import name prefix can't be "astro:" (for "${importName}") because it's reserved for Astro core.`,
 				);
 			}
-			return [
-				resolveVirtualModuleId(importName),
-				importName,
-			]	
-		})
+			return [resolveVirtualModuleId(importName), importName];
+		}),
 	);
 
 	return {
@@ -31,9 +28,9 @@ const createVirtualModule = (imports: Record<string, string>): Plugin => {
 			return;
 		},
 		load(id) {
-			const resolution = resolutionMap[id]
+			const resolution = resolutionMap[id];
 			if (resolution) return imports[resolution];
-			return
+			return;
 		},
 	};
 };
