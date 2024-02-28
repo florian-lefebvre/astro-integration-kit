@@ -212,12 +212,42 @@ describe("defineIntegration", () => {
 				const name = "my-integration";
 				const virtualImportName = `virtual:${name}`;
 				const content = "declare module {}";
-				const imports = { [virtualImportName]: content }
+				const imports = { [virtualImportName]: content };
 
 				const setup = (): ExtendedHooks => {
 					return {
 						"astro:config:setup": ({ addVirtualImports }) => {
-							addVirtualImports(imports);
+							addVirtualImports({ name, imports });
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+					plugins,
+				})();
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
+					.lastCall[0];
+
+				expect(addVirtualImportsCallArgs.name).toBe(name);
+			});
+
+			test("Should pass the correct import", () => {
+				const name = "my-integration";
+				const virtualImportName = `virtual:${name}`;
+				const content = "declare module {}";
+				const imports = { [virtualImportName]: content };
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addVirtualImports }) => {
+							addVirtualImports({ name, imports });
 						},
 					};
 				};
@@ -242,12 +272,12 @@ describe("defineIntegration", () => {
 				const name = "my-integration";
 				const virtualImportName = `virtual:${name}`;
 				const content = "declare module {}";
-				const imports = { [virtualImportName]: content }
+				const imports = { [virtualImportName]: content };
 
 				const setup = (): ExtendedHooks => {
 					return {
 						"astro:config:setup": ({ addVirtualImports }) => {
-							addVirtualImports(imports);
+							addVirtualImports({ name: virtualImportName, imports });
 						},
 					};
 				};
@@ -265,7 +295,9 @@ describe("defineIntegration", () => {
 				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportsCallArgs.imports[virtualImportName]).toEqual(content);
+				expect(addVirtualImportsCallArgs.imports[virtualImportName]).toBe(
+					content,
+				);
 			});
 		});
 
