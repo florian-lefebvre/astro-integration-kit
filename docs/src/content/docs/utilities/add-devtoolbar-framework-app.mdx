@@ -126,13 +126,19 @@ You can now use a React, Preact, Solid, Vue or Svelte component instead of manip
 
 ## Component Props
 
-`addDevToolbarFrameworkApp` initialises your framework component with three props: `canvas`, `eventTarget`, and `renderWindow`.
+`addDevToolbarFrameworkApp` initialises your framework component with three props:
 
-`canvas` is the root ShadowDOM node that holds your whole application.
+### canvas
+**Type:** `HTMLElement`
+The root ShadowDOM node that holds your whole application.
 
-`eventTarget` allows you to set and listen to events from the server. See [the Client-side Events docs for more info](https://docs.astro.build/en/reference/dev-toolbar-app-reference/#client-side-events).
+### eventTarget
+**Type:** `EventTarget`
+Allows you to set and listen to events from the server. See [the Client-side Events docs for more info](https://docs.astro.build/en/reference/dev-toolbar-app-reference/#client-side-events).
 
-`renderWindow` is the physical window shown when your app is opened.
+### renderWindow
+**Type:** `HTMLElement`
+Physical window shown when your app is opened.
 
 <LinkCard
     title="Dev Toolbar App docs"
@@ -143,25 +149,24 @@ You can now use a React, Preact, Solid, Vue or Svelte component instead of manip
 
 <Tabs>
     <TabItem label="React">
-        ```tsx title="integration/my-app.jsx"
-        export default function App({ canvas, eventTarget, renderWindow }) {
-            console.log(canvas, eventTarget, renderWindow)
+       ```tsx title="integration/plugin.tsx"
+        import type { DevToolbarFrameworkAppProps } from "astro-integration-kit";
+        
+        export default function App({ canvas, eventTarget, renderWindow }: DevToolbarFrameworkAppProps ) {
             
-            return ()
+            return <div>...</div>
         }
         ```
     </TabItem>
     <TabItem label="Vue">
-        ```vue title="integration/my-app.vue"
+        ```vue title="integration/plugin.vue"
         <script setup>
-        const props = defineProps(['canvas', 'eventTarget', 'renderWindow'])
-
-        console.log(props.canvas, props.renderWindow)
+        import type { DevToolbarFrameworkAppProps } from "astro-integration-kit";
+        
+        defineProps<DevToolbarFrameworkAppProps>()
         </script>
-
         <template>
-            <h1>Count is: {{ count }}</h1>
-            <button type="button" @click="count++">Increment</button>
+            <div>...</div>
         </template>
         ```
     </TabItem>
@@ -170,7 +175,7 @@ You can now use a React, Preact, Solid, Vue or Svelte component instead of manip
 The typings for `canvas`, `renderTarget`, and `renderWindow` can be imported from:
 
 ```ts
-import { DevToolbarFrameworkAppProps } from "astro-integration-kit";
+import type { DevToolbarFrameworkAppProps } from "astro-integration-kit";
 ```
 
 ## Adding Framework-specific Integrations
@@ -195,21 +200,16 @@ Unfortunately this won't be picked up from the browser. So your users will need 
 
 The dependencies required your users need are:
 
-React: `@astrojs/react`, `react`, `react-dom`
-
-Vue: `@astrojs/vue`, `vue`
-
-Preact: `@astrojs/preact`, `preact`
-
-Svelte: `@astrojs/svelte`, `svelte`
-
-Solid: `@astrojs/solid-js`, `solid-js`
+- React: `@astrojs/react`, `react`, `react-dom`
+- Vue: `@astrojs/vue`, `vue`
+- Preact: `@astrojs/preact`, `preact`
+- Svelte: `@astrojs/svelte`, `svelte`
+- Solid: `@astrojs/solid-js`, `solid-js`
 </Aside>
 
-```ts title="my-integration/index.ts" /addIntegration\\b/ {17}
+```ts title="my-integration/index.ts" /addIntegration\\b/ {3,16}
 import { defineIntegration, createResolver } from "astro-integration-kit";
 import { addDevToolbarFrameworkAppPlugin, addIntegrationPlugin } from "astro-integration-kit/plugins";
-
 import Vue from "@astrojs/vue";
 
 export default defineIntegration({
@@ -248,9 +248,10 @@ export default defineIntegration({
 `addDevToolbarFrameworkApp` allows you to pass in a stylesheet through the option `style`.
 
 This stylesheet gets injected into the shadow DOM of your plugin meaning it's styles won't leak out.
-Plus it means your whole plugin can be nicely styled with CSS instead of having a mixmatch of inline styles and scrappy CSS!
 
-### TailwindCSS
+This is great so you don't have to define your styles in your component or JS. You can create a stylesheet and use that as the styles for your app.
+
+### Tailwind CSS
 
 Tailwind is _not_ supported out of the box... Yet! 👀
 
@@ -261,24 +262,12 @@ to attach styles generated to the shadow DOM of your plugin.
 If you want to use Tailwind, your best option is to build the stylesheet yourself and read
 the file in your component.
 
-```ts title="my-integration/src/my-plugin.svelte"
+```ts title="my-integration/plugin.svelte"
 <script>
-  let count = 0;
-
-  function increment() {
-    count += 1;
-  }
-
-  function decrement() {
-    count -= 1;
-  }
+  const title = "Hello world"
 </script>
-
 <div>
-  <h1 class="font-black text-5xl">Counter</h1>
-  <p>Count: {count}</p>
-  <button on:click={increment}>Increment</button>
-  <button on:click={decrement}>Decrement</button>
+  <h1 class="font-black text-5xl">{title}</h1>
 </div>
 ```
 
@@ -286,7 +275,7 @@ the file in your component.
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: [
-		'./src/**/*.{svelte}',
+		'./**/**/*.{svelte}',
 	],
 }
 ```
@@ -323,7 +312,7 @@ export default defineIntegration({
                     id: "my-svelte-plugin",
                     icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
                     src: resolve("./my-plugin.svelte"),
-                    style: readFileSync(resolve('./styles.css'), 'utf8'),
+                    style: readFileSync(resolve('./styles.css'), 'utf-8'),
                 })
             }
         }
@@ -366,7 +355,7 @@ export default defineIntegration({
                     id: "my-svelte-plugin",
                     icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
                     src: resolve("./my-plugin.svelte"),
-                    style: readFileSync(resolve('./styles.css'), 'utf8'),
+                    style: readFileSync(resolve('./styles.css'), 'utf-8'),
                 })
             }
         }

@@ -23,10 +23,9 @@ export type AddDevToolbarFrameworkAppParams = {
  * @param {object} params
  * @param {string} params.name - The name of the toolbar plugin
  * @param {string} params.icon - This should be an inline SVG
- * @param {URL} params.framework
+ * @param {string} params.framework - The framework your component is using. Can be either "react", "vue", "svelte", "solid", or "preact"
  * @param {URL} params.src - Path to your component
- * @param {URL} params.style - A stylesheet to pass to your plugin
- * @param {URL} params.callback - A callback function containing the canvas and window your plugin is loaded on
+ * @param {string} params.style - A stylesheet to pass to your plugin
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  * @param {import("astro").HookParameters<"astro:config:setup">["addDevToolbarApp"]} params.addDevToolbarApp
  * @param {import("astro").HookParameters<"astro:config:setup">["injectScript"]} params.injectScript
@@ -66,7 +65,7 @@ export const addDevToolbarFrameworkApp = ({
 
 	let content = readFileSync(
 		resolve(`../stubs/add-devtoolbar-framework-app/${framework}.ts`),
-		"utf8",
+		"utf-8",
 	);
 
 	const escapedIcon = icon.replace("`", '${"`"}');

@@ -15,7 +15,7 @@ export const addIntegrationPlugin = definePlugin({
 		) =>
 			addIntegration({
 				integration,
-				options: options ?? {},
+				options,
 				updateConfig,
 				config,
 				logger,

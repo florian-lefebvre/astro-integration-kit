@@ -5,7 +5,7 @@ export type AddIntegrationParams = {
 	integration: AstroIntegration;
 	options?: {
 		ensureUnique?: boolean;
-	};
+	} | undefined;
 } & Pick<
 	HookParameters<"astro:config:setup">,
 	"updateConfig" | "config" | "logger"
