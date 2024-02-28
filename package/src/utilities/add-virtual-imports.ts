@@ -7,11 +7,14 @@ const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
 };
 
-const createVirtualModule = (imports: Record<string, string>): Plugin => {
-	const importNames = Object.keys(imports);
+const createVirtualModule = (
+	name: string,
+	imports: Record<string, string>,
+): Plugin => {
+	const pluginName = `vite-plugin-${name}`;
 
 	const resolutionMap = Object.fromEntries(
-		importNames.map((importName) => {
+		Object.keys(imports).map((importName) => {
 			if (importName.startsWith("astro:")) {
 				throw new AstroError(
 					`Virtual import name prefix can't be "astro:" (for "${importName}") because it's reserved for Astro core.`,
@@ -22,7 +25,7 @@ const createVirtualModule = (imports: Record<string, string>): Plugin => {
 	);
 
 	return {
-		name: `vite-plugin-${importNames[0]}`,
+		name: pluginName,
 		resolveId(id) {
 			if (id in imports) return resolveVirtualModuleId(id);
 			return;
@@ -40,6 +43,7 @@ const createVirtualModule = (imports: Record<string, string>): Plugin => {
  * Virtual imports are useful for passing things like config options, or data computed within the integration.
  *
  * @param {object} params
+ * @param {string} params.name
  * @param {Object.<string, string>} params.imports
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  *
@@ -67,14 +71,16 @@ const createVirtualModule = (imports: Record<string, string>): Plugin => {
  * ```
  */
 export const addVirtualImports = ({
+	name,
 	imports,
 	updateConfig,
 }: {
+	name: string;
 	imports: Record<string, string>;
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
 	addVitePlugin({
-		plugin: createVirtualModule(imports),
+		plugin: createVirtualModule(name, imports),
 		updateConfig,
 	});
 };
