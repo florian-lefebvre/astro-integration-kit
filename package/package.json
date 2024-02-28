@@ -24,6 +24,7 @@
 		"./utilities": "./src/utilities/index.ts",
 		"./plugins": "./src/plugins/index.ts"
 	},
+	"files": ["src", "tsconfig.json"],
 	"scripts": {
 		"test": "vitest"
 	},
