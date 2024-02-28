@@ -16,11 +16,15 @@ const createVirtualModule = (name: string, content: string): Plugin => {
 			if (id === name) {
 				return resolveVirtualModuleId(id);
 			}
+
+			return;
 		},
 		load(id) {
 			if (id === resolveVirtualModuleId(name)) {
 				return content;
 			}
+
+			return;
 		},
 	};
 };
