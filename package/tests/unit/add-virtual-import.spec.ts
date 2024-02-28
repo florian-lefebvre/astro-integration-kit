@@ -9,8 +9,9 @@ const pluginNameStub = <T extends string>(name: T): `vite-plugin-${T}` =>
 	`vite-plugin-${name}`;
 
 describe("add-virtual-imports", () => {
-	const name = "test-module";
-	const content = "export default {}";
+	const name = "test-module"
+	const content = "export default {}"
+	const imports = { [name]: content };
 	const updateConfig = vi.fn();
 
 	afterEach(() => {
@@ -19,8 +20,7 @@ describe("add-virtual-imports", () => {
 
 	test("It should call `addVitePlugin`", () => {
 		addVirtualImports({
-			name,
-			content,
+			imports,
 			updateConfig,
 		});
 
@@ -29,8 +29,7 @@ describe("add-virtual-imports", () => {
 
 	test("`addVitePlugin` should get called with the correct plugin name", () => {
 		addVirtualImports({
-			name,
-			content,
+			imports,
 			updateConfig,
 		});
 
@@ -43,8 +42,7 @@ describe("add-virtual-imports", () => {
 
 	test("Virtual module should resolve correct name", () => {
 		addVirtualImports({
-			name,
-			content,
+			imports,
 			updateConfig,
 		});
 
@@ -58,8 +56,7 @@ describe("add-virtual-imports", () => {
 	test("It should throw an error if you try and prefix your virtual import with 'astro:'", () => {
 		const testFunction = () =>
 			addVirtualImports({
-				name: `astro:${name}`,
-				content,
+				imports: { [`astro:${name}`]: content },
 				updateConfig,
 			});
 
@@ -69,8 +66,7 @@ describe("add-virtual-imports", () => {
 	test("It should throw an AstroError if you try and prefix your virtual import with 'astro:'", () => {
 		const testFunction = () =>
 			addVirtualImports({
-				name: `astro:${name}`,
-				content,
+				imports: { [`astro:${name}`]: content },
 				updateConfig,
 			});
 

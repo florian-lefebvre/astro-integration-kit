@@ -212,14 +212,12 @@ describe("defineIntegration", () => {
 				const name = "my-integration";
 				const virtualImportName = `virtual:${name}`;
 				const content = "declare module {}";
+				const imports = { [virtualImportName]: content }
 
 				const setup = (): ExtendedHooks => {
 					return {
 						"astro:config:setup": ({ addVirtualImports }) => {
-							addVirtualImports({
-								name: virtualImportName,
-								content: content,
-							});
+							addVirtualImports(imports);
 						},
 					};
 				};
@@ -237,21 +235,19 @@ describe("defineIntegration", () => {
 				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportsCallArgs.name).toBe(virtualImportName);
+				expect(addVirtualImportsCallArgs.imports).toHaveProperty(virtualImportName);
 			});
 
 			test("Should pass the correct content", () => {
 				const name = "my-integration";
 				const virtualImportName = `virtual:${name}`;
 				const content = "declare module {}";
+				const imports = { [virtualImportName]: content }
 
 				const setup = (): ExtendedHooks => {
 					return {
 						"astro:config:setup": ({ addVirtualImports }) => {
-							addVirtualImports({
-								name: virtualImportName,
-								content: content,
-							});
+							addVirtualImports(imports);
 						},
 					};
 				};
@@ -269,7 +265,7 @@ describe("defineIntegration", () => {
 				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportsCallArgs.content).toBe(content);
+				expect(addVirtualImportsCallArgs.imports[virtualImportName]).toEqual(content);
 			});
 		});
 
