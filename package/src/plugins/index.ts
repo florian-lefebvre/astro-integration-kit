@@ -1,5 +1,5 @@
 import { addDtsPlugin } from "./add-dts.js";
-import { addVirtualImportPlugin } from "./add-virtual-import.js";
+import { addVirtualImportsPlugin } from "./add-virtual-imports.js";
 import { addVitePluginPlugin } from "./add-vite-plugin.js";
 import { hasIntegrationPlugin } from "./has-integration.js";
 import { injectDevRoutePlugin } from "./inject-dev-route.js";
@@ -7,7 +7,7 @@ import { watchIntegrationPlugin } from "./watch-integration.js";
 
 export const corePlugins = [
 	addDtsPlugin,
-	addVirtualImportPlugin,
+	addVirtualImportsPlugin,
 	addVitePluginPlugin,
 	hasIntegrationPlugin,
 	injectDevRoutePlugin,
@@ -16,7 +16,7 @@ export const corePlugins = [
 
 export {
 	addDtsPlugin,
-	addVirtualImportPlugin,
+	addVirtualImportsPlugin,
 	addVitePluginPlugin,
 	hasIntegrationPlugin,
 	injectDevRoutePlugin,

@@ -108,8 +108,8 @@ export default defineConfig({
 							link: "/utilities/add-dts/",
 						},
 						{
-							label: "addVirtualImport",
-							link: "/utilities/add-virtual-import/",
+							label: "addVirtualImports",
+							link: "/utilities/add-virtual-imports/",
 						},
 						{
 							label: "addVitePlugin",

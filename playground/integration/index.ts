@@ -26,7 +26,7 @@ const testIntegration = defineIntegration({
 
 		return {
 			"astro:config:setup": ({
-				addVirtualImport,
+				addVirtualImports,
 				watchIntegration,
 				hasIntegration,
 				addDts,
@@ -38,7 +38,7 @@ const testIntegration = defineIntegration({
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
-				addVirtualImport({
+				addVirtualImports({
 					name: "virtual:astro-integration-kit-playground/config",
 					content: `export default ${JSON.stringify({ foo: "bar" })}`,
 				});
@@ -63,8 +63,8 @@ const testIntegration = defineIntegration({
 					console.log("Integration B is installed after Integration A");
 				}
 
-				// Test addVirtualImport disallowed list
-				// addVirtualImport({
+				// Test addVirtualImports disallowed list
+				// addVirtualImports({
 				// 	name: "astro:test",
 				// 	content: "export default {}"
 				// });
