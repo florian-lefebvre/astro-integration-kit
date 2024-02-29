@@ -1,0 +1,355 @@
+---
+title: addDevToolbarFrameworkApp
+description:  Allows you to register a framework component as a Dev Toolbar App.
+---
+import { Tabs, TabItem, LinkCard, Aside } from '@astrojs/starlight/components';
+
+`addDevToolbarFrameworkApp` allows you to register a framework component as a Dev Toolbar App!
+You can now use a React, Preact, Solid, Vue or Svelte component instead of manipulating the DOM imperatively!
+
+<Tabs>
+    <TabItem label="Extended hooks">
+    ```ts title="my-integration/index.ts" /addDevToolbarFrameworkApp\\b/ /addDevToolbarFrameworkAppPlugin\\b/ {3,11}
+    import { defineIntegration, createResolver } from "astro-integration-kit";
+    import { addDevToolbarFrameworkAppPlugin, addIntegrationPlugin } from "astro-integration-kit/plugins";
+    import Vue from "@astrojs/vue";
+
+    export default defineIntegration({
+        name: "my-integration",
+        plugins: [addDevToolbarFrameworkAppPlugin, addIntegrationPlugin],
+        setup(options) {
+            return {
+                "astro:config:setup": ({
+                    addDevToolbarFrameworkApp,
+                    addIntegration,
+                }) => {
+                    const { resolve } = createResolver(import.meta.url);
+
+                    addIntegration(Vue())
+
+                    addDevToolbarFrameworkApp({
+                        framework: "vue",
+                        name: "Test Vue Plugin",
+                        id: "my-vue-plugin",
+                        icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+                        src: resolve("./my-plugin.vue"),
+                        style: `
+                            h1 {
+                                font-family: Inter;
+                            }
+                        `,
+                    });
+                }
+            }
+        }
+    })
+    ```
+    ```vue title="my-integration/my-app.vue"
+    <script setup lang="ts">
+        import { ref } from 'vue'
+
+        const count = ref(0)
+    </script>
+
+    <template>
+        <h1>Count is: {{ count }}</h1>
+        <button type="button" @click="count++">Increment</button>
+    </template>
+    ```
+    </TabItem>
+    <TabItem label="Standalone utilities">
+    ```ts title="integration/index.ts" "addDevToolbarFrameworkApp" {7, 24}
+    import type { AstroIntegration } from "astro";
+    import {
+        addDevToolbarFrameworkApp,
+        addIntegration,
+        createResolver,
+    } from "astro-integration-kit";
+    import Vue from "@astrojs/vue";
+
+    export default function myIntegration(): AstroIntegration {
+        return {
+            name: "my-integration",
+            hooks: {
+                "astro:config:setup": ({
+                    addDevToolbarApp,
+                    config,
+                    injectScript,
+                    logger,
+                    updateConfig,
+                }) => {
+                    const { resolve } = createResolver(import.meta.url);
+
+                    addIntegration({
+                        integration: Vue(),
+                        updateConfig,
+                        config,
+                        logger,
+                    })
+
+                    addDevToolbarFrameworkApp({
+                        framework: "vue",
+                        name: "Test Vue Plugin",
+                        id: "my-vue-plugin",
+                        icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+                        src: resolve("./my-plugin.vue"),
+                        style: `
+                            h1 {
+                                font-family: Inter;
+                            }
+                        `,
+                        updateConfig,
+                        addDevToolbarApp,
+                        injectScript,
+                    })
+                }
+            }
+        }
+    }
+    ```
+    ```vue title="integration/my-app.vue"
+    <script setup lang="ts">
+        import { ref } from 'vue'
+
+        const count = ref(0)
+    </script>
+
+    <template>
+        <h1>Count is: {{ count }}</h1>
+        <button type="button" @click="count++">Increment</button>
+    </template>
+    ```
+    </TabItem>
+</Tabs>
+
+## Component Props
+
+`addDevToolbarFrameworkApp` initialises your framework component with three props:
+
+### canvas
+**Type:** `HTMLElement`
+The root ShadowDOM node that holds your whole application.
+
+### eventTarget
+**Type:** `EventTarget`
+Allows you to set and listen to events from the server. See [the Client-side Events docs for more info](https://docs.astro.build/en/reference/dev-toolbar-app-reference/#client-side-events).
+
+### renderWindow
+**Type:** `HTMLElement`
+Physical window shown when your app is opened.
+
+<LinkCard
+    title="Dev Toolbar App docs"
+    description="For more info on these props, see the Dev Toolbar App docs"
+    href="https://docs.astro.build/en/reference/dev-toolbar-app-reference/#client-side-events"
+    target="_blank"
+/>
+
+<Tabs>
+    <TabItem label="React">
+       ```tsx title="integration/plugin.tsx"
+        import type { DevToolbarFrameworkAppProps } from "astro-integration-kit";
+        
+        export default function App({ canvas, eventTarget, renderWindow }: DevToolbarFrameworkAppProps) {
+            return <div>...</div>
+        }
+        ```
+    </TabItem>
+    <TabItem label="Vue">
+        ```vue title="integration/plugin.vue"
+        <script setup>
+        import type { DevToolbarFrameworkAppProps } from "astro-integration-kit";
+        
+        defineProps<DevToolbarFrameworkAppProps>()
+        </script>
+        <template>
+            <div>...</div>
+        </template>
+        ```
+    </TabItem>
+</Tabs>
+
+## Adding Framework-specific Integrations
+
+It's recommended to manually add the official Astro integration for your chosen framework
+using the [addIntegration](/utilities/add-integration) utility instead of relying on your users
+to install and add it. `addIntegration` won't re-add integrations, so you're safe to call it even
+if your user _has_ added it already.
+
+<LinkCard
+    title="addIntegration"
+    description="The addIntegration is used to add integrations from an integration."
+    href="/utilities/add-integration"
+/>
+
+This also means it's a good idea to have the `@astrojs/*` framework package be a dependency of your
+integration package so the correct dependencies will definitely be installed.
+
+<Aside type="caution" title="Installing your app package">
+Astro-Integration-Kit cannot currently allow your DevToolbar Apps to use the framework package installed by your package - even if it's a dependency.
+Unfortunately this won't be picked up from the browser. So your users will need to also install the framework dependencies for the framework you are using.
+
+The dependencies required your users need are:
+
+- React: `@astrojs/react`, `react`, `react-dom`
+- Vue: `@astrojs/vue`, `vue`
+- Preact: `@astrojs/preact`, `preact`
+- Svelte: `@astrojs/svelte`, `svelte`
+- Solid: `@astrojs/solid-js`, `solid-js`
+</Aside>
+
+```ts title="my-integration/index.ts" /addIntegration\\b/ {3,16}
+import { defineIntegration, createResolver } from "astro-integration-kit";
+import { addDevToolbarFrameworkAppPlugin, addIntegrationPlugin } from "astro-integration-kit/plugins";
+import Vue from "@astrojs/vue";
+
+export default defineIntegration({
+    name: "my-integration",
+    plugins: [addDevToolbarFrameworkAppPlugin, addIntegrationPlugin],
+    setup(options) {
+        return {
+            "astro:config:setup": ({
+                addDevToolbarFrameworkApp,
+                addIntegration,
+            }) => {
+                const { resolve } = createResolver(import.meta.url);
+
+                addIntegration(Vue())
+
+                addDevToolbarFrameworkApp({
+                    framework: "vue",
+                    name: "Test Vue Plugin",
+                    id: "my-vue-plugin",
+                    icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+                    src: resolve("./my-plugin.vue"),
+                    style: `
+                        h1 {
+                            font-family: Inter;
+                        }
+                    `,
+                });
+            }
+        }
+    }
+})
+```
+
+## Styling
+
+`addDevToolbarFrameworkApp` allows you to pass in a stylesheet through the option `style`.
+
+This stylesheet gets injected into the shadow DOM of your plugin meaning it's styles won't leak out.
+
+This is great so you don't have to define your styles in your component or JS. You can create a stylesheet and use that as the styles for your app.
+
+### Tailwind CSS
+
+Tailwind is _not_ supported out of the box... Yet! 👀
+
+As in you can't just use Tailwind classes in your component and it'll work. Even if you
+install the `@astrojs/tailwind` integration. The Tailwind integration currently has no way
+to attach styles generated to the shadow DOM of your plugin.
+
+If you want to use Tailwind, your best option is to build the stylesheet yourself and read
+the file in your component.
+
+```ts title="my-integration/plugin.svelte"
+<script>
+  const title = "Hello world"
+</script>
+<div>
+  <h1 class="font-black text-5xl">{title}</h1>
+</div>
+```
+
+```js title="tailwind.config.js"
+/** @type {import('tailwindcss').Config} */
+export default {
+	content: [
+		'./**/**/*.{svelte}',
+	],
+}
+```
+
+Then you can run the Tailwind CLI and it will generate a CSS file for you.
+
+```bash
+pnpm i tailwindcss
+pnpm exec tailwindcss -o ./src/styles.css
+```
+
+Then you can read that file in your integration.
+
+```ts title="my-integration/src/index.ts" /readFileSync\\b/ {23}
+import { defineIntegration, createResolver } from "astro-integration-kit"
+import {
+    addDevToolbarFrameworkAppPlugin,
+} from "astro-integration-kit/plugins";
+import { readFileSync } from "node:fs";
+
+export default defineIntegration({
+    name: "my-integration",
+    plugins: [addDevToolbarFrameworkAppPlugin],
+    setup() {
+        const { resolve } = createResolver(import.meta.url);
+
+        return {
+            "astro:config:setup": ({
+                addDevToolbarFrameworkApp,
+            }) => {
+                addDevToolbarFrameworkApp({
+                    framework: "svelte",
+                    name: "Test Svelte Plugin",
+                    id: "my-svelte-plugin",
+                    icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+                    src: resolve("./my-plugin.svelte"),
+                    style: readFileSync(resolve('./styles.css'), 'utf-8'),
+                })
+            }
+        }
+    }
+})
+```
+
+#### Bonus 🎉
+
+If you use the `watch` flag on the Tailwind CLI and use the [watchIntegration](/utilities/watch-integration)
+plugin, you can then get automatic reloading of your plugin. Not HMR yet though!
+
+```bash
+pnpm exec tailwindcss -o ./src/styles.css --watch
+```
+
+```ts title="my-integration/src/index.ts" /watchIntegration\\b/ {16,18}
+import { defineIntegration, createResolver } from "astro-integration-kit"
+import {
+    addDevToolbarFrameworkAppPlugin,
+    watchIntegrationPlugin,
+} from "astro-integration-kit/plugins";
+
+export default defineIntegration({
+    name: "my-integration",
+    plugins: [addDevToolbarFrameworkAppPlugin, watchIntegrationPlugin],
+    setup() {
+        const { resolve } = createResolver(import.meta.url);
+
+        return {
+            "astro:config:setup": ({
+                addDevToolbarFrameworkApp,
+                watchIntegration
+            }) => {
+                watchIntegration(resolve());
+            
+                addDevToolbarFrameworkApp({
+                    framework: "svelte",
+                    name: "Test Svelte Plugin",
+                    id: "my-svelte-plugin",
+                    icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+                    src: resolve("./my-plugin.svelte"),
+                    style: readFileSync(resolve('./styles.css'), 'utf-8'),
+                })
+            }
+        }
+    }
+})
+```

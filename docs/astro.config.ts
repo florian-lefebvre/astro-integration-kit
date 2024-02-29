@@ -83,7 +83,6 @@ export default defineConfig({
 						{
 							label: "defineIntegration",
 							link: "/core/define-integration/",
-							badge: badge("updated"),
 						},
 						{
 							label: "defineOptions",
@@ -104,8 +103,18 @@ export default defineConfig({
 					label: "Utilities",
 					items: [
 						{
+							label: "addDevToolbarFrameworkApp",
+							link: "/utilities/add-devtoolbar-framework-app/",
+							badge: badge("new"),
+						},
+						{
 							label: "addDts",
 							link: "/utilities/add-dts/",
+						},
+						{
+							label: "addIntegration",
+							link: "/utilities/add-integration/",
+							badge: badge("new"),
 						},
 						{
 							label: "addVirtualImport",
@@ -122,7 +131,6 @@ export default defineConfig({
 						{
 							label: "injectDevRoute",
 							link: "/utilities/inject-dev-route/",
-							badge: badge("new"),
 						},
 						{
 							label: "watchIntegration (HMR)",
