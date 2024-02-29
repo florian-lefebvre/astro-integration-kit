@@ -1,7 +1,7 @@
 import { definePlugin } from "../core/define-plugin.js";
 import { addVirtualImports } from "../utilities/add-virtual-imports.js";
 
-const pluginIndexMap: Record<string, number> = {}
+const pluginIndexMap: Record<string, number> = {};
 
 export const addVirtualImportsPlugin = definePlugin({
 	name: "addVirtualImports",
@@ -9,8 +9,12 @@ export const addVirtualImportsPlugin = definePlugin({
 	implementation:
 		({ updateConfig }, { name }) =>
 		(imports: Record<string, string>) => {
-			pluginIndexMap[name] ??= -1
-			pluginIndexMap[name]++
-			addVirtualImports({ name: `${name}-${pluginIndexMap[name]}`, imports, updateConfig })
-		}
+			pluginIndexMap[name] ??= -1;
+			pluginIndexMap[name]++;
+			addVirtualImports({
+				name: `${name}-${pluginIndexMap[name]}`,
+				imports,
+				updateConfig,
+			});
+		},
 });
