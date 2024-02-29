@@ -1,0 +1,15 @@
+{
+    "name": "test-vue-app",
+    "private": "true",
+    "type": "module",
+    "version": "0.0.1",
+    "dependencies": {
+        "@astrojs/vue": "^4.0.8",
+        "astro": "^4.4.5",
+        "astro-integration-kit": "workspace:*",
+        "vue": "^3.4.20"
+    },
+    "exports": {
+        ".": "./index.ts"
+    }
+}

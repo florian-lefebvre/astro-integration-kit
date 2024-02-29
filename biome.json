@@ -13,6 +13,6 @@
 		}
 	},
 	"files": {
-		"ignore": ["dist", ".astro"]
+		"ignore": ["dist", ".astro", "src/stubs"]
 	}
 }
