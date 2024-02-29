@@ -3,4 +3,4 @@ packages:
   - packages/*
   - playground
   - docs
-  - test-vue-app
+  - playground-packages/*
