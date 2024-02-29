@@ -19,8 +19,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
             return {
                 "astro:config:setup": ({ addVirtualImports }) => {
                     addVirtualImports({
-                        name: 'virtual:my-integration/config',
-                        content: `export default ${JSON.stringify({ foo: "bar" })}`,
+                        'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
                     })
                 }
             }
@@ -39,9 +38,11 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
             hooks: {
                 "astro:config:setup": ({ updateConfig }) => {
                     addVirtualImports({
-                        name: 'virtual:my-integration/config',
-                        content: `export default ${JSON.stringify({ foo: "bar" })}`,
                         updateConfig,
+                        name: 'my-integration',
+                        imports: {
+                            'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+                        },
                     })
                 }
             }
