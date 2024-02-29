@@ -9,10 +9,9 @@ You can now use a React, Preact, Solid, Vue or Svelte component instead of manip
 
 <Tabs>
     <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" /addDevToolbarFrameworkApp\\b/ /addDevToolbarFrameworkAppPlugin\\b/ {4,12}
+    ```ts title="my-integration/index.ts" /addDevToolbarFrameworkApp\\b/ /addDevToolbarFrameworkAppPlugin\\b/ {3,11}
     import { defineIntegration, createResolver } from "astro-integration-kit";
     import { addDevToolbarFrameworkAppPlugin, addIntegrationPlugin } from "astro-integration-kit/plugins";
-
     import Vue from "@astrojs/vue";
 
     export default defineIntegration({
@@ -59,14 +58,13 @@ You can now use a React, Preact, Solid, Vue or Svelte component instead of manip
     ```
     </TabItem>
     <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" "addDevToolbarFrameworkApp"
+    ```ts title="integration/index.ts" "addDevToolbarFrameworkApp" {7, 24}
     import type { AstroIntegration } from "astro";
     import {
         addDevToolbarFrameworkApp,
         addIntegration,
         createResolver,
     } from "astro-integration-kit";
-
     import Vue from "@astrojs/vue";
 
     export default function myIntegration(): AstroIntegration {
@@ -152,8 +150,7 @@ Physical window shown when your app is opened.
        ```tsx title="integration/plugin.tsx"
         import type { DevToolbarFrameworkAppProps } from "astro-integration-kit";
         
-        export default function App({ canvas, eventTarget, renderWindow }: DevToolbarFrameworkAppProps ) {
-            
+        export default function App({ canvas, eventTarget, renderWindow }: DevToolbarFrameworkAppProps) {
             return <div>...</div>
         }
         ```
@@ -171,12 +168,6 @@ Physical window shown when your app is opened.
         ```
     </TabItem>
 </Tabs>
-
-The typings for `canvas`, `renderTarget`, and `renderWindow` can be imported from:
-
-```ts
-import type { DevToolbarFrameworkAppProps } from "astro-integration-kit";
-```
 
 ## Adding Framework-specific Integrations
 

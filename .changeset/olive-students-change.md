@@ -2,4 +2,4 @@
 "astro-integration-kit": minor
 ---
 
-Adds utility addDevToolbarFrameworkApp so now you can add Dev Toolbar Apps using framework components!
+Adds 2 new utilities, `addIntegration` as well as `addDevToolbarFrameworkApp` that allows you to build Dev Toolbar Apps using UI framework components!
