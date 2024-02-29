@@ -1,4 +1,4 @@
-import type { HookParameters } from "astro";
+import type { DevToolbarApp, HookParameters } from "astro";
 import type {
 	Prettify,
 	UnionToArray,
@@ -141,4 +141,10 @@ export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
 		Hooks["astro:build:done"],
 		AddedParam<TPlugins, "astro:build:done">
 	>;
+}
+
+export interface DevToolbarFrameworkAppProps {
+	canvas: Parameters<Required<DevToolbarApp>["init"]>[0];
+	eventTarget: Parameters<Required<DevToolbarApp>["init"]>[1];
+	renderWindow: HTMLElementTagNameMap["astro-dev-toolbar-window"];
 }

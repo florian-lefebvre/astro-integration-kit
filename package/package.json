@@ -1,6 +1,6 @@
 {
 	"name": "astro-integration-kit",
-	"version": "0.3.1",
+	"version": "0.4.0",
 	"description": "A package that contains utilities to help you build Astro integrations.",
 	"author": {
 		"email": "contact@florian-lefebvre.dev",
@@ -33,7 +33,33 @@
 	},
 	"type": "module",
 	"peerDependencies": {
-		"astro": "^4.0.0"
+		"@vitejs/plugin-react": "^4.2.1",
+		"astro": "^4.4.1",
+		"preact": "^10.19.4",
+		"react": "^18.2.0",
+		"solid-js": "^1.8.15",
+		"svelte": "^4.2.11",
+		"vue": "^3.4.19"
+	},
+	"peerDependenciesMeta": {
+		"@vitejs/plugin-react": {
+			"optional": true
+		},
+		"preact": {
+			"optional": true
+		},
+		"react": {
+			"optional": true
+		},
+		"solid-js": {
+			"optional": true
+		},
+		"svelte": {
+			"optional": true
+		},
+		"vue": {
+			"optional": true
+		}
 	},
 	"devDependencies": {
 		"@types/node": "^20.11.0",

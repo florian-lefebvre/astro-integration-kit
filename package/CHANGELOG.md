@@ -1,5 +1,15 @@
 # astro-integration-kit
 
+## 0.4.0
+
+### Minor Changes
+
+- 2863031: Adds 2 new utilities, `addIntegration` as well as `addDevToolbarFrameworkApp` that allows you to build Dev Toolbar Apps using UI framework components!
+
+### Patch Changes
+
+- c445660: Updates the `optionsSchema` constraint to allow any schema shape
+
 ## 0.3.1
 
 ### Patch Changes

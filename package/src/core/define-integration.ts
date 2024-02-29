@@ -28,7 +28,7 @@ import type { AnyPlugin, ExtendedHooks } from "./types.js";
  * ```
  */
 export const defineIntegration = <
-	TOptionsSchema extends z.AnyZodObject = z.AnyZodObject,
+	TOptionsSchema extends z.ZodTypeAny = z.ZodTypeAny,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,

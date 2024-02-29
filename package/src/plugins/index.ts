@@ -1,4 +1,6 @@
+import { addDevToolbarFrameworkAppPlugin } from "./add-devtoolbar-framework-app.js";
 import { addDtsPlugin } from "./add-dts.js";
+import { addIntegrationPlugin } from "./add-integration.js";
 import { addVirtualImportsPlugin } from "./add-virtual-imports.js";
 import { addVitePluginPlugin } from "./add-vite-plugin.js";
 import { hasIntegrationPlugin } from "./has-integration.js";
@@ -12,6 +14,8 @@ export const corePlugins = [
 	hasIntegrationPlugin,
 	injectDevRoutePlugin,
 	watchIntegrationPlugin,
+	addDevToolbarFrameworkAppPlugin,
+	addIntegrationPlugin,
 ] as const;
 
 export {
@@ -21,4 +25,6 @@ export {
 	hasIntegrationPlugin,
 	injectDevRoutePlugin,
 	watchIntegrationPlugin,
+	addDevToolbarFrameworkAppPlugin,
+	addIntegrationPlugin,
 };
