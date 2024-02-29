@@ -110,12 +110,12 @@ export default defineConfig({
 						{
 							label: "addVirtualImport",
 							link: "/utilities/add-virtual-import/",
-							badge: badge("removed")
+							badge: badge("removed"),
 						},
 						{
 							label: "addVirtualImports",
 							link: "/utilities/add-virtual-imports/",
-							badge: badge("new")
+							badge: badge("new"),
 						},
 						{
 							label: "addVitePlugin",
