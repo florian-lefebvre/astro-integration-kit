@@ -1,7 +1,7 @@
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
-import testIntegration from "./integration";
 import TestVueApp from "test-vue-app";
+import testIntegration from "./integration";
 
 // https://astro.build/config
 export default defineConfig({
