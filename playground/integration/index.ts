@@ -9,19 +9,24 @@ import Solid from "@astrojs/solid-js";
 import Svelte from "@astrojs/svelte";
 import Vue from "@astrojs/vue";
 
-const OptionsSchema = z.object({
-	/**
-	 * The name of the resource.
-	 */
-	resource: z
-		.string()
-		.default("abc")
-		.transform((val) => val.length),
-});
+const optionsSchema = z
+	.object({
+		/**
+		 * The name of the resource.
+		 */
+		resource: z
+			.string()
+			.default("abc")
+			.transform((val) => val.length),
+	})
+	.refine((val) => val.resource > 1, {
+		message: "Must be at least 2 chars long",
+		path: ["resource"],
+	});
 
 const testIntegration = defineIntegration({
 	name: "test-integration",
-	optionsSchema: OptionsSchema,
+	optionsSchema,
 	plugins: [...corePlugins],
 	setup: ({ options }) => {
 		const { resolve } = createResolver(import.meta.url);
