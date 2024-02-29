@@ -219,11 +219,8 @@ const testIntegration = defineIntegration({
 					src: resolve("./devToolbarApps/Test.solid.jsx"),
 				});
 
-				// Test addVirtualImport disallowed list
-				// addVirtualImport({
-				// 	name: "astro:test",
-				// 	content: "export default {}"
-				// });
+				// Test addVirtualImports disallowed list
+				// addVirtualImports({ "astro:test": "export default {}" });
 			},
 		};
 	},
