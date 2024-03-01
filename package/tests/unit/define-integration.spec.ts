@@ -235,7 +235,7 @@ describe("defineIntegration", () => {
 				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportsCallArgs.name).toBe(`${name}-0`);
+				expect(addVirtualImportsCallArgs.name).toBe(`${name}-1`);
 			});
 
 			test("Should increment name", () => {
@@ -247,6 +247,7 @@ describe("defineIntegration", () => {
 				const setup = (): ExtendedHooks => {
 					return {
 						"astro:config:setup": ({ addVirtualImports }) => {
+							addVirtualImports(imports);
 							addVirtualImports(imports);
 						},
 					};
@@ -265,7 +266,7 @@ describe("defineIntegration", () => {
 				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportsCallArgs.name).toBe(`${name}-1`);
+				expect(addVirtualImportsCallArgs.name).toBe(`${name}-2`);
 			});
 
 			test("Should pass the correct import", () => {
