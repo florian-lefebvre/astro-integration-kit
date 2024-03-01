@@ -1,6 +1,6 @@
 import { AstroError } from "astro/errors";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
-import { addVirtualImport } from "../../src/utilities/add-virtual-import.js";
+import { addVirtualImports } from "../../src/utilities/add-virtual-imports.js";
 import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 
 vi.mock("../../src/utilities/add-vite-plugin.js");
@@ -8,9 +8,10 @@ vi.mock("../../src/utilities/add-vite-plugin.js");
 const pluginNameStub = <T extends string>(name: T): `vite-plugin-${T}` =>
 	`vite-plugin-${name}`;
 
-describe("add-virtual-import", () => {
+describe("add-virtual-imports", () => {
 	const name = "test-module";
 	const content = "export default {}";
+	const imports = { [name]: content };
 	const updateConfig = vi.fn();
 
 	afterEach(() => {
@@ -18,9 +19,9 @@ describe("add-virtual-import", () => {
 	});
 
 	test("It should call `addVitePlugin`", () => {
-		addVirtualImport({
+		addVirtualImports({
 			name,
-			content,
+			imports,
 			updateConfig,
 		});
 
@@ -28,9 +29,9 @@ describe("add-virtual-import", () => {
 	});
 
 	test("`addVitePlugin` should get called with the correct plugin name", () => {
-		addVirtualImport({
+		addVirtualImports({
 			name,
-			content,
+			imports,
 			updateConfig,
 		});
 
@@ -42,9 +43,9 @@ describe("add-virtual-import", () => {
 	});
 
 	test("Virtual module should resolve correct name", () => {
-		addVirtualImport({
+		addVirtualImports({
 			name,
-			content,
+			imports,
 			updateConfig,
 		});
 
@@ -57,9 +58,9 @@ describe("add-virtual-import", () => {
 
 	test("It should throw an error if you try and prefix your virtual import with 'astro:'", () => {
 		const testFunction = () =>
-			addVirtualImport({
-				name: `astro:${name}`,
-				content,
+			addVirtualImports({
+				name,
+				imports: { [`astro:${name}`]: content },
 				updateConfig,
 			});
 
@@ -68,9 +69,9 @@ describe("add-virtual-import", () => {
 
 	test("It should throw an AstroError if you try and prefix your virtual import with 'astro:'", () => {
 		const testFunction = () =>
-			addVirtualImport({
-				name: `astro:${name}`,
-				content,
+			addVirtualImports({
+				name,
+				imports: { [`astro:${name}`]: content },
 				updateConfig,
 			});
 

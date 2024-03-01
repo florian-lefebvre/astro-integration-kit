@@ -8,12 +8,12 @@ import { defineIntegration } from "../../src/core/define-integration.js";
 import type { ExtendedHooks as _ExtendedHooks } from "../../src/core/types.js";
 import { corePlugins } from "../../src/plugins/index.js";
 import { addDts as mockAddDts } from "../../src/utilities/add-dts.js";
-import { addVirtualImport as mockAddVirtualImport } from "../../src/utilities/add-virtual-import.js";
+import { addVirtualImports as mockaddVirtualImports } from "../../src/utilities/add-virtual-imports.js";
 import { addVitePlugin as mockAddVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 import { hasIntegration as mockHasIntegration } from "../../src/utilities/has-integration.js";
 import { watchIntegration as mockWatchIntegration } from "../../src/utilities/watch-integration.js";
 
-vi.mock("../../src/utilities/add-virtual-import.js");
+vi.mock("../../src/utilities/add-virtual-imports.js");
 vi.mock("../../src/utilities/add-vite-plugin.js");
 vi.mock("../../src/utilities/add-dts.js");
 vi.mock("../../src/utilities/has-integration.js");
@@ -207,19 +207,17 @@ describe("defineIntegration", () => {
 			});
 		});
 
-		describe("addVirtualImport", () => {
+		describe("addVirtualImports", () => {
 			test("Should pass the correct name", () => {
 				const name = "my-integration";
 				const virtualImportName = `virtual:${name}`;
 				const content = "declare module {}";
+				const imports = { [virtualImportName]: content };
 
 				const setup = (): ExtendedHooks => {
 					return {
-						"astro:config:setup": ({ addVirtualImport }) => {
-							addVirtualImport({
-								name: virtualImportName,
-								content: content,
-							});
+						"astro:config:setup": ({ addVirtualImports }) => {
+							addVirtualImports(imports);
 						},
 					};
 				};
@@ -234,24 +232,85 @@ describe("defineIntegration", () => {
 
 				integration.hooks["astro:config:setup"]?.(params);
 
-				const addVirtualImportCallArgs = (mockAddVirtualImport as Mock).mock
+				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportCallArgs.name).toBe(virtualImportName);
+				expect(addVirtualImportsCallArgs.name).toBe(`${name}-1`);
+			});
+
+			test("Should increment name", () => {
+				const name = "my-integration";
+				const virtualImportName = `virtual:${name}`;
+				const content = "declare module {}";
+				const imports = { [virtualImportName]: content };
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addVirtualImports }) => {
+							addVirtualImports(imports);
+							addVirtualImports(imports);
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+					plugins,
+				})();
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
+					.lastCall[0];
+
+				expect(addVirtualImportsCallArgs.name).toBe(`${name}-2`);
+			});
+
+			test("Should pass the correct import", () => {
+				const name = "my-integration";
+				const virtualImportName = `virtual:${name}`;
+				const content = "declare module {}";
+				const imports = { [virtualImportName]: content };
+
+				const setup = (): ExtendedHooks => {
+					return {
+						"astro:config:setup": ({ addVirtualImports }) => {
+							addVirtualImports(imports);
+						},
+					};
+				};
+
+				const integration = defineIntegration({
+					name,
+					setup,
+					plugins,
+				})();
+
+				const params = astroConfigSetupParamsStub();
+
+				integration.hooks["astro:config:setup"]?.(params);
+
+				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
+					.lastCall[0];
+
+				expect(addVirtualImportsCallArgs.imports).toHaveProperty(
+					virtualImportName,
+				);
 			});
 
 			test("Should pass the correct content", () => {
 				const name = "my-integration";
 				const virtualImportName = `virtual:${name}`;
 				const content = "declare module {}";
+				const imports = { [virtualImportName]: content };
 
 				const setup = (): ExtendedHooks => {
 					return {
-						"astro:config:setup": ({ addVirtualImport }) => {
-							addVirtualImport({
-								name: virtualImportName,
-								content: content,
-							});
+						"astro:config:setup": ({ addVirtualImports }) => {
+							addVirtualImports(imports);
 						},
 					};
 				};
@@ -266,10 +325,12 @@ describe("defineIntegration", () => {
 
 				integration.hooks["astro:config:setup"]?.(params);
 
-				const addVirtualImportCallArgs = (mockAddVirtualImport as Mock).mock
+				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportCallArgs.content).toBe(content);
+				expect(addVirtualImportsCallArgs.imports[virtualImportName]).toBe(
+					content,
+				);
 			});
 		});
 

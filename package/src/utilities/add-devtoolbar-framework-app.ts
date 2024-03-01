@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { type HookParameters } from "astro";
 import { createResolver } from "../core/create-resolver.js";
-import { addVirtualImport } from "./add-virtual-import.js";
+import { addVirtualImports } from "./add-virtual-imports.js";
 
 type SupportedFrameworks = "react" | "preact" | "vue" | "svelte" | "solid";
 
@@ -77,10 +77,10 @@ export const addDevToolbarFrameworkApp = ({
 		.replace("@@ICON@@", escapedIcon)
 		.replace("@@STYLE@@", style ?? "");
 
-	addVirtualImport({
-		name: virtualModuleName,
-		content,
+	addVirtualImports({
+		name: id,
 		updateConfig,
+		imports: { [virtualModuleName]: content },
 	});
 
 	if (framework === "react") {

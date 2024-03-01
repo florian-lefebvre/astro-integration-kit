@@ -43,7 +43,7 @@ const testIntegration = defineIntegration({
 				addDts,
 				addDevToolbarFrameworkApp,
 				addIntegration,
-				addVirtualImport,
+				addVirtualImports,
 			}) => {
 				watchIntegration(resolve());
 
@@ -52,9 +52,10 @@ const testIntegration = defineIntegration({
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
-				addVirtualImport({
-					name: "virtual:astro-integration-kit-playground/config",
-					content: `export default ${JSON.stringify({ foo: "bar" })}`,
+				addVirtualImports({
+					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
+						{ foo: "bar" },
+					)}`,
 				});
 
 				if (hasIntegration("@astrojs/tailwind")) {
@@ -215,11 +216,8 @@ const testIntegration = defineIntegration({
 					src: resolve("./devToolbarApps/Test.solid.jsx"),
 				});
 
-				// Test addVirtualImport disallowed list
-				// addVirtualImport({
-				// 	name: "astro:test",
-				// 	content: "export default {}"
-				// });
+				// Test addVirtualImports disallowed list
+				// addVirtualImports({ "astro:test": "export default {}" });
 			},
 		};
 	},

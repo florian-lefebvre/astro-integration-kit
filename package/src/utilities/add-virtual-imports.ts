@@ -7,23 +7,32 @@ const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
 };
 
-const createVirtualModule = (name: string, content: string): Plugin => {
+const createVirtualModule = (
+	name: string,
+	imports: Record<string, string>,
+): Plugin => {
 	const pluginName = `vite-plugin-${name}`;
+
+	const resolutionMap = Object.fromEntries(
+		Object.keys(imports).map((importName) => {
+			if (importName.startsWith("astro:")) {
+				throw new AstroError(
+					`Virtual import name prefix can't be "astro:" (for "${importName}") because it's reserved for Astro core.`,
+				);
+			}
+			return [resolveVirtualModuleId(importName), importName];
+		}),
+	);
 
 	return {
 		name: pluginName,
 		resolveId(id) {
-			if (id === name) {
-				return resolveVirtualModuleId(id);
-			}
-
+			if (id in imports) return resolveVirtualModuleId(id);
 			return;
 		},
 		load(id) {
-			if (id === resolveVirtualModuleId(name)) {
-				return content;
-			}
-
+			const resolution = resolutionMap[id];
+			if (resolution) return imports[resolution];
 			return;
 		},
 	};
@@ -35,20 +44,22 @@ const createVirtualModule = (name: string, content: string): Plugin => {
  *
  * @param {object} params
  * @param {string} params.name
- * @param {string} params.content
+ * @param {Record<string, string>} params.imports
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  *
- * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-import/
+ * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-imports/
  *
  * @example
  * ```ts
  * // my-integration/index.ts
- * import { addVirtualImport } from "astro-integration-kit";
+ * import { addVirtualImports } from "astro-integration-kit";
  *
- * addVirtualImport(
- * 		name: 'virtual:my-integration/config',
- *   	content: `export default ${ JSON.stringify({foo: "bar"}) }`,
- * 		updateConfig
+ * addVirtualImports(
+ * 		updateConfig,
+ * 		name: 'my-integration',
+ *   	imports: {
+ * 			'virtual:my-integration/config': `export default ${ JSON.stringify({foo: "bar"}) }`,
+ * 		}
  * );
  * ```
  *
@@ -61,23 +72,17 @@ const createVirtualModule = (name: string, content: string): Plugin => {
  * console.log(config.foo) // "bar"
  * ```
  */
-export const addVirtualImport = ({
+export const addVirtualImports = ({
 	name,
-	content,
+	imports,
 	updateConfig,
 }: {
 	name: string;
-	content: string;
+	imports: Record<string, string>;
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
-	if (name.startsWith("astro:")) {
-		throw new AstroError(
-			`Virtual import name prefix can't be "astro:" (for "${name}") because it's reserved for Astro core.`,
-		);
-	}
-
 	addVitePlugin({
-		plugin: createVirtualModule(name, content),
+		plugin: createVirtualModule(name, imports),
 		updateConfig,
 	});
 };

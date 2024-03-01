@@ -4,23 +4,34 @@ description: Allows adding Vite virtual modules easily to access data across you
 ---
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-`addVirtualImport` allows you to create virtual modules and share data from your integration. For example:
+`addVirtualImport` was removed in `0.5.0`. Here is how to migrate:
 
 <Tabs>
     <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" /addVirtualImport\\b/ {2,6}
+    ```ts title="my-integration/index.ts" del={2,7,11,13-20} ins={3,8,12,21-24}
     import { defineIntegration } from "astro-integration-kit";
     import { addVirtualImportPlugin } from "astro-integration-kit/plugins";
+    import { addVirtualImportsPlugin } from "astro-integration-kit/plugins";
 
     export default defineIntegration({
         name: "my-integration",
         plugins: [addVirtualImportPlugin],
+        plugins: [addVirtualImportsPlugin],
         setup() {
             return {
                 "astro:config:setup": ({ addVirtualImport }) => {
+                "astro:config:setup": ({ addVirtualImports }) => {
                     addVirtualImport({
                         name: 'virtual:my-integration/config',
                         content: `export default ${JSON.stringify({ foo: "bar" })}`,
+                    })
+                    addVirtualImport({
+                        name: 'virtual:my-integration/context',
+                        content: `export default ${JSON.stringify({ entrypoint: import.meta.url })}`,
+                    })
+                    addVirtualImports({
+                        'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+                        'virtual:my-integration/context': `export default ${JSON.stringify({ entrypoint: import.meta.url })}`
                     })
                 }
             }
@@ -29,9 +40,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     ```
     </TabItem>
     <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" "addVirtualImport"
+    ```ts title="integration/index.ts" del={2,10-19} ins={3,20-27}
     import type { AstroIntegration } from "astro";
     import { addVirtualImport } from "astro-integration-kit/utilities";
+    import { addVirtualImports } from "astro-integration-kit/utilities";
 
     export default function myIntegration(): AstroIntegration {
         return {
@@ -39,9 +51,22 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
             hooks: {
                 "astro:config:setup": ({ updateConfig }) => {
                     addVirtualImport({
+                        updateConfig,
                         name: 'virtual:my-integration/config',
                         content: `export default ${JSON.stringify({ foo: "bar" })}`,
+                    })
+                    addVirtualImport({
                         updateConfig,
+                        name: 'virtual:my-integration/context',
+                        content: `export default ${JSON.stringify({ entrypoint: import.meta.url })}`,
+                    })
+                    addVirtualImports({
+                        updateConfig,
+                        name: 'my-integration',
+                        imports: {
+                            'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+                            'virtual:my-integration/context': `export default ${JSON.stringify({ entrypoint: import.meta.url })}`
+                        },
                     })
                 }
             }
@@ -50,40 +75,3 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     ```
     </TabItem>
 </Tabs>
-
-:::note
-While you can choose any name for your virtual module, it's a good idea to stick to this convention as much as possible:
-
-- If the module is an "internal" module (ie. only supposed to be used by other parts of your integration), follow this pattern: `virtual:${integrationName}/${moduleName}`
-- If you want your module to be used by your end user, in other words someone who will install your integration, follow this pattern: `${integrationName}/${moduleName}`
-::: 
-
-You can now access the config somewhere else, for example inside a page injected by your integration:
-
-```ts title="my-integration/src/pages/index.astro"
----
-import config from "virtual:my-integration/config",
-
-console.log(config.foo) // "bar"
----
-```
-
-:::caution
-Virtual modules defined with `addVirtualImport` cannot be referenced inside your integration code, for example inside `integration/index.ts`. That's because integration code is running before vite injects the virtual imports.
-:::
-
-## Typing your virtual module
-
-In order to get the types for your virtual modules while developing your integration, you'll need to manually declare a virtual module.
-
-First create a `virtual.d.ts` file in your integration root. Then you can define your virtual modules as global TypeScript modules:
-
-```ts title="my-integration/virtual.d.ts"
-declare module "virtual:my-integration/config" {
-    export default { foo: string };
-}
-```
-
-:::note
-Types defined in your `virtual.d.ts` are not accessible to end-users. They are only used whilst developing your integration.
-:::
