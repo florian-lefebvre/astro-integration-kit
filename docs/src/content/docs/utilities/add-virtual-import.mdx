@@ -40,7 +40,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
     ```
     </TabItem>
     <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" del={2,10-14} ins={3,15-21}
+    ```ts title="integration/index.ts" del={2,10-19} ins={3,20-27}
     import type { AstroIntegration } from "astro";
     import { addVirtualImport } from "astro-integration-kit/utilities";
     import { addVirtualImports } from "astro-integration-kit/utilities";
@@ -55,11 +55,17 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
                         name: 'virtual:my-integration/config',
                         content: `export default ${JSON.stringify({ foo: "bar" })}`,
                     })
+                    addVirtualImport({
+                        updateConfig,
+                        name: 'virtual:my-integration/context',
+                        content: `export default ${JSON.stringify({ entrypoint: import.meta.url })}`,
+                    })
                     addVirtualImports({
                         updateConfig,
                         name: 'my-integration',
                         imports: {
                             'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+                            'virtual:my-integration/context': `export default ${JSON.stringify({ entrypoint: import.meta.url })}`
                         },
                     })
                 }
