@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.5.0
+
+### Minor Changes
+
+- 3fc73d0: Updates `addVirtualImport` to `addVirtualImports` with the ability to resolve multiple imports using a single Vite plugin
+
 ## 0.4.0
 
 ### Minor Changes
