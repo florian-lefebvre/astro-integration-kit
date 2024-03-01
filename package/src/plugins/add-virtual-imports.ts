@@ -6,13 +6,13 @@ export const addVirtualImportsPlugin = definePlugin({
 	hook: "astro:config:setup",
 	implementation:
 		({ updateConfig }, { name }) => {
-		  let counter = 1;
-		  (imports: Record<string, string>) => {
-			  addVirtualImports({
-				  name: `${name}-${counter++}`,
-				  imports,
-				  updateConfig,
-			  });
-		  },
+			let counter = 1;
+			return (imports: Record<string, string>) => {
+				addVirtualImports({
+					name: `${name}-${counter++}`,
+					imports,
+					updateConfig,
+				});
+			}
 		},
 });
