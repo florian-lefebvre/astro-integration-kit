@@ -39,6 +39,7 @@ const testIntegration = defineIntegration({
 			"astro:config:setup": ({
 				updateConfig,
 				watchIntegration,
+				hasVitePlugin,
 				hasIntegration,
 				addDts,
 				addDevToolbarFrameworkApp,
@@ -52,11 +53,13 @@ const testIntegration = defineIntegration({
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
+				console.log(`Vite plugin "vite-plugin-test-integration-1" exists:`, hasVitePlugin("vite-plugin-test-integration-1"));
 				addVirtualImports({
 					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
 						{ foo: "bar" },
 					)}`,
 				});
+				console.log(`Vite plugin "vite-plugin-test-integration-1" exists:`, hasVitePlugin("vite-plugin-test-integration-1"));
 
 				if (hasIntegration("@astrojs/tailwind")) {
 					console.log("Tailwind is installed");
