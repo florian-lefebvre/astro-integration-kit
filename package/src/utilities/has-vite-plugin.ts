@@ -4,20 +4,33 @@ export const hasVitePlugin = ({
   name,
   config
 }: {
-  name: string
+  name: string,
   config: HookParameters<"astro:config:setup">["config"],
 }): boolean => {
-	return (config.vite?.plugins || []).some(plugin => {
-		if (!plugin) return false;
+	const plugins = config.vite?.plugins
 
-		if (Array.isArray(plugin)) {
-			return hasVitePlugin({ name, config });
+	if (plugins) {
+		for (const plugin of plugins) {
+			if (!plugin) continue
+		
+			if (Array.isArray(plugin)) {
+				return hasVitePlugin({
+					name,
+					config: {
+						vite: {
+							plugins: plugin
+						}
+					} as typeof config
+				});
+			}
+		
+			if (plugin instanceof Promise) {
+				continue
+			}
+		
+			return name === plugin.name;
 		}
+	}
 
-		if (plugin instanceof Promise) {
-			return false;
-		}
-
-		return plugin.name === name;
-	});
+	return false;
 }
