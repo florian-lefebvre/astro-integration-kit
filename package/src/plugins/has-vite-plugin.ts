@@ -1,16 +1,16 @@
 import type { AstroConfig } from "astro";
 import { definePlugin } from "../core/define-plugin.js";
 
-function getPlugins(
+function getPluginNames(
 	store: Set<string>,
-	plugins: AstroConfig["vite"]["plugins"] | undefined,
+	plugins: AstroConfig["vite"]["plugins"],
 ) {
 	if (plugins) {
 		for (const plugin of plugins) {
 			if (!plugin) continue;
 
 			if (Array.isArray(plugin)) {
-				getPlugins(store, plugin);
+				getPluginNames(store, plugin);
 				continue;
 			}
 
@@ -28,12 +28,12 @@ export const hasVitePluginPlugin = definePlugin({
 	name: "hasVitePlugin",
 	hook: "astro:config:setup",
 	implementation: (astroConfig) => {
-		const plugins = getPlugins(new Set(), astroConfig.config.vite?.plugins);
+		const plugins = getPluginNames(new Set(), astroConfig.config.vite?.plugins);
 
 		const { updateConfig } = astroConfig;
 
 		astroConfig.updateConfig = (config) => {
-			getPlugins(plugins, config.vite?.plugins);
+			getPluginNames(plugins, config.vite?.plugins);
 			return updateConfig(config);
 		};
 
