@@ -9,11 +9,11 @@ import { injectDevRoutePlugin } from "./inject-dev-route.js";
 import { watchIntegrationPlugin } from "./watch-integration.js";
 
 export const corePlugins = [
+	hasVitePluginPlugin,
 	addDtsPlugin,
 	addVirtualImportsPlugin,
 	addVitePluginPlugin,
 	hasIntegrationPlugin,
-	hasVitePluginPlugin,
 	injectDevRoutePlugin,
 	watchIntegrationPlugin,
 	addDevToolbarFrameworkAppPlugin,
