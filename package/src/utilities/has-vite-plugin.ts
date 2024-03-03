@@ -6,7 +6,7 @@ export const hasVitePlugin = ({
 }: {
   name: string
   config: HookParameters<"astro:config:setup">["config"],
-}) => {
+}): boolean => {
 	return (config.vite?.plugins || []).some(plugin => {
 		if (!plugin) return false;
 
