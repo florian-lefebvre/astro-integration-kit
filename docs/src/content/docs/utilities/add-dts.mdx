@@ -16,7 +16,7 @@ create a file inside `.astro` and reference it from `src/env.d.ts`. For example:
     export default defineIntegration({
         name: "my-integration",
         plugins: [addDtsPlugin],
-        setup(options) {
+        setup({ options }) {
             return {
                 "astro:config:setup": ({ addDts }) => {
                     addDts({
@@ -53,3 +53,106 @@ create a file inside `.astro` and reference it from `src/env.d.ts`. For example:
     ```
     </TabItem>
 </Tabs>
+
+:::tip
+Don't worry about indentation or making your code pretty by hand! `addDts` will do it for you.
+:::
+
+## How to generate `content`?
+
+Here are a few suggestions regarding how to deal with `content` conveniently.
+
+### Static content
+
+If `content` is a static string and you want to have a nice DX instead of managing it inside a string,
+we recommend you use a `stub` approach:
+
+```ts title="my-integration/stubs/virtual-import.d.ts"
+declare module "virtual:my-integration" {}
+```
+
+```ts title="my-integration/index.ts" {15}
+import { defineIntegration, createResolver } from "astro-integration-kit";
+import { addDtsPlugin } from "astro-integration-kit/plugins";
+import { readFileSync } from "node:fs";
+
+export default defineIntegration({
+    name: "my-integration",
+    plugins: [addDtsPlugin],
+    setup({ options }) {
+        const { resolve } = createResolver(import.meta.url)
+
+        return {
+            "astro:config:setup": ({ addDts }) => {
+                addDts({
+                    name: "my-integration",
+                    content: readFileSync(resolve("./stubs/virtual-import.d.ts"), "utf-8")
+                })
+            }
+        }
+    }
+})
+```
+
+### Dynamic content
+
+If you want to generate type from user data/input (codegen), you can go for **interpolation** or a **buffer** approach.
+
+#### Interpolation
+
+```ts title="my-integration/index.ts"
+import { defineIntegration } from "astro-integration-kit";
+import { addDtsPlugin } from "astro-integration-kit/plugins";
+
+export default defineIntegration({
+    name: "my-integration",
+    plugins: [addDtsPlugin],
+    setup({ options }) {
+        const { resolve } = createResolver(import.meta.url)
+
+        return {
+            "astro:config:setup": ({ addDts }) => {
+                addDts({
+                    name: "my-integration",
+                    content: `declare module "virtual:my-integration" {
+                        export type Locale: ${options.locales.map(e => `"${e}"`).join(" | ")};
+                    }`
+                })
+            }
+        }
+    }
+})
+```
+
+#### Buffer
+
+#### Interpolation
+
+```ts title="my-integration/index.ts"
+import { defineIntegration } from "astro-integration-kit";
+import { addDtsPlugin } from "astro-integration-kit/plugins";
+
+export default defineIntegration({
+    name: "my-integration",
+    plugins: [addDtsPlugin],
+    setup({ options }) {
+        const { resolve } = createResolver(import.meta.url)
+
+        return {
+            "astro:config:setup": ({ addDts }) => {
+                let content = `declare module "virtual:my-integration" {
+                    export type Locale:`
+                for (const locale of locales) {
+                    content += ` | ${locale}`
+                }
+                content += ";\n}"
+
+                addDts({
+                    name: "my-integration",
+                    content
+                })
+            }
+        }
+    }
+})
+```

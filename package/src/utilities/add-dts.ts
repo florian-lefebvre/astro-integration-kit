@@ -2,6 +2,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AstroIntegrationLogger } from "astro";
+import { prettyPrint, parse } from "recast";
+import typescriptParser from "recast/parsers/typescript"
 
 const injectEnvDTS = ({
 	srcDir,
@@ -95,5 +97,14 @@ export const addDts = ({
 	});
 
 	mkdirSync(dirname(filePath), { recursive: true });
-	writeFileSync(filePath, content, "utf-8");
+	writeFileSync(
+		filePath,
+		prettyPrint(
+			parse(content, {
+				parser: typescriptParser,
+			}),
+			{ tabWidth: 4 },
+		).code,
+		"utf-8",
+	);
 };

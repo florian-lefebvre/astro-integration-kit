@@ -52,6 +52,16 @@ const testIntegration = defineIntegration({
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
+				addDts({
+					name: "test-format",
+					content: `declare module "test:whatever" {
+						interface A {
+									foo: bar;
+							}
+				export const a: A;
+					}`
+				})
+
 				addVirtualImports({
 					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
 						{ foo: "bar" },
