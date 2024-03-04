@@ -1,6 +1,6 @@
 import type { AstroConfig } from "astro";
-import { definePlugin } from "../core/define-plugin.js";
 import type { Plugin, PluginOption } from "vite";
+import { definePlugin } from "../core/define-plugin.js";
 import { hasVitePlugin } from "../utilities/has-vite-plugin.js";
 
 function getPlugins(
@@ -30,25 +30,28 @@ export const hasVitePluginPlugin = definePlugin({
 	name: "hasVitePlugin",
 	hook: "astro:config:setup",
 	implementation: (astroConfig) => {
-    const currentPlugins = getPlugins(new Set(), astroConfig.config.vite?.plugins);
+		const currentPlugins = getPlugins(
+			new Set(),
+			astroConfig.config.vite?.plugins,
+		);
 
-    const { updateConfig } = astroConfig;
+		const { updateConfig } = astroConfig;
 
-    astroConfig.updateConfig = (config) => {
-      getPlugins(currentPlugins, config.vite?.plugins);
-			astroConfig.config.vite ??= {}
-      astroConfig.config.vite.plugins = [...currentPlugins] as PluginOption[]
-      return updateConfig(config);
-    };
+		astroConfig.updateConfig = (config) => {
+			getPlugins(currentPlugins, config.vite?.plugins);
+			astroConfig.config.vite ??= {};
+			astroConfig.config.vite.plugins = [...currentPlugins] as PluginOption[];
+			return updateConfig(config);
+		};
 
-    return (plugin: string | PluginOption) =>
-      hasVitePlugin({
-        plugin,
-        config: {
-          vite: {
-            plugins: [...currentPlugins]
-          }
-        }
-      })
-  },
+		return (plugin: string | PluginOption) =>
+			hasVitePlugin({
+				plugin,
+				config: {
+					vite: {
+						plugins: [...currentPlugins],
+					},
+				},
+			});
+	},
 });

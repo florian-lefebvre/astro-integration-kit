@@ -45,7 +45,7 @@ const testIntegration = defineIntegration({
 				addDevToolbarFrameworkApp,
 				addIntegration,
 				addVirtualImports,
-				addVitePlugin
+				addVitePlugin,
 			}) => {
 				watchIntegration(resolve());
 
@@ -54,7 +54,10 @@ const testIntegration = defineIntegration({
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
-				console.log("Test hasViteplugin: ", hasVitePlugin("vite-plugin-test-integration-1"));
+				console.log(
+					"Test hasViteplugin: ",
+					hasVitePlugin("vite-plugin-test-integration-1"),
+				);
 				addVirtualImports({
 					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
 						{ foo: "bar" },
@@ -63,11 +66,11 @@ const testIntegration = defineIntegration({
 				console.log(
 					"Test hasViteplugin: ",
 					hasVitePlugin("vite-plugin-test-integration-1"),
-					hasVitePlugin({ name: "vite-plugin-test-integration-1" }), 
+					hasVitePlugin({ name: "vite-plugin-test-integration-1" }),
 					hasVitePlugin([{ name: "vite-plugin-test-integration-1" }]),
-					hasVitePlugin([[{ name: "vite-plugin-test-integration-1" }]])
-				)
-				addVitePlugin({ name: "vite-plugin-test-integration-1" })
+					hasVitePlugin([[{ name: "vite-plugin-test-integration-1" }]]),
+				);
+				addVitePlugin({ name: "vite-plugin-test-integration-1" });
 
 				if (hasIntegration("@astrojs/tailwind")) {
 					console.log("Tailwind is installed");
@@ -123,7 +126,9 @@ const testIntegration = defineIntegration({
 					src: resolve("./devToolbarApps/Test.react.jsx"),
 				});
 
-				console.log("Test duplicate hasVitePlugin inside current integration (Warning should be below this message)")
+				console.log(
+					"Test duplicate hasVitePlugin inside current integration (Warning should be below this message)",
+				);
 				addDevToolbarFrameworkApp({
 					framework: "react",
 					name: "Test React Plugin",
