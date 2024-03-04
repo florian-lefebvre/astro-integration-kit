@@ -45,6 +45,7 @@ const testIntegration = defineIntegration({
 				addDevToolbarFrameworkApp,
 				addIntegration,
 				addVirtualImports,
+				addVitePlugin
 			}) => {
 				watchIntegration(resolve());
 
@@ -53,13 +54,20 @@ const testIntegration = defineIntegration({
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
-				console.log(`Vite plugin "vite-plugin-test-integration-1" exists:`, hasVitePlugin("vite-plugin-test-integration-1"));
+				console.log("Test hasViteplugin: ", hasVitePlugin("vite-plugin-test-integration-1"));
 				addVirtualImports({
 					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
 						{ foo: "bar" },
 					)}`,
 				});
-				console.log(`Vite plugin "vite-plugin-test-integration-1" exists:`, hasVitePlugin("vite-plugin-test-integration-1"));
+				console.log(
+					"Test hasViteplugin: ",
+					hasVitePlugin("vite-plugin-test-integration-1"),
+					hasVitePlugin({ name: "vite-plugin-test-integration-1" }), 
+					hasVitePlugin([{ name: "vite-plugin-test-integration-1" }]),
+					hasVitePlugin([[{ name: "vite-plugin-test-integration-1" }]])
+				)
+				addVitePlugin({ name: "vite-plugin-test-integration-1" })
 
 				if (hasIntegration("@astrojs/tailwind")) {
 					console.log("Tailwind is installed");
@@ -100,12 +108,22 @@ const testIntegration = defineIntegration({
 					}),
 				);
 				addIntegration(Svelte());
+
 				addIntegration(
 					Solid({
 						include: ["**/*.solid.jsx"],
 					}),
 				);
 
+				addDevToolbarFrameworkApp({
+					framework: "react",
+					name: "Test React Plugin",
+					id: "test-react-plugin",
+					icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><title>React Logo</title><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`,
+					src: resolve("./devToolbarApps/Test.react.jsx"),
+				});
+
+				console.log("Test duplicate hasVitePlugin inside current integration (Warning should be below this message)")
 				addDevToolbarFrameworkApp({
 					framework: "react",
 					name: "Test React Plugin",
