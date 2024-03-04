@@ -1,21 +1,6 @@
 import type { HookParameters } from "astro";
 import type { Plugin, PluginOption } from "vite";
-import type { Prettify } from "../internal/types.js";
 import { hasVitePlugin } from "./has-vite-plugin.js";
-
-interface OptionA {
-	warnDuplicated: true;
-	plugin: PluginOption;
-	config: HookParameters<"astro:config:setup">["config"];
-	logger: HookParameters<"astro:config:setup">["logger"];
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-}
-
-interface OptionB {
-	warnDuplicated?: false;
-	plugin: PluginOption;
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-}
 
 /**
  * Adds a [vite plugin](https://vitejs.dev/guide/using-plugins) to the
