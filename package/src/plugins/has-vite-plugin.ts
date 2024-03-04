@@ -20,7 +20,7 @@ function getPlugins(
 				continue;
 			}
 
-			store.add({ name: plugin.name });
+			store.add(plugin);
 		}
 	}
 	return store;
