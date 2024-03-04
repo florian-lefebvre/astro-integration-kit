@@ -6,7 +6,12 @@ export const addVitePluginPlugin = definePlugin({
 	name: "addVitePlugin",
 	hook: "astro:config:setup",
 	implementation:
-		({ updateConfig }) =>
-		(plugin: VitePlugin) =>
-			addVitePlugin({ plugin, updateConfig }),
+		({ config, logger, updateConfig }) =>
+			(plugin: VitePlugin) =>
+				addVitePlugin({ 
+					plugin, 
+					config,
+					logger, 
+					updateConfig 
+				})
 });
