@@ -1,5 +1,21 @@
 import type { HookParameters } from "astro";
-import type { PluginOption } from "vite";
+import type { Plugin, PluginOption } from "vite";
+import { hasVitePlugin } from './has-vite-plugin.js';
+import type { Prettify } from "../internal/types.js";
+
+interface OptionA {
+	warnDuplicated: true;
+	plugin: PluginOption;
+	config: HookParameters<"astro:config:setup">["config"];
+	logger: HookParameters<"astro:config:setup">["logger"];
+	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+}
+
+interface OptionB {
+	warnDuplicated?: false;
+	plugin: PluginOption;
+	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+}
 
 /**
  * Adds a [vite plugin](https://vitejs.dev/guide/using-plugins) to the
@@ -20,12 +36,29 @@ import type { PluginOption } from "vite";
  * ```
  */
 export const addVitePlugin = ({
+	warnDuplicated = true,
 	plugin,
+	config,
+	logger,
 	updateConfig,
 }: {
+	warnDuplicated?: false | undefined;
 	plugin: PluginOption;
+	config: never;
+	logger: never;
+	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+} | {
+	warnDuplicated?: true;
+	plugin: PluginOption;
+	config: HookParameters<"astro:config:setup">["config"];
+	logger: HookParameters<"astro:config:setup">["logger"];
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
+	if (
+		warnDuplicated && hasVitePlugin({ plugin, config })) {
+		logger.warn(`The Vite plugin "${(plugin as Plugin<any>).name}" is already present in your Vite configuration, this plugin may not behave correctly.`)
+	}
+
 	updateConfig({
 		vite: {
 			plugins: [plugin],
