@@ -2,8 +2,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AstroIntegrationLogger } from "astro";
-import { prettyPrint, parse } from "recast";
-import typescriptParser from "recast/parsers/typescript"
+import { parse, prettyPrint } from "recast";
+import typescriptParser from "recast/parsers/typescript";
 
 const injectEnvDTS = ({
 	srcDir,

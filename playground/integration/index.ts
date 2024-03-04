@@ -59,8 +59,8 @@ const testIntegration = defineIntegration({
 									foo: bar;
 							}
 				export const a: A;
-					}`
-				})
+					}`,
+				});
 
 				addVirtualImports({
 					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
