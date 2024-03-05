@@ -28,7 +28,7 @@ export const addVitePlugin = ({
 	updateConfig,
 }:
 	| {
-			warnDuplicated?: false | undefined;
+			warnDuplicated: false | undefined;
 			plugin: PluginOption;
 			config: never;
 			logger: never;
@@ -44,7 +44,7 @@ export const addVitePlugin = ({
 	if (warnDuplicated && hasVitePlugin({ plugin, config })) {
 		logger.warn(
 			`The Vite plugin "${
-				(plugin as Plugin<any>).name
+				(plugin as Plugin).name
 			}" is already present in your Vite configuration, this plugin may not behave correctly.`,
 		);
 	}
