@@ -54,7 +54,9 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 :::caution
 
-**Extended Hook**: Has to be the _first_ plugin inside the `plugins` array in order to correctly detect Vite plugins added to the config
+Cannot check for asynchronous Vite plugins
+
+**Extended Hook**: Has to be the _first_ plugin inside the `plugins` array in order to correctly detect Vite plugins added inside your integration
 
 **Standalone Utility**: Can only detect Vite plugins added from previously loaded integrations
 
