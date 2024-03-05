@@ -36,8 +36,8 @@ function getPluginNames(plugins: AstroConfig["vite"]["plugins"]) {
  * @example
 * ```ts
 * hasVitePlugin({
-* 	plugin: "vite-plugin-my-integration",
-* 	config
+* 		plugin: "vite-plugin-my-integration",
+* 		config
 * })
 * ```
 */
