@@ -54,15 +54,27 @@ const testIntegration = defineIntegration({
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
+				addDts({
+					name: "test-format",
+					content: `declare module "test:whatever" {
+						interface A {
+									foo: bar;
+							}
+				export const a: A;
+					}`,
+				});
+
 				console.log(
 					"Test hasViteplugin: ",
 					hasVitePlugin("vite-plugin-test-integration-1"),
 				);
+
 				addVirtualImports({
 					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
 						{ foo: "bar" },
 					)}`,
 				});
+
 				console.log(
 					"Test hasViteplugin: ",
 					hasVitePlugin("vite-plugin-test-integration-1"),
@@ -70,6 +82,7 @@ const testIntegration = defineIntegration({
 					hasVitePlugin([{ name: "vite-plugin-test-integration-1" }]),
 					hasVitePlugin([[{ name: "vite-plugin-test-integration-1" }]]),
 				);
+				
 				addVitePlugin({ name: "vite-plugin-test-integration-1" });
 
 				if (hasIntegration("@astrojs/tailwind")) {

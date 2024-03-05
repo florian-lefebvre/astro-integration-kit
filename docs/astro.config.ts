@@ -75,6 +75,10 @@ export default defineConfig({
 							label: "Showcase",
 							link: "/getting-started/showcase/",
 						},
+						{
+							label: "Breaking changes",
+							link: "/getting-started/breaking-changes/",
+						},
 					],
 				},
 				{
@@ -86,8 +90,11 @@ export default defineConfig({
 						},
 						{
 							label: "defineOptions",
-							link: "/core/define-options/",
+							link: "/getting-started/breaking-changes/#defineoptions",
 							badge: badge("removed"),
+							attrs: {
+								style: "opacity:0.5;",
+							},
 						},
 						{
 							label: "createResolver",
@@ -118,8 +125,11 @@ export default defineConfig({
 						},
 						{
 							label: "addVirtualImport",
-							link: "/utilities/add-virtual-import/",
+							link: "/getting-started/breaking-changes/#addvirtualimport",
 							badge: badge("removed"),
+							attrs: {
+								style: "opacity:0.5;",
+							},
 						},
 						{
 							label: "addVirtualImports",

@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.5.1
+
+### Patch Changes
+
+- c9f8870: Updates `addDts` to prettify the content automatically
+
 ## 0.5.0
 
 ### Minor Changes
