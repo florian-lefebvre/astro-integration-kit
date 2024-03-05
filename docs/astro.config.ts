@@ -141,6 +141,11 @@ export default defineConfig({
 							link: "/utilities/add-vite-plugin/",
 						},
 						{
+							label: "hasVitePlugin",
+							link: "/utilities/has-vite-plugin/",
+							badge: badge("new")
+						},
+						{
 							label: "hasIntegration",
 							link: "/utilities/has-integration/",
 						},
