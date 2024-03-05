@@ -38,8 +38,7 @@ export const hasVitePluginPlugin = definePlugin({
 		const { updateConfig } = astroConfig;
 
 		astroConfig.updateConfig = (config) => {
-			getPlugins(currentPlugins, config.vite?.plugins);
-			astroConfig.config.vite.plugins = [...currentPlugins];
+			astroConfig.config.vite.plugins = [...getPlugins(currentPlugins, config.vite?.plugins)];
 			return updateConfig(config);
 		};
 
