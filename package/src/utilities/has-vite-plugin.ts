@@ -24,6 +24,23 @@ function getPluginNames(plugins: AstroConfig["vite"]["plugins"]) {
 	return names;
 }
 
+/**
+ * Checks for the existence of a Vite plugin inside the Astro config.
+ *
+ * @param {Params} params
+ * @param {string|import("vite").Plugin} params.plugin
+ * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
+ *
+ * @see https://astro-integration-kit.netlify.app/utilities/has-vite-plugin/
+ *
+ * @example
+* ```ts
+* hasVitePlugin({
+* 	plugin: "vite-plugin-my-integration",
+* 	config
+* })
+* ```
+*/
 export const hasVitePlugin = ({
 	plugin,
 	config,
