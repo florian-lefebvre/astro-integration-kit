@@ -45,6 +45,7 @@ const createVirtualModule = (
  * @param {object} params
  * @param {string} params.name
  * @param {Record<string, string>} params.imports
+ * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-imports/
@@ -55,9 +56,10 @@ const createVirtualModule = (
  * import { addVirtualImports } from "astro-integration-kit";
  *
  * addVirtualImports(
- * 		updateConfig,
  * 		name: 'my-integration',
- *   	imports: {
+ * 		config,
+ * 		updateConfig,
+ * 		imports: {
  * 			'virtual:my-integration/config': `export default ${ JSON.stringify({foo: "bar"}) }`,
  * 		}
  * );
