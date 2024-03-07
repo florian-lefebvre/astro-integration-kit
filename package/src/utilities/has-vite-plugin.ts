@@ -63,7 +63,7 @@ export const hasVitePlugin = ({
 			const names = new Set(
 				getPluginNames(plugin as NonNullable<AstroConfig["vite"]["plugins"]>),
 			);
-			names.forEach(plugins.add, plugins);
+			for (const name of names) plugins.add(name)
 		} else {
 			plugins.add(plugin.name);
 		}
