@@ -1,12 +1,29 @@
 ---
 import config from "virtual:astro-integration-kit-playground/config"
+// @ts-ignore
+import simple from "virtual:playground/simple"
+// @ts-ignore
+import arraySimple from "virtual:playground/array-simple"
+// @ts-ignore
+import arrayComplex from "virtual:playground/array-complex"
 
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Testing Virtual Module">
     <p>Virtual Module: { config.foo } should be equal to "bar"</p>
+    <div>"{simple}" should be equal to "simple"</div>
+    <div>"{arraySimple}" should be equal to "array-simple"</div>
+    <div>"{arrayComplex}" should be equal to "array-server"</div>
+    <div>"<span id="array-complex-client"></span>" should be equal to "array-client"</div>
 </Layout>
+
+<script>
+    // @ts-ignore
+import arrayComplex from "virtual:playground/array-complex"
+
+document.getElementById("array-complex-client")!.innerText = arrayComplex
+</script>
 
 <style is:global>
     body {
