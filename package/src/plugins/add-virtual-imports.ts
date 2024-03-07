@@ -4,14 +4,12 @@ import { addVirtualImports } from "../utilities/add-virtual-imports.js";
 export const addVirtualImportsPlugin = definePlugin({
 	name: "addVirtualImports",
 	hook: "astro:config:setup",
-	implementation: ({ config, logger, updateConfig }, { name }) => {
-		let counter = 1;
+	implementation: ({ config, updateConfig }, { name }) => {
 		return (imports: Record<string, string>) => {
 			addVirtualImports({
-				name: `${name}-${counter++}`,
+				name,
 				imports,
 				config,
-				logger,
 				updateConfig,
 			});
 		};
