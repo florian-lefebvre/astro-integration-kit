@@ -31,9 +31,7 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	// with the same id and context server
 	const duplicatedImports: Record<string, Array<string>> = {};
 	for (const { id, context } of imports) {
-		if (!duplicatedImports[id]) {
-			duplicatedImports[id] = [];
-		}
+		duplicatedImports[id] ??= [];
 		duplicatedImports[id]?.push(
 			...(context === undefined ? ["server", "client"] : [context]),
 		);
