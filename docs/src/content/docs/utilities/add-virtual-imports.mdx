@@ -23,10 +23,15 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
                     })
                     addVirtualImports([
                         {
-                            id: "virtual:my-integration/server-only",
-                            content: "export const foo = 'bar'",
+                            id: "virtual:my-integration/advanced",
+                            content: "export const foo = 'server'",
                             context: "server"
-                        }
+                        },
+                        {
+                            id: "virtual:my-integration/advanced",
+                            content: "export const foo = 'client'",
+                            context: "client"
+                        },
                     ])
                 }
             }
@@ -57,10 +62,15 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
                         name: 'my-integration',
                         imports: [
                             {
-                                id: "virtual:my-integration/server-only",
-                                content: "export const foo = 'bar'",
+                                id: "virtual:my-integration/advanced",
+                                content: "export const foo = 'server'",
                                 context: "server"
-                            }
+                            },
+                            {
+                                id: "virtual:my-integration/advanced",
+                                content: "export const foo = 'client'",
+                                context: "client"
+                            },
                         ]
                     })
                 }
