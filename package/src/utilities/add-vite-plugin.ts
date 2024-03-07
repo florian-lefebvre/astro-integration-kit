@@ -1,6 +1,11 @@
-import type { HookParameters } from "astro";
-import type { Plugin, PluginOption } from "vite";
+import type { AstroConfig, HookParameters } from "astro";
+import type { Plugin } from "vite";
 import { hasVitePlugin } from "./has-vite-plugin.js";
+
+type PluginOption = Extract<
+	NonNullable<NonNullable<AstroConfig["vite"]["plugins"]>[number]>,
+	{ name: string }
+>;
 
 interface CommonOptions {
 	plugin: PluginOption;

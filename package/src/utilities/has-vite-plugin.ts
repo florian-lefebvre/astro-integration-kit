@@ -1,5 +1,9 @@
 import type { AstroConfig, HookParameters } from "astro";
-import type { PluginOption } from "vite";
+
+type PluginOption = Extract<
+	NonNullable<NonNullable<AstroConfig["vite"]["plugins"]>[number]>,
+	{ name: string }
+>;
 
 function getPluginNames(plugins: AstroConfig["vite"]["plugins"]) {
 	const names: string[] = [];
