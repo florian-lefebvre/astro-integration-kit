@@ -3,7 +3,7 @@ import type { Plugin, PluginOption } from "vite";
 import { hasVitePlugin } from "./has-vite-plugin.js";
 
 function incrementPluginName(plugin: Plugin) {
-	let count = 0
+	let count = 1
 	plugin.name = `${plugin.name.replace(/-(\d+)$/, (_, c) => { count = parseInt(c) + 1; return '' })}-${count}`
 }
 
