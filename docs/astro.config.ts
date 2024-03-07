@@ -112,7 +112,6 @@ export default defineConfig({
 						{
 							label: "addDevToolbarFrameworkApp",
 							link: "/utilities/add-devtoolbar-framework-app/",
-							badge: badge("new"),
 						},
 						{
 							label: "addDts",
@@ -121,7 +120,6 @@ export default defineConfig({
 						{
 							label: "addIntegration",
 							link: "/utilities/add-integration/",
-							badge: badge("new"),
 						},
 						{
 							label: "addVirtualImport",
@@ -134,7 +132,7 @@ export default defineConfig({
 						{
 							label: "addVirtualImports",
 							link: "/utilities/add-virtual-imports/",
-							badge: badge("new"),
+							badge: badge("updated"),
 						},
 						{
 							label: "addVitePlugin",
