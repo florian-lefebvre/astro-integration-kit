@@ -11,11 +11,11 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 	<TabItem label="Extended hooks">
 	```ts title="my-integration/index.ts" /hasVitePlugin\\b/ {2,6}
 	import { defineIntegration } from "astro-integration-kit";
-	import { hasVitePlugin } from "astro-integration-kit/plugins";
+	import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
 
 	export default defineIntegration({
 		name: "my-integration",
-		plugins: [hasVitePlugin],
+		plugins: [hasVitePluginPlugin],
 		setup() {
 			return {
 				"astro:config:setup": ({ hasVitePlugin, logger }) => {
