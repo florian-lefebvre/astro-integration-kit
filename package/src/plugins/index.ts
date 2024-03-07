@@ -9,7 +9,7 @@ import { injectDevRoutePlugin } from "./inject-dev-route.js";
 import { watchIntegrationPlugin } from "./watch-integration.js";
 
 export const corePlugins = [
-	hasVitePluginPlugin,
+	hasVitePluginPlugin, // Has to be the first plugin to detect Vite plugins added from inside the integration
 	addDtsPlugin,
 	addVirtualImportsPlugin,
 	addVitePluginPlugin,
