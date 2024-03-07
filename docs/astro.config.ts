@@ -90,7 +90,7 @@ export default defineConfig({
 						},
 						{
 							label: "defineOptions",
-							link: "/getting-started/breaking-changes/#defineoptions",
+							link: "/getting-started/breaking-changes/#removed-defineoptions",
 							badge: badge("removed"),
 							attrs: {
 								style: "opacity:0.5;",
@@ -125,7 +125,7 @@ export default defineConfig({
 						},
 						{
 							label: "addVirtualImport",
-							link: "/getting-started/breaking-changes/#addvirtualimport",
+							link: "/getting-started/breaking-changes/#update-addvirtualimport",
 							badge: badge("removed"),
 							attrs: {
 								style: "opacity:0.5;",

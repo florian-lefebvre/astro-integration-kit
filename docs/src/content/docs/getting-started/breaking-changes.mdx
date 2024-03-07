@@ -7,7 +7,85 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Features get added and removed, and breaking changes are introduced! This documents how to migrate.
 
-## `addVirtualImport`
+## `0.6.0`
+
+---
+
+### Update `addVitePlugin`
+
+`addVitePlugin` has three different upgrade paths you can choose from:
+
+1.  Add `config` and `logger` params to warn about duplicate plugins
+    ```ts ins={3,4}
+    addVitePlugin({
+        plugin,
+        config,
+        logger
+        updateConfig
+    })
+    ```
+2.  Add `warnDuplicate: false` to disable warnings about duplicate plugins
+    ```ts ins={2}
+    addVitePlugin({
+        warnDuplicate: false,
+        plugin,
+        updateConfig
+    })
+    ```
+3.  Add `warnDuplicate: false` AND `config` to increment the name of the plugin using numbers to avoid naming conflicts
+    ```ts ins={2,4}
+    addVitePlugin({
+        warnDuplicate: false,
+        plugin,
+        config,
+        updateConfig
+    })
+    ```
+
+### Update `addVirtualImports`
+
+The `addVirtualImports` utility now requires a `config` parameter
+
+```ts ins={1,4}
+"astro:config:setup": ({ config, updateConfig }) => {
+    addVirtualImports({
+        updateConfig,
+        config
+        name: 'my-integration',
+        imports: {
+            'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+        },
+    })
+}
+```
+
+### Update `addDevToolbarFrameworkApp`
+
+The `addDevToolbarFrameworkApp` utility now requires a `config` parameter
+
+```ts ins={1,3}
+"astro:config:setup": ({ config, updateConfig }) => {
+    addDevToolbarFrameworkApp({
+        config,
+        framework: "vue",
+        name: "Test Vue Plugin",
+        id: "my-vue-plugin",
+        icon: `<svg>...</svg>`,
+        src: resolve("./my-plugin.vue"),
+        style: `
+            h1 {
+                font-family: Inter;
+            }
+        `,
+    })
+}
+```
+
+## `0.5.0`
+
+---
+
+### Update `addVirtualImport`
 
 `addVirtualImport` was removed in `0.5.0`. Here is how to migrate:
 
@@ -84,7 +162,12 @@ Features get added and removed, and breaking changes are introduced! This docume
     </TabItem>
 </Tabs>
 
-## `defineOptions`
+
+## `0.2.0`
+
+---
+
+### Removed `defineOptions`
 
 `defineOptions` has been removed in `0.2.0`. Here is how to migrate:
 
