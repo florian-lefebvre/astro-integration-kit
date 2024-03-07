@@ -35,24 +35,21 @@ export const hasVitePluginPlugin = definePlugin({
 	name: "hasVitePlugin",
 	hook: "astro:config:setup",
 	implementation: (params) => {
-		const currentPlugins = getPlugins(
-			new Set(),
-			params.config.vite?.plugins,
-		);
+		const currentPlugins = getPlugins(new Set(), params.config.vite?.plugins);
 
-		const { updateConfig } = params;
+		const { updateConfig, config } = params;
 
-		params.updateConfig = (config) => {
-			params.config.vite.plugins = [
-				...getPlugins(currentPlugins, config.vite?.plugins),
+		params.updateConfig = (newConfig) => {
+			config.vite.plugins = [
+				...getPlugins(currentPlugins, newConfig.vite?.plugins),
 			];
-			return updateConfig(config);
+			return updateConfig(newConfig);
 		};
 
 		return (plugin: string | PluginOption) =>
 			hasVitePlugin({
 				plugin,
-				config: params.config,
+				config,
 			});
 	},
 });
