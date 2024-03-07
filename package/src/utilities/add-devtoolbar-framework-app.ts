@@ -14,7 +14,7 @@ export type AddDevToolbarFrameworkAppParams = {
 	style?: string;
 } & Pick<
 	HookParameters<"astro:config:setup">,
-	"config" | "logger" | "addDevToolbarApp" | "updateConfig" | "injectScript"
+	"config" | "addDevToolbarApp" | "updateConfig" | "injectScript"
 >;
 
 /**
@@ -56,7 +56,6 @@ export const addDevToolbarFrameworkApp = ({
 	src,
 	style,
 	config,
-	logger,
 	addDevToolbarApp,
 	updateConfig,
 	injectScript,
@@ -83,7 +82,6 @@ export const addDevToolbarFrameworkApp = ({
 		name: id,
 		imports: { [virtualModuleName]: content },
 		config,
-		logger,
 		updateConfig,
 	});
 
