@@ -34,16 +34,16 @@ function getPlugins(
 export const hasVitePluginPlugin = definePlugin({
 	name: "hasVitePlugin",
 	hook: "astro:config:setup",
-	implementation: (astroConfig) => {
+	implementation: (params) => {
 		const currentPlugins = getPlugins(
 			new Set(),
-			astroConfig.config.vite?.plugins,
+			params.config.vite?.plugins,
 		);
 
-		const { updateConfig } = astroConfig;
+		const { updateConfig } = params;
 
-		astroConfig.updateConfig = (config) => {
-			astroConfig.config.vite.plugins = [
+		params.updateConfig = (config) => {
+			params.config.vite.plugins = [
 				...getPlugins(currentPlugins, config.vite?.plugins),
 			];
 			return updateConfig(config);
@@ -52,7 +52,7 @@ export const hasVitePluginPlugin = definePlugin({
 		return (plugin: string | PluginOption) =>
 			hasVitePlugin({
 				plugin,
-				config: astroConfig.config,
+				config: params.config,
 			});
 	},
 });
