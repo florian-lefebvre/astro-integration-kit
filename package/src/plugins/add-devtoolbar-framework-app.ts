@@ -12,10 +12,7 @@ export const addDevToolbarFrameworkAppPlugin = definePlugin({
 		(
 			params: Omit<
 				AddDevToolbarFrameworkAppParams,
-				| "config"
-				| "addDevToolbarApp"
-				| "updateConfig"
-				| "injectScript"
+				"config" | "addDevToolbarApp" | "updateConfig" | "injectScript"
 			>,
 		) =>
 			addDevToolbarFrameworkApp({

@@ -4,7 +4,12 @@ import { definePlugin } from "../core/define-plugin.js";
 import { hasVitePlugin } from "../utilities/has-vite-plugin.js";
 
 function getPlugins(
-	store: Set<Extract<NonNullable<NonNullable<AstroConfig["vite"]["plugins"]>[number]>, { name: string }>>,
+	store: Set<
+		Extract<
+			NonNullable<NonNullable<AstroConfig["vite"]["plugins"]>[number]>,
+			{ name: string }
+		>
+	>,
 	plugins: AstroConfig["vite"]["plugins"],
 ) {
 	if (plugins) {
@@ -38,7 +43,9 @@ export const hasVitePluginPlugin = definePlugin({
 		const { updateConfig } = astroConfig;
 
 		astroConfig.updateConfig = (config) => {
-			astroConfig.config.vite.plugins = [...getPlugins(currentPlugins, config.vite?.plugins)];
+			astroConfig.config.vite.plugins = [
+				...getPlugins(currentPlugins, config.vite?.plugins),
+			];
 			return updateConfig(config);
 		};
 

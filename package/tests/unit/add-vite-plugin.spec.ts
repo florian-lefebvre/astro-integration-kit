@@ -1,4 +1,8 @@
-import type { AstroConfig, AstroIntegrationLogger, HookParameters } from "astro";
+import type {
+	AstroConfig,
+	AstroIntegrationLogger,
+	HookParameters,
+} from "astro";
 import type { Plugin } from "vite";
 import { describe, expect, test, vi } from "vitest";
 import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
@@ -78,15 +82,15 @@ describe("addVitePlugin", () => {
 		};
 		const config = {
 			vite: {
-				plugins: [ plugin ]
-			}
-		} as AstroConfig
+				plugins: [plugin],
+			},
+		} as AstroConfig;
 
 		const logger = {
-			warn: vi.fn()
-		} as unknown as AstroIntegrationLogger
-		
-		const updateConfig = vi.fn()
+			warn: vi.fn(),
+		} as unknown as AstroIntegrationLogger;
+
+		const updateConfig = vi.fn();
 
 		addVitePlugin({
 			plugin,

@@ -3,8 +3,11 @@ import type { Plugin, PluginOption } from "vite";
 import { hasVitePlugin } from "./has-vite-plugin.js";
 
 function incrementPluginName(plugin: Plugin) {
-	let count = 1
-	plugin.name = `${plugin.name.replace(/-(\d+)$/, (_, c) => { count = parseInt(c) + 1; return '' })}-${count}`
+	let count = 1;
+	plugin.name = `${plugin.name.replace(/-(\d+)$/, (_, c) => {
+		count = parseInt(c) + 1;
+		return "";
+	})}-${count}`;
 }
 
 /**
@@ -36,19 +39,21 @@ export const addVitePlugin = ({
 	config,
 	logger,
 	updateConfig,
-}: {
-	warnDuplicated: false;
-	plugin: PluginOption;
-	config?: HookParameters<"astro:config:setup">["config"];
-	logger?: HookParameters<"astro:config:setup">["logger"];
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-} | {
-	warnDuplicated?: true;
-	plugin: PluginOption;
-	config: HookParameters<"astro:config:setup">["config"];
-	logger: HookParameters<"astro:config:setup">["logger"];
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-}) => {
+}:
+	| {
+			warnDuplicated: false;
+			plugin: PluginOption;
+			config?: HookParameters<"astro:config:setup">["config"];
+			logger?: HookParameters<"astro:config:setup">["logger"];
+			updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+	  }
+	| {
+			warnDuplicated?: true;
+			plugin: PluginOption;
+			config: HookParameters<"astro:config:setup">["config"];
+			logger: HookParameters<"astro:config:setup">["logger"];
+			updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+	  }) => {
 	if (config && hasVitePlugin({ plugin, config })) {
 		if (warnDuplicated && logger) {
 			logger.warn(
@@ -57,9 +62,9 @@ export const addVitePlugin = ({
 				}" is already present in your Vite configuration, this plugin may not behave correctly.`,
 			);
 		} else {
-			incrementPluginName(plugin as Plugin)
-			while(hasVitePlugin({ plugin, config }))
-				incrementPluginName(plugin as Plugin)
+			incrementPluginName(plugin as Plugin);
+			while (hasVitePlugin({ plugin, config }))
+				incrementPluginName(plugin as Plugin);
 		}
 	}
 

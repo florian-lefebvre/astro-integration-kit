@@ -264,7 +264,10 @@ const testIntegration = defineIntegration({
 					src: resolve("./devToolbarApps/Test.solid.jsx"),
 				});
 
-				console.log("VITE PLUGINS", config.vite.plugins?.map(p => p.name))
+				console.log(
+					"VITE PLUGINS",
+					config.vite.plugins?.map((p) => p.name),
+				);
 
 				// Test addVirtualImports disallowed list
 				// addVirtualImports({ "astro:test": "export default {}" });

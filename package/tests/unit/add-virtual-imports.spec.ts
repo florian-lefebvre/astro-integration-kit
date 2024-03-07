@@ -1,8 +1,8 @@
+import type { AstroConfig } from "astro";
 import { AstroError } from "astro/errors";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
 import { addVirtualImports } from "../../src/utilities/add-virtual-imports.js";
 import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
-import type { AstroConfig } from "astro";
 
 vi.mock("../../src/utilities/add-vite-plugin.js");
 
@@ -14,7 +14,7 @@ describe("add-virtual-imports", () => {
 	const content = "export default {}";
 	const imports = { [name]: content };
 	const updateConfig = vi.fn();
-	const config = {} as AstroConfig
+	const config = {} as AstroConfig;
 
 	afterEach(() => {
 		vi.clearAllMocks();

@@ -34,13 +34,13 @@ function getPluginNames(plugins: AstroConfig["vite"]["plugins"]) {
  * @see https://astro-integration-kit.netlify.app/utilities/has-vite-plugin/
  *
  * @example
-* ```ts
-* hasVitePlugin({
-* 		plugin: "vite-plugin-my-integration",
-* 		config
-* })
-* ```
-*/
+ * ```ts
+ * hasVitePlugin({
+ * 		plugin: "vite-plugin-my-integration",
+ * 		config
+ * })
+ * ```
+ */
 export const hasVitePlugin = ({
 	plugin,
 	config,
@@ -60,7 +60,9 @@ export const hasVitePlugin = ({
 
 	if (typeof plugin === "object") {
 		if (Array.isArray(plugin)) {
-			const names = new Set(getPluginNames(plugin as NonNullable<AstroConfig["vite"]["plugins"]>));
+			const names = new Set(
+				getPluginNames(plugin as NonNullable<AstroConfig["vite"]["plugins"]>),
+			);
 			names.forEach(plugins.add, plugins);
 		} else {
 			plugins.add(plugin.name);
