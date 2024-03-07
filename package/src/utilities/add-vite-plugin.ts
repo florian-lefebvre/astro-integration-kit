@@ -34,8 +34,8 @@ function incrementPluginName(plugin: Plugin) {
  * @param {Params} params
  * @param {boolean} [params.warnDuplicated=true]
  * @param {import("vite").PluginOption} params.plugin
- * @param {import("astro").HookParameters<"astro:config:setup">["config"]} [params.config]
- * @param {import("astro").HookParameters<"astro:config:setup">["logger"]} [params.logger]
+ * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
+ * @param {import("astro").HookParameters<"astro:config:setup">["logger"]} params.logger
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-vite-plugin/
