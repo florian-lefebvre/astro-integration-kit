@@ -2,6 +2,11 @@ import type { HookParameters } from "astro";
 import type { Plugin, PluginOption } from "vite";
 import { hasVitePlugin } from "./has-vite-plugin.js";
 
+function incrementPluginName(plugin: Plugin) {
+	let count = 0
+	plugin.name = `${plugin.name.replace(/-(\d+)$/, (_, c) => { count = parseInt(c) + 1; return '' })}-${count}`
+}
+
 /**
  * Adds a [vite plugin](https://vitejs.dev/guide/using-plugins) to the
  * Astro config.
@@ -44,12 +49,18 @@ export const addVitePlugin = ({
 	logger: HookParameters<"astro:config:setup">["logger"];
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
-	if (warnDuplicated && config && logger && hasVitePlugin({ plugin, config })) {
-		logger.warn(
-			`The Vite plugin "${
-				(plugin as Plugin<any>).name
-			}" is already present in your Vite configuration, this plugin may not behave correctly.`,
-		);
+	if (config && hasVitePlugin({ plugin, config })) {
+		if (warnDuplicated && logger) {
+			logger.warn(
+				`The Vite plugin "${
+					(plugin as Plugin<any>).name
+				}" is already present in your Vite configuration, this plugin may not behave correctly.`,
+			);
+		} else {
+			incrementPluginName(plugin as Plugin)
+			while(hasVitePlugin({ plugin, config }))
+				incrementPluginName(plugin as Plugin)
+		}
 	}
 
 	updateConfig({
