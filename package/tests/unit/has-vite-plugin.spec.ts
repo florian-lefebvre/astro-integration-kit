@@ -5,6 +5,15 @@ import { hasVitePlugin } from "../../src/utilities/has-vite-plugin.js";
 describe("hasVitePlugin", () => {
 	const name = "vite-plugin-my-integration"
 	const plugin = { name };
+
+	test("Should not detect a plugin", () => {
+		const config = {} as AstroConfig
+
+		expect(hasVitePlugin({
+			plugin: null,
+			config
+		})).toBe(false);
+	});
 	
 	test("Should detect a plugin using a string", () => {
 		const config = {
