@@ -2,6 +2,23 @@ import type { HookParameters } from "astro";
 import type { Plugin, PluginOption } from "vite";
 import { hasVitePlugin } from "./has-vite-plugin.js";
 
+interface CommonOptions {
+	plugin: PluginOption;
+	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
+}
+
+interface Options extends CommonOptions {
+	warnDuplicated: false;
+	config?: HookParameters<"astro:config:setup">["config"];
+	logger?: HookParameters<"astro:config:setup">["logger"];
+}
+
+interface WarnDuplicateOptions extends CommonOptions {
+	warnDuplicated?: true;
+	config: HookParameters<"astro:config:setup">["config"];
+	logger: HookParameters<"astro:config:setup">["logger"];
+}
+
 function incrementPluginName(plugin: Plugin) {
 	let count = 1;
 	plugin.name = `${plugin.name.replace(/-(\d+)$/, (_, c) => {
@@ -39,21 +56,7 @@ export const addVitePlugin = ({
 	config,
 	logger,
 	updateConfig,
-}:
-	| {
-			warnDuplicated: false;
-			plugin: PluginOption;
-			config?: HookParameters<"astro:config:setup">["config"];
-			logger?: HookParameters<"astro:config:setup">["logger"];
-			updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-	  }
-	| {
-			warnDuplicated?: true;
-			plugin: PluginOption;
-			config: HookParameters<"astro:config:setup">["config"];
-			logger: HookParameters<"astro:config:setup">["logger"];
-			updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-	  }) => {
+}: Options | WarnDuplicateOptions) => {
 	if (config && hasVitePlugin({ plugin, config })) {
 		if (warnDuplicated && logger) {
 			logger.warn(
