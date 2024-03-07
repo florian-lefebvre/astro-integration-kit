@@ -67,7 +67,7 @@ const testIntegration = defineIntegration({
 
 				console.log(
 					"Test hasViteplugin: ",
-					hasVitePlugin("vite-plugin-test-integration-1"),
+					hasVitePlugin("vite-plugin-test-integration"),
 				);
 
 				addVirtualImports({
@@ -78,12 +78,13 @@ const testIntegration = defineIntegration({
 
 				console.log(
 					"Test hasViteplugin: ",
-					hasVitePlugin("vite-plugin-test-integration-1"),
-					hasVitePlugin({ name: "vite-plugin-test-integration-1" }),
-					hasVitePlugin([{ name: "vite-plugin-test-integration-1" }]),
-					hasVitePlugin([[{ name: "vite-plugin-test-integration-1" }]]),
+					hasVitePlugin("vite-plugin-test-integration"),
+					hasVitePlugin({ name: "vite-plugin-test-integration" }),
+					hasVitePlugin([{ name: "vite-plugin-test-integration" }]),
+					hasVitePlugin([[{ name: "vite-plugin-test-integration" }]]),
 				);
 
+				// This is for testing incrementing plugin names, toggle `warnDuplicate` option in `addVitePlugin` util file to `false` to test this
 				// addVitePlugin({ name: "vite-plugin-test-integration" });
 				// addVitePlugin({ name: "vite-plugin-test-integration" });
 				// addVitePlugin({ name: "vite-plugin-test-integration-0" });
