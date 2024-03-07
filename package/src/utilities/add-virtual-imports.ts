@@ -76,19 +76,17 @@ export const addVirtualImports = ({
 	name,
 	imports,
 	config,
-	logger,
 	updateConfig,
 }: {
 	name: string;
 	imports: Record<string, string>;
 	config: HookParameters<"astro:config:setup">["config"];
-	logger: HookParameters<"astro:config:setup">["logger"];
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }) => {
 	addVitePlugin({
+		warnDuplicated: false,
 		plugin: createVirtualModule(name, imports),
 		config,
-		logger,
 		updateConfig,
 	});
 };
