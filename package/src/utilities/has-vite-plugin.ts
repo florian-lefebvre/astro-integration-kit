@@ -1,9 +1,5 @@
 import type { AstroConfig, HookParameters } from "astro";
-
-type PluginOption = Extract<
-	NonNullable<NonNullable<AstroConfig["vite"]["plugins"]>[number]>,
-	{ name: string }
->;
+import type { PluginOption } from "vite";
 
 function getPluginNames(plugins: AstroConfig["vite"]["plugins"]) {
 	const names: string[] = [];
@@ -32,7 +28,7 @@ function getPluginNames(plugins: AstroConfig["vite"]["plugins"]) {
  * Checks for the existence of a Vite plugin inside the Astro config.
  *
  * @param {Params} params
- * @param {string|import("vite").Plugin} params.plugin
+ * @param {string|import("vite").PluginOption} params.plugin
  * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
  *
  * @see https://astro-integration-kit.netlify.app/utilities/has-vite-plugin/
