@@ -45,7 +45,7 @@ Features get added and removed, and breaking changes are introduced! This docume
     ```
     </TabItem>
     <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" del={2,10-19} ins={3,20-27}
+    ```ts title="integration/index.ts" del={2,10-21} ins={3,22-30}
     import type { AstroIntegration } from "astro";
     import { addVirtualImport } from "astro-integration-kit/utilities";
     import { addVirtualImports } from "astro-integration-kit/utilities";
@@ -54,19 +54,22 @@ Features get added and removed, and breaking changes are introduced! This docume
         return {
             name: "my-integration",
             hooks: {
-                "astro:config:setup": ({ updateConfig }) => {
+                "astro:config:setup": ({ config, updateConfig }) => {
                     addVirtualImport({
                         updateConfig,
+                        config,
                         name: 'virtual:my-integration/config',
                         content: `export default ${JSON.stringify({ foo: "bar" })}`,
                     })
                     addVirtualImport({
                         updateConfig,
+                        config,
                         name: 'virtual:my-integration/context',
                         content: `export default ${JSON.stringify({ entrypoint: import.meta.url })}`,
                     })
                     addVirtualImports({
                         updateConfig,
+                        config,
                         name: 'my-integration',
                         imports: {
                             'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,

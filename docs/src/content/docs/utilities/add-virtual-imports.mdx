@@ -36,9 +36,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
         return {
             name: "my-integration",
             hooks: {
-                "astro:config:setup": ({ updateConfig }) => {
+                "astro:config:setup": ({ config, updateConfig }) => {
                     addVirtualImports({
                         updateConfig,
+                        config,
                         name: 'my-integration',
                         imports: {
                             'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
