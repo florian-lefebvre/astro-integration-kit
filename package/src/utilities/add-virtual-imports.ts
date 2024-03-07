@@ -61,7 +61,7 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	return {
 		name: pluginName,
 		resolveId(id) {
-			if (imports.find((e) => e.id === id)) {
+			if (imports.find((_import) => _import.id === id)) {
 				return resolveVirtualModuleId(id);
 			}
 			return;
@@ -70,10 +70,10 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 			const resolution = resolutionMap[id];
 			if (resolution) {
 				const context = options?.ssr ? "server" : "client";
-				const data = imports.find((e) =>
-					e.id === resolution && e.context === undefined
+				const data = imports.find((_import) =>
+					_import.id === resolution && _import.context === undefined
 						? true
-						: e.context === context,
+						: _import.context === context,
 				);
 
 				if (data) {
