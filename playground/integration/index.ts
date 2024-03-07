@@ -94,6 +94,48 @@ const testIntegration = defineIntegration({
 				// addVitePlugin({ name: "vite-plugin-test-integration-1" });
 				// addVitePlugin({ name: "vite-plugin-test-integration-10" });
 
+				addVirtualImports({
+					"virtual:playground/simple": `const x = "simple"; export default x;`,
+				});
+				addVirtualImports([
+					{
+						id: "virtual:playground/array-simple",
+						content: `const x = "array-simple"; export default x;`,
+					},
+					{
+						id: "virtual:playground/array-complex",
+						content: `const x = "array-server"; export default x;`,
+						context: "server",
+					},
+					{
+						id: "virtual:playground/array-complex",
+						content: `const x = "array-client"; export default x;`,
+						context: "client",
+					},
+				]);
+				{
+					let error = false;
+					try {
+						addVirtualImports([
+							{
+								id: "a",
+								content: "",
+							},
+							{
+								id: "a",
+								content: "",
+								context: "server",
+							},
+						]);
+					} catch (err) {
+						console.log((err as Error).message);
+						error = true;
+					}
+					if (!error) {
+						throw new Error("Should fail");
+					}
+				}
+
 				if (hasIntegration("@astrojs/tailwind")) {
 					console.log("Tailwind is installed");
 				}

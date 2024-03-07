@@ -7,32 +7,77 @@ const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
 };
 
-const createVirtualModule = (
-	name: string,
-	imports: Record<string, string>,
-): Plugin => {
+type VirtualImport = {
+	id: string;
+	content: string;
+	context?: "server" | "client" | undefined;
+};
+
+type Imports = Record<string, string> | Array<VirtualImport>;
+
+const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	const pluginName = `vite-plugin-${name}`;
 
+	// We normalize the imports into an array
+	const imports: Array<VirtualImport> = Array.isArray(_imports)
+		? _imports
+		: Object.entries(_imports).map(([id, content]) => ({
+				id,
+				content,
+				context: undefined,
+		  }));
+
+	// We check for virtual imports with overlapping contexts, eg. several imports
+	// with the same id and context server
+	const duplicatedImports: Record<string, Array<string>> = {};
+	for (const { id, context } of imports) {
+		duplicatedImports[id] ??= [];
+		duplicatedImports[id]?.push(
+			...(context === undefined ? ["server", "client"] : [context]),
+		);
+	}
+	for (const [id, contexts] of Object.entries(duplicatedImports)) {
+		if (contexts.length !== [...new Set(contexts)].length) {
+			throw new AstroError(
+				`Virtual import with id "${id}" has been registered several times with conflicting contexts.`,
+			);
+		}
+	}
+
 	const resolutionMap = Object.fromEntries(
-		Object.keys(imports).map((importName) => {
-			if (importName.startsWith("astro:")) {
+		imports.map(({ id }) => {
+			if (id.startsWith("astro:")) {
 				throw new AstroError(
-					`Virtual import name prefix can't be "astro:" (for "${importName}") because it's reserved for Astro core.`,
+					`Virtual import name prefix can't be "astro:" (for "${id}") because it's reserved for Astro core.`,
 				);
 			}
-			return [resolveVirtualModuleId(importName), importName];
+
+			return [resolveVirtualModuleId(id), id];
 		}),
 	);
 
 	return {
 		name: pluginName,
 		resolveId(id) {
-			if (id in imports) return resolveVirtualModuleId(id);
+			if (imports.find((_import) => _import.id === id)) {
+				return resolveVirtualModuleId(id);
+			}
 			return;
 		},
-		load(id) {
+		load(id, options) {
 			const resolution = resolutionMap[id];
-			if (resolution) return imports[resolution];
+			if (resolution) {
+				const context = options?.ssr ? "server" : "client";
+				const data = imports.find((_import) =>
+					_import.id === resolution && _import.context === undefined
+						? true
+						: _import.context === context,
+				);
+
+				if (data) {
+					return data.content;
+				}
+			}
 			return;
 		},
 	};
@@ -44,8 +89,7 @@ const createVirtualModule = (
  *
  * @param {object} params
  * @param {string} params.name
- * @param {Record<string, string>} params.imports
- * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
+ * @param {Imports} params.imports
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-imports/
@@ -81,10 +125,8 @@ export const addVirtualImports = ({
 	updateConfig,
 }: {
 	name: string;
-	imports: Record<string, string>;
-	config: HookParameters<"astro:config:setup">["config"];
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-}) => {
+	imports: Imports;
+} & Pick<HookParameters<"astro:config:setup">, "config" | "updateConfig">) => {
 	addVitePlugin({
 		warnDuplicated: false,
 		plugin: createVirtualModule(name, imports),
