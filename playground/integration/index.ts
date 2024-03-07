@@ -37,6 +37,7 @@ const testIntegration = defineIntegration({
 
 		return {
 			"astro:config:setup": ({
+				config,
 				updateConfig,
 				watchIntegration,
 				hasVitePlugin,
@@ -82,8 +83,15 @@ const testIntegration = defineIntegration({
 					hasVitePlugin([{ name: "vite-plugin-test-integration-1" }]),
 					hasVitePlugin([[{ name: "vite-plugin-test-integration-1" }]]),
 				);
-				
-				addVitePlugin({ name: "vite-plugin-test-integration-1" });
+
+				// addVitePlugin({ name: "vite-plugin-test-integration" });
+				// addVitePlugin({ name: "vite-plugin-test-integration" });
+				// addVitePlugin({ name: "vite-plugin-test-integration-0" });
+				// addVitePlugin({ name: "vite-plugin-test-integration-0" });
+				// addVitePlugin({ name: "vite-plugin-test-integration-1" });
+				// addVitePlugin({ name: "vite-plugin-test-integration-1" });
+				// addVitePlugin({ name: "vite-plugin-test-integration-1" });
+				// addVitePlugin({ name: "vite-plugin-test-integration-10" });
 
 				if (hasIntegration("@astrojs/tailwind")) {
 					console.log("Tailwind is installed");
@@ -254,6 +262,8 @@ const testIntegration = defineIntegration({
 					`,
 					src: resolve("./devToolbarApps/Test.solid.jsx"),
 				});
+
+				console.log("VITE PLUGINS", config.vite.plugins?.map(p => p.name))
 
 				// Test addVirtualImports disallowed list
 				// addVirtualImports({ "astro:test": "export default {}" });
