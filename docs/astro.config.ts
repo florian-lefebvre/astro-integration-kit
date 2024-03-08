@@ -123,7 +123,7 @@ export default defineConfig({
 						},
 						{
 							label: "addVirtualImport",
-							link: "/getting-started/breaking-changes/#update-addvirtualimport",
+							link: "/getting-started/breaking-changes/#updated-addvirtualimport",
 							badge: badge("removed"),
 							attrs: {
 								style: "opacity:0.5;",
