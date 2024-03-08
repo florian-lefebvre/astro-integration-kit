@@ -84,15 +84,8 @@ const testIntegration = defineIntegration({
 					hasVitePlugin([[{ name: "vite-plugin-test-integration" }]]),
 				);
 
-				// This is for testing incrementing plugin names, toggle `warnDuplicate` option in `addVitePlugin` util file to `false` to test this
-				// addVitePlugin({ name: "vite-plugin-test-integration" });
-				// addVitePlugin({ name: "vite-plugin-test-integration" });
-				// addVitePlugin({ name: "vite-plugin-test-integration-0" });
-				// addVitePlugin({ name: "vite-plugin-test-integration-0" });
-				// addVitePlugin({ name: "vite-plugin-test-integration-1" });
-				// addVitePlugin({ name: "vite-plugin-test-integration-1" });
-				// addVitePlugin({ name: "vite-plugin-test-integration-1" });
-				// addVitePlugin({ name: "vite-plugin-test-integration-10" });
+				// Should log warning about duplicate plugin
+				addVitePlugin({ name: "vite-plugin-test-integration" });
 
 				addVirtualImports({
 					"virtual:playground/simple": `const x = "simple"; export default x;`,
@@ -190,9 +183,6 @@ const testIntegration = defineIntegration({
 					src: resolve("./devToolbarApps/Test.react.jsx"),
 				});
 
-				console.log(
-					"Test duplicate hasVitePlugin inside current integration (Warning should be below this message)",
-				);
 				addDevToolbarFrameworkApp({
 					framework: "react",
 					name: "Test React Plugin",
