@@ -18,14 +18,13 @@ const incrementPluginName = (name: string) => {
 		count = parseInt(c) + 1;
 		return "";
 	})}-${count}`;
-}
+};
 
 const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
 };
 
 const createVirtualModule = (name: string, _imports: Imports): Plugin => {
-
 	// We normalize the imports into an array
 	const imports: Array<VirtualImport> = Array.isArray(_imports)
 		? _imports

@@ -40,7 +40,9 @@ export const hasVitePluginPlugin = definePlugin({
 		const { updateConfig, config } = params;
 
 		params.updateConfig = (newConfig) => {
-			config.vite.plugins = Array.from(getPlugins(currentPlugins, newConfig.vite?.plugins))
+			config.vite.plugins = Array.from(
+				getPlugins(currentPlugins, newConfig.vite?.plugins),
+			);
 			return updateConfig(newConfig);
 		};
 
