@@ -1,5 +1,5 @@
 import type { AstroConfig } from "astro";
-import { PluginOption } from "vite";
+import type { PluginOption } from "vite";
 import { definePlugin } from "../core/define-plugin.js";
 import { hasVitePlugin } from "../utilities/has-vite-plugin.js";
 
@@ -40,9 +40,7 @@ export const hasVitePluginPlugin = definePlugin({
 		const { updateConfig, config } = params;
 
 		params.updateConfig = (newConfig) => {
-			config.vite.plugins = [
-				...getPlugins(currentPlugins, newConfig.vite?.plugins),
-			];
+			config.vite.plugins = Array.from(getPlugins(currentPlugins, newConfig.vite?.plugins))
 			return updateConfig(newConfig);
 		};
 
