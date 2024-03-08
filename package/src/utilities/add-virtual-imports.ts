@@ -2,10 +2,7 @@ import type { HookParameters } from "astro";
 import { AstroError } from "astro/errors";
 import type { Plugin } from "vite";
 import { addVitePlugin } from "./add-vite-plugin.js";
-
-const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
-	return `\0${id}`;
-};
+import { hasVitePlugin } from "./has-vite-plugin.js";
 
 type VirtualImport = {
 	id: string;
@@ -15,8 +12,19 @@ type VirtualImport = {
 
 type Imports = Record<string, string> | Array<VirtualImport>;
 
+const incrementPluginName = (name: string) => {
+	let count = 1;
+	return `${name.replace(/-(\d+)$/, (_, c) => {
+		count = parseInt(c) + 1;
+		return "";
+	})}-${count}`;
+}
+
+const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
+	return `\0${id}`;
+};
+
 const createVirtualModule = (name: string, _imports: Imports): Plugin => {
-	const pluginName = `vite-plugin-${name}`;
 
 	// We normalize the imports into an array
 	const imports: Array<VirtualImport> = Array.isArray(_imports)
@@ -57,7 +65,7 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	);
 
 	return {
-		name: pluginName,
+		name,
 		resolveId(id) {
 			if (imports.find((_import) => _import.id === id)) {
 				return resolveVirtualModuleId(id);
@@ -127,10 +135,14 @@ export const addVirtualImports = ({
 	name: string;
 	imports: Imports;
 } & Pick<HookParameters<"astro:config:setup">, "config" | "updateConfig">) => {
+	let pluginName = `vite-plugin-${name}`;
+
+	while (hasVitePlugin({ plugin: pluginName, config }))
+		pluginName = incrementPluginName(pluginName);
+
 	addVitePlugin({
 		warnDuplicated: false,
-		plugin: createVirtualModule(name, imports),
-		config,
+		plugin: createVirtualModule(pluginName, imports),
 		updateConfig,
 	});
 };

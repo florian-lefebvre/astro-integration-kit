@@ -7,24 +7,16 @@ interface CommonOptions {
 	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
 }
 
-interface NoWarnDuplicateOptions extends CommonOptions {
+interface UnsafeOptions extends CommonOptions {
 	warnDuplicated: false;
 	config?: HookParameters<"astro:config:setup">["config"];
 	logger?: HookParameters<"astro:config:setup">["logger"];
 }
 
-interface WarnDuplicateOptions extends CommonOptions {
+interface SafeOptions extends CommonOptions {
 	warnDuplicated?: true;
 	config: HookParameters<"astro:config:setup">["config"];
 	logger: HookParameters<"astro:config:setup">["logger"];
-}
-
-function incrementPluginName(plugin: Plugin) {
-	let count = 1;
-	plugin.name = `${plugin.name.replace(/-(\d+)$/, (_, c) => {
-		count = parseInt(c) + 1;
-		return "";
-	})}-${count}`;
 }
 
 /**
@@ -56,19 +48,13 @@ export const addVitePlugin = ({
 	config,
 	logger,
 	updateConfig,
-}: WarnDuplicateOptions | NoWarnDuplicateOptions) => {
-	if (config && hasVitePlugin({ plugin, config })) {
-		if (warnDuplicated && logger) {
-			logger.warn(
-				`The Vite plugin "${
-					(plugin as Plugin).name
-				}" is already present in your Vite configuration, this plugin may not behave correctly.`,
-			);
-		} else {
-			incrementPluginName(plugin as Plugin);
-			while (hasVitePlugin({ plugin, config }))
-				incrementPluginName(plugin as Plugin);
-		}
+}: SafeOptions | UnsafeOptions) => {
+	if (warnDuplicated && config && logger && hasVitePlugin({ plugin, config })) {
+		logger.warn(
+			`The Vite plugin "${
+				(plugin as Plugin).name
+			}" is already present in your Vite configuration, this plugin may not behave correctly.`,
+		);
 	}
 
 	updateConfig({
