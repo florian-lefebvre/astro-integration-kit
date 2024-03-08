@@ -48,7 +48,7 @@ export const addVitePlugin = ({
 	config,
 	logger,
 	updateConfig,
-}: SafeOptions | UnsafeOptions) => {
+}: UnsafeOptions | SafeOptions) => {
 	if (warnDuplicated && config && logger && hasVitePlugin({ plugin, config })) {
 		logger.warn(
 			`The Vite plugin "${
