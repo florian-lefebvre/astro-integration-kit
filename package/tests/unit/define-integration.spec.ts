@@ -235,38 +235,7 @@ describe("defineIntegration", () => {
 				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
 					.lastCall[0];
 
-				expect(addVirtualImportsCallArgs.name).toBe(`${name}-1`);
-			});
-
-			test("Should increment name", () => {
-				const name = "my-integration";
-				const virtualImportName = `virtual:${name}`;
-				const content = "declare module {}";
-				const imports = { [virtualImportName]: content };
-
-				const setup = (): ExtendedHooks => {
-					return {
-						"astro:config:setup": ({ addVirtualImports }) => {
-							addVirtualImports(imports);
-							addVirtualImports(imports);
-						},
-					};
-				};
-
-				const integration = defineIntegration({
-					name,
-					setup,
-					plugins,
-				})();
-
-				const params = astroConfigSetupParamsStub();
-
-				integration.hooks["astro:config:setup"]?.(params);
-
-				const addVirtualImportsCallArgs = (mockaddVirtualImports as Mock).mock
-					.lastCall[0];
-
-				expect(addVirtualImportsCallArgs.name).toBe(`${name}-2`);
+				expect(addVirtualImportsCallArgs.name).toBe(name);
 			});
 
 			test("Should pass the correct import", () => {

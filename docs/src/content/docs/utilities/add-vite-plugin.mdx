@@ -37,9 +37,11 @@ to the Astro config. For example:
         return {
             name: "my-integration",
             hooks: {
-                "astro:config:setup": ({ updateConfig }) => {
+                "astro:config:setup": ({ config, logger, updateConfig }) => {
                     addVitePlugin({
                         plugin: VitePWA({ registerType: 'autoUpdate' }),
+                        config,
+                        logger,
                         updateConfig
                     })
                 }

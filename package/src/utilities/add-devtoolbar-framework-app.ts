@@ -14,7 +14,7 @@ export type AddDevToolbarFrameworkAppParams = {
 	style?: string;
 } & Pick<
 	HookParameters<"astro:config:setup">,
-	"addDevToolbarApp" | "updateConfig" | "injectScript"
+	"config" | "addDevToolbarApp" | "updateConfig" | "injectScript"
 >;
 
 /**
@@ -26,6 +26,7 @@ export type AddDevToolbarFrameworkAppParams = {
  * @param {string} params.framework - The framework your component is using. Can be either "react", "vue", "svelte", "solid", or "preact"
  * @param {URL} params.src - Path to your component
  * @param {string} params.style - A stylesheet to pass to your plugin
+ * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
  * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
  * @param {import("astro").HookParameters<"astro:config:setup">["addDevToolbarApp"]} params.addDevToolbarApp
  * @param {import("astro").HookParameters<"astro:config:setup">["injectScript"]} params.injectScript
@@ -43,6 +44,7 @@ export type AddDevToolbarFrameworkAppParams = {
  *              background-color: rebeccapurple;
  *          }
  *      `,
+ *      config
  * });
  * ```
  *
@@ -55,6 +57,7 @@ export const addDevToolbarFrameworkApp = ({
 	framework,
 	src,
 	style,
+	config,
 	addDevToolbarApp,
 	updateConfig,
 	injectScript,
@@ -79,8 +82,9 @@ export const addDevToolbarFrameworkApp = ({
 
 	addVirtualImports({
 		name: id,
-		updateConfig,
 		imports: { [virtualModuleName]: content },
+		config,
+		updateConfig,
 	});
 
 	if (framework === "react") {

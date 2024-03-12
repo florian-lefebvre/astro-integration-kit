@@ -37,13 +37,16 @@ const testIntegration = defineIntegration({
 
 		return {
 			"astro:config:setup": ({
+				config,
 				updateConfig,
 				watchIntegration,
+				hasVitePlugin,
 				hasIntegration,
 				addDts,
 				addDevToolbarFrameworkApp,
 				addIntegration,
 				addVirtualImports,
+				addVitePlugin,
 			}) => {
 				watchIntegration(resolve());
 
@@ -62,11 +65,27 @@ const testIntegration = defineIntegration({
 					}`,
 				});
 
+				console.log(
+					"Test hasViteplugin: ",
+					hasVitePlugin("vite-plugin-test-integration"),
+				);
+
 				addVirtualImports({
 					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
 						{ foo: "bar" },
 					)}`,
 				});
+
+				console.log(
+					"Test hasViteplugin: ",
+					hasVitePlugin("vite-plugin-test-integration"),
+					hasVitePlugin({ name: "vite-plugin-test-integration" }),
+					hasVitePlugin([{ name: "vite-plugin-test-integration" }]),
+					hasVitePlugin([[{ name: "vite-plugin-test-integration" }]]),
+				);
+
+				// Should log warning about duplicate plugin
+				addVitePlugin({ name: "vite-plugin-test-integration" });
 
 				addVirtualImports({
 					"virtual:playground/simple": `const x = "simple"; export default x;`,
@@ -149,11 +168,20 @@ const testIntegration = defineIntegration({
 					}),
 				);
 				addIntegration(Svelte());
+
 				addIntegration(
 					Solid({
 						include: ["**/*.solid.jsx"],
 					}),
 				);
+
+				addDevToolbarFrameworkApp({
+					framework: "react",
+					name: "Test React Plugin",
+					id: "test-react-plugin",
+					icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><title>React Logo</title><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`,
+					src: resolve("./devToolbarApps/Test.react.jsx"),
+				});
 
 				addDevToolbarFrameworkApp({
 					framework: "react",
@@ -267,6 +295,11 @@ const testIntegration = defineIntegration({
 					`,
 					src: resolve("./devToolbarApps/Test.solid.jsx"),
 				});
+
+				console.log(
+					"VITE PLUGINS",
+					config.vite.plugins?.map((p) => p.name),
+				);
 
 				// Test addVirtualImports disallowed list
 				// addVirtualImports({ "astro:test": "export default {}" });

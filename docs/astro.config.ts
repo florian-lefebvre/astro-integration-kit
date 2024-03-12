@@ -90,7 +90,7 @@ export default defineConfig({
 						},
 						{
 							label: "defineOptions",
-							link: "/getting-started/breaking-changes/#defineoptions",
+							link: "/getting-started/breaking-changes/#removed-defineoptions",
 							badge: badge("removed"),
 							attrs: {
 								style: "opacity:0.5;",
@@ -112,7 +112,6 @@ export default defineConfig({
 						{
 							label: "addDevToolbarFrameworkApp",
 							link: "/utilities/add-devtoolbar-framework-app/",
-							badge: badge("new"),
 						},
 						{
 							label: "addDts",
@@ -121,11 +120,10 @@ export default defineConfig({
 						{
 							label: "addIntegration",
 							link: "/utilities/add-integration/",
-							badge: badge("new"),
 						},
 						{
 							label: "addVirtualImport",
-							link: "/getting-started/breaking-changes/#addvirtualimport",
+							link: "/getting-started/breaking-changes/#updated-addvirtualimport",
 							badge: badge("removed"),
 							attrs: {
 								style: "opacity:0.5;",
@@ -134,11 +132,16 @@ export default defineConfig({
 						{
 							label: "addVirtualImports",
 							link: "/utilities/add-virtual-imports/",
-							badge: badge("new"),
+							badge: badge("updated"),
 						},
 						{
 							label: "addVitePlugin",
 							link: "/utilities/add-vite-plugin/",
+						},
+						{
+							label: "hasVitePlugin",
+							link: "/utilities/has-vite-plugin/",
+							badge: badge("new"),
 						},
 						{
 							label: "hasIntegration",

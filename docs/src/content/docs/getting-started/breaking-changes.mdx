@@ -7,7 +7,79 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Features get added and removed, and breaking changes are introduced! This documents how to migrate.
 
-## `addVirtualImport`
+## `0.6.0`
+
+---
+
+### Updated `addVitePlugin`
+
+The `addVitePlugin` utility now requires a `config` and `logger` parameter to log warnings for duplicate plugins
+
+```ts ins={4,5}
+"astro:config:setup": ({ config, updateConfig }) => {
+    addVitePlugin({
+        plugin,
+        config,
+        logger
+        updateConfig
+    })
+}
+```
+
+Or you can turn off warnings for duplicate plugins using `warnDuplicate: false`
+
+```ts ins={2}
+addVitePlugin({
+    warnDuplicate: false,
+    plugin,
+    updateConfig
+})
+```
+
+### Updated `addVirtualImports`
+
+The `addVirtualImports` utility now requires a `config` parameter
+
+```ts ins={1,4}
+"astro:config:setup": ({ config, updateConfig }) => {
+    addVirtualImports({
+        updateConfig,
+        config
+        name: 'my-integration',
+        imports: {
+            'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+        },
+    })
+}
+```
+
+### Updated `addDevToolbarFrameworkApp`
+
+The `addDevToolbarFrameworkApp` utility now requires a `config` parameter
+
+```ts ins={1,3}
+"astro:config:setup": ({ config, updateConfig }) => {
+    addDevToolbarFrameworkApp({
+        config,
+        framework: "vue",
+        name: "Test Vue Plugin",
+        id: "my-vue-plugin",
+        icon: `<svg>...</svg>`,
+        src: resolve("./my-plugin.vue"),
+        style: `
+            h1 {
+                font-family: Inter;
+            }
+        `,
+    })
+}
+```
+
+## `0.5.0`
+
+---
+
+### Updated `addVirtualImport`
 
 `addVirtualImport` was removed in `0.5.0`. Here is how to migrate:
 
@@ -45,7 +117,7 @@ Features get added and removed, and breaking changes are introduced! This docume
     ```
     </TabItem>
     <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" del={2,10-19} ins={3,20-27}
+    ```ts title="integration/index.ts" del={2,10-21} ins={3,22-30}
     import type { AstroIntegration } from "astro";
     import { addVirtualImport } from "astro-integration-kit/utilities";
     import { addVirtualImports } from "astro-integration-kit/utilities";
@@ -54,19 +126,22 @@ Features get added and removed, and breaking changes are introduced! This docume
         return {
             name: "my-integration",
             hooks: {
-                "astro:config:setup": ({ updateConfig }) => {
+                "astro:config:setup": ({ config, updateConfig }) => {
                     addVirtualImport({
                         updateConfig,
+                        config,
                         name: 'virtual:my-integration/config',
                         content: `export default ${JSON.stringify({ foo: "bar" })}`,
                     })
                     addVirtualImport({
                         updateConfig,
+                        config,
                         name: 'virtual:my-integration/context',
                         content: `export default ${JSON.stringify({ entrypoint: import.meta.url })}`,
                     })
                     addVirtualImports({
                         updateConfig,
+                        config,
                         name: 'my-integration',
                         imports: {
                             'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
@@ -81,7 +156,12 @@ Features get added and removed, and breaking changes are introduced! This docume
     </TabItem>
 </Tabs>
 
-## `defineOptions`
+
+## `0.2.0`
+
+---
+
+### Removed `defineOptions`
 
 `defineOptions` has been removed in `0.2.0`. Here is how to migrate:
 

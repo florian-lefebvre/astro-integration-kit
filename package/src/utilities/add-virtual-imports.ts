@@ -2,10 +2,7 @@ import type { HookParameters } from "astro";
 import { AstroError } from "astro/errors";
 import type { Plugin } from "vite";
 import { addVitePlugin } from "./add-vite-plugin.js";
-
-const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
-	return `\0${id}`;
-};
+import { hasVitePlugin } from "./has-vite-plugin.js";
 
 type VirtualImport = {
 	id: string;
@@ -15,9 +12,19 @@ type VirtualImport = {
 
 type Imports = Record<string, string> | Array<VirtualImport>;
 
-const createVirtualModule = (name: string, _imports: Imports): Plugin => {
-	const pluginName = `vite-plugin-${name}`;
+const incrementPluginName = (name: string) => {
+	let count = 1;
+	return `${name.replace(/-(\d+)$/, (_, c) => {
+		count = parseInt(c) + 1;
+		return "";
+	})}-${count}`;
+};
 
+const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
+	return `\0${id}`;
+};
+
+const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	// We normalize the imports into an array
 	const imports: Array<VirtualImport> = Array.isArray(_imports)
 		? _imports
@@ -57,7 +64,7 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	);
 
 	return {
-		name: pluginName,
+		name,
 		resolveId(id) {
 			if (imports.find((_import) => _import.id === id)) {
 				return resolveVirtualModuleId(id);
@@ -100,9 +107,10 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
  * import { addVirtualImports } from "astro-integration-kit";
  *
  * addVirtualImports(
- * 		updateConfig,
  * 		name: 'my-integration',
- *   	imports: {
+ * 		config,
+ * 		updateConfig,
+ * 		imports: {
  * 			'virtual:my-integration/config': `export default ${ JSON.stringify({foo: "bar"}) }`,
  * 		}
  * );
@@ -120,13 +128,20 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 export const addVirtualImports = ({
 	name,
 	imports,
+	config,
 	updateConfig,
 }: {
 	name: string;
 	imports: Imports;
 } & Pick<HookParameters<"astro:config:setup">, "config" | "updateConfig">) => {
+	let pluginName = `vite-plugin-${name}`;
+
+	while (hasVitePlugin({ plugin: pluginName, config }))
+		pluginName = incrementPluginName(pluginName);
+
 	addVitePlugin({
-		plugin: createVirtualModule(name, imports),
+		warnDuplicated: false,
+		plugin: createVirtualModule(pluginName, imports),
 		updateConfig,
 	});
 };
