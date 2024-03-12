@@ -1,5 +1,12 @@
 # astro-integration-kit
 
+## 0.6.0
+
+### Minor Changes
+
+- c2f01fb: Adds a new `hasVitePlugin` utility. Other utilities have been updated to use it under the hood and warn when duplicate Vite plugins are created
+- fc64f03: Allows passing imports as an array to `addVirtualImports` for more advanced use cases (eg. for different versions on server and client). This is a breaking change when using it as a utility as it now requires a new `config` prop
+
 ## 0.5.1
 
 ### Patch Changes
