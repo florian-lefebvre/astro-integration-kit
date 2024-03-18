@@ -8,6 +8,7 @@ import React from "@astrojs/react";
 import Solid from "@astrojs/solid-js";
 import Svelte from "@astrojs/svelte";
 import Vue from "@astrojs/vue";
+import { VitePWA } from 'vite-plugin-pwa'
 
 const optionsSchema = z
 	.object({
@@ -86,6 +87,8 @@ const testIntegration = defineIntegration({
 
 				// Should log warning about duplicate plugin
 				addVitePlugin({ name: "vite-plugin-test-integration" });
+
+				addVitePlugin(VitePWA({ registerType: 'autoUpdate' }));
 
 				addVirtualImports({
 					"virtual:playground/simple": `const x = "simple"; export default x;`,
