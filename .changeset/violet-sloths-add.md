@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-Change `Plugin` type to `PluginOption` type so that the VitePlugin can be added correctly.
+Updates `addVitePlugin` plugin type from `Plugin` to `PluginOption` to align with vite's configuration.
