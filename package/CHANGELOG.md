@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.6.1
+
+### Patch Changes
+
+- d73c9e0: Updates `addVitePlugin` plugin type from `Plugin` to `PluginOption` to align with vite's configuration.
+
 ## 0.6.0
 
 ### Minor Changes
