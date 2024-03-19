@@ -1,15 +1,10 @@
 import type { AstroConfig } from "astro";
-import type { PluginOption } from "vite";
+import type { Plugin, PluginOption } from "vite";
 import { definePlugin } from "../core/define-plugin.js";
 import { hasVitePlugin } from "../utilities/has-vite-plugin.js";
 
 function getPlugins(
-	store: Set<
-		Extract<
-			NonNullable<NonNullable<AstroConfig["vite"]["plugins"]>[number]>,
-			{ name: string }
-		>
-	>,
+	store: Set<Plugin<any>>,
 	plugins: AstroConfig["vite"]["plugins"],
 ) {
 	if (plugins) {

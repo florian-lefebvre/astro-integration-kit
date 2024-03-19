@@ -1,4 +1,4 @@
-import type { Plugin as VitePlugin } from "vite";
+import type { PluginOption } from "vite";
 import { definePlugin } from "../core/define-plugin.js";
 import { addVitePlugin } from "../utilities/add-vite-plugin.js";
 
@@ -7,7 +7,7 @@ export const addVitePluginPlugin = definePlugin({
 	hook: "astro:config:setup",
 	implementation:
 		({ config, logger, updateConfig }) =>
-		(plugin: VitePlugin) =>
+		(plugin: PluginOption) =>
 			addVitePlugin({
 				plugin,
 				config,
