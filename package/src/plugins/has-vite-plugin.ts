@@ -1,5 +1,5 @@
 import type { AstroConfig } from "astro";
-import type { PluginOption, Plugin } from "vite";
+import type { Plugin, PluginOption } from "vite";
 import { definePlugin } from "../core/define-plugin.js";
 import { hasVitePlugin } from "../utilities/has-vite-plugin.js";
 
