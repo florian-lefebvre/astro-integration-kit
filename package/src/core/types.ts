@@ -19,7 +19,10 @@ export type Plugin<
 };
 
 // To avoud having to call this manually for every generic
-export type AnyPlugin = Plugin<string, keyof Hooks, any>;
+export type AnyPlugin = Omit<
+	Plugin<string, keyof Hooks, any>,
+	"implementation"
+> & { implementation: any };
 
 export type Hooks = Prettify<
 	Required<NonNullable<import("astro").AstroIntegration["hooks"]>>
@@ -80,7 +83,7 @@ type PluginsToImplementation<TPlugins extends Record<string, AnyPlugin>> = {
 		infer _Hook,
 		infer Implementation
 	>
-		? ReturnType<Implementation>
+		? Implementation
 		: never;
 };
 
