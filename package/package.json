@@ -22,7 +22,8 @@
 	"exports": {
 		".": "./src/core/index.ts",
 		"./utilities": "./src/utilities/index.ts",
-		"./plugins": "./src/plugins/index.ts"
+		"./plugins": "./src/plugins/index.ts",
+		"./extra/db": "./src/extra/db.d.ts"
 	},
 	"files": [
 		"src",
@@ -33,6 +34,7 @@
 	},
 	"type": "module",
 	"peerDependencies": {
+		"@astrojs/db": "^0.9.0",
 		"@vitejs/plugin-react": "^4.2.1",
 		"astro": "^4.4.1",
 		"preact": "^10.19.4",
@@ -42,6 +44,9 @@
 		"vue": "^3.4.19"
 	},
 	"peerDependenciesMeta": {
+		"@astrojs/db": {
+			"optional": true
+		},
 		"@vitejs/plugin-react": {
 			"optional": true
 		},

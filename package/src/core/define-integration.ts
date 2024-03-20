@@ -1,7 +1,6 @@
 import type { AstroIntegration, HookParameters } from "astro";
 import { AstroError } from "astro/errors";
 import { z } from "astro/zod";
-import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
 import { errorMap } from "../internal/error-map.js";
 import type { AnyPlugin, ExtendedHooks } from "./types.js";
 
@@ -71,8 +70,12 @@ export const defineIntegration = <
 
 		const providedHooks = setup({ name, options });
 
+		const definedHooks = Object.keys(providedHooks) as Array<
+			keyof typeof providedHooks
+		>;
+
 		const hooks: AstroIntegration["hooks"] = Object.fromEntries(
-			DEFAULT_HOOK_NAMES.map((hookName) => [
+			definedHooks.map((hookName) => [
 				hookName,
 				(params: HookParameters<typeof hookName>) => {
 					const plugins = resolvedPlugins.filter((p) => p.hook === hookName);

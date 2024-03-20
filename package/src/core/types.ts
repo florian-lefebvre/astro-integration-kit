@@ -1,4 +1,5 @@
-import type { DevToolbarApp, HookParameters } from "astro";
+import type { DevToolbarApp } from "astro";
+import "../internal/ambient.d.ts";
 import type {
 	Prettify,
 	UnionToArray,
@@ -21,7 +22,12 @@ export type Plugin<
 // To avoud having to call this manually for every generic
 export type AnyPlugin = Plugin<string, keyof Hooks, any>;
 
-export type Hooks = NonNullable<import("astro").AstroIntegration["hooks"]>;
+export type Hooks = Prettify<
+	Required<NonNullable<import("astro").AstroIntegration["hooks"]>> &
+		AIK.ExtraHooks
+>;
+
+type HookParameters<THook extends keyof Hooks> = Parameters<Hooks[THook]>[0];
 
 // From an array of plugins, returns an array of plugins where the hook
 // is the same as the THook generic. Otherwise, returns never.
@@ -100,48 +106,9 @@ type AddParam<Func, Param = never> = [Param] extends [never]
 	  ? (params: Params & Param) => ReturnType
 	  : never;
 
-export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
-	"astro:config:setup"?: AddParam<
-		Hooks["astro:config:setup"],
-		AddedParam<TPlugins, "astro:config:setup">
-	>;
-	"astro:config:done"?: AddParam<
-		Hooks["astro:config:done"],
-		AddedParam<TPlugins, "astro:config:done">
-	>;
-	"astro:server:setup"?: AddParam<
-		Hooks["astro:server:setup"],
-		AddedParam<TPlugins, "astro:server:setup">
-	>;
-	"astro:server:start"?: AddParam<
-		Hooks["astro:server:start"],
-		AddedParam<TPlugins, "astro:server:start">
-	>;
-	"astro:server:done"?: AddParam<
-		Hooks["astro:server:done"],
-		AddedParam<TPlugins, "astro:server:done">
-	>;
-	"astro:build:start"?: AddParam<
-		Hooks["astro:build:start"],
-		AddedParam<TPlugins, "astro:build:start">
-	>;
-	"astro:build:setup"?: AddParam<
-		Hooks["astro:build:setup"],
-		AddedParam<TPlugins, "astro:build:setup">
-	>;
-	"astro:build:generated"?: AddParam<
-		Hooks["astro:build:generated"],
-		AddedParam<TPlugins, "astro:build:generated">
-	>;
-	"astro:build:ssr"?: AddParam<
-		Hooks["astro:build:ssr"],
-		AddedParam<TPlugins, "astro:build:ssr">
-	>;
-	"astro:build:done"?: AddParam<
-		Hooks["astro:build:done"],
-		AddedParam<TPlugins, "astro:build:done">
-	>;
-}
+export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
+	[Hook in keyof Hooks]?: AddParam<Hooks[Hook], AddedParam<TPlugins, Hook>>;
+};
 
 export interface DevToolbarFrameworkAppProps {
 	canvas: Parameters<Required<DevToolbarApp>["init"]>[0];
