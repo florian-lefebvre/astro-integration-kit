@@ -148,4 +148,27 @@ In setup, you'll want to add any logic that is shared between any hook, for exam
 - Calling `createResolver`
 - Save the `config` from `astro:config:done` to be used in later hooks
 
-It needs to return Astro hooks. 
+It needs to return Astro hooks.
+
+## Using non-built-in Astro hooks
+
+Some official Astro tools, like [`@astrojs/db`](https://docs.astro.build/en/guides/integrations-guide/db/), define new integration hooks that are not built into Astro core. AIK, by default, don't integrate with those hooks.
+
+If you want to use those hooks on your integration, you can import that extra behavior when defining your integration:
+
+```ts title="my-integration/index.ts" ins={2,8-10}
+import { defineIntegration } from "astro-integration-kit";
+import "astro-integration-kit/extras/db";
+
+export default defineIntegration({
+    // ...
+    setup() {
+        return {
+            "astro:db:setup": ({extendDb}) => {
+                // ...
+            }
+        }
+    }
+})
+```
+
