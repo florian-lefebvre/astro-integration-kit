@@ -67,7 +67,7 @@ export const addDevToolbarFrameworkApp = ({
 	const { resolve } = createResolver(import.meta.url);
 
 	let content = readFileSync(
-		resolve(`../stubs/add-devtoolbar-framework-app/${framework}.mjs`),
+		resolve(`../stubs/add-devtoolbar-framework-app/${framework}.js`),
 		"utf-8",
 	);
 

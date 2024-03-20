@@ -16,16 +16,16 @@
 	"sideEffects": false,
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"default": "./dist/index.js"
+			"types": "./dist/core/index.d.ts",
+			"default": "./dist/core/index.js"
 		},
 		"./utilities": {
-			"types": "./dist/utilities.d.ts",
-			"default": "./dist/utilities.js"
+			"types": "./dist/utilities/index.d.ts",
+			"default": "./dist/utilities/index.js"
 		},
 		"./plugins": {
-			"types": "./dist/plugins.d.ts",
-			"default": "./dist/plugins.js"
+			"types": "./dist/plugins/index.d.ts",
+			"default": "./dist/plugins/index.js"
 		}
 	},
 	"files": ["dist"],
@@ -40,6 +40,7 @@
 		"astro": "^4.4.1",
 		"preact": "^10.19.4",
 		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
 		"solid-js": "^1.8.15",
 		"svelte": "^4.2.11",
 		"vue": "^3.4.19"
@@ -52,6 +53,9 @@
 			"optional": true
 		},
 		"react": {
+			"optional": true
+		},
+		"react-dom": {
 			"optional": true
 		},
 		"solid-js": {

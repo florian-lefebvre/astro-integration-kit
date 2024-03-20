@@ -1,19 +1,19 @@
 import { defineConfig } from "tsup";
+import { peerDependencies } from "./package.json";
 
-export default defineConfig({
-	entry: {
-		index: "src/core/index.ts",
-		utilities: "src/utilities/index.ts",
-		plugins: "src/plugins/index.ts",
-	},
-	format: ["esm"],
-	target: "node18",
-	bundle: true,
-	dts: true,
-	sourcemap: true,
-	clean: true,
-	splitting: false,
-	minify: true,
-	external: ["astro"],
-	tsconfig: "tsconfig.build.json",
+export default defineConfig((options) => {
+	const dev = !!options.watch;
+	return {
+		entry: ["src/**/*.(ts|js)", "!src/**/*.d.ts"],
+		format: ["esm"],
+		target: "node18",
+		bundle: true,
+		dts: true,
+		sourcemap: true,
+		clean: true,
+		splitting: false,
+		minify: !dev,
+		external: [...Object.keys(peerDependencies), "@@COMPONENT_SRC@@"],
+		tsconfig: "tsconfig.build.json",
+	};
 });
