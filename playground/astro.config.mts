@@ -8,7 +8,7 @@ export default defineConfig({
 	integrations: [
 		tailwind(),
 		testIntegration({
-			resource: "abc",
+			resource: "def",
 		}),
 		{ name: "integration-a", hooks: {} },
 		{ name: "integration-b", hooks: {} },
