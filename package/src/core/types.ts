@@ -1,4 +1,4 @@
-import type { DevToolbarApp, HookParameters } from "astro";
+import type { DevToolbarApp } from "astro";
 import type {
 	Prettify,
 	UnionToArray,
@@ -21,7 +21,11 @@ export type Plugin<
 // To avoud having to call this manually for every generic
 export type AnyPlugin = Plugin<string, keyof Hooks, any>;
 
-export type Hooks = NonNullable<import("astro").AstroIntegration["hooks"]>;
+export type Hooks = Prettify<
+	Required<NonNullable<import("astro").AstroIntegration["hooks"]>>
+>;
+
+export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
 
 // From an array of plugins, returns an array of plugins where the hook
 // is the same as the THook generic. Otherwise, returns never.

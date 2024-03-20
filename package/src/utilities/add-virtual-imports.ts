@@ -1,6 +1,6 @@
-import type { HookParameters } from "astro";
 import { AstroError } from "astro/errors";
 import type { Plugin } from "vite";
+import type { HookParameters } from "../core/types.js";
 import { addVitePlugin } from "./add-vite-plugin.js";
 import { hasVitePlugin } from "./has-vite-plugin.js";
 
@@ -90,6 +90,11 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	};
 };
 
+type HookParameterProperties = Pick<
+	HookParameters<"astro:config:setup">,
+	"config" | "updateConfig"
+>;
+
 /**
  * Creates a Vite virtual module and updates the Astro config.
  * Virtual imports are useful for passing things like config options, or data computed within the integration.
@@ -130,10 +135,10 @@ export const addVirtualImports = ({
 	imports,
 	config,
 	updateConfig,
-}: {
+}: HookParameterProperties & {
 	name: string;
 	imports: Imports;
-} & Pick<HookParameters<"astro:config:setup">, "config" | "updateConfig">) => {
+}) => {
 	let pluginName = `vite-plugin-${name}`;
 
 	while (hasVitePlugin({ plugin: pluginName, config }))
