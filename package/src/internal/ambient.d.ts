@@ -1,3 +1,3 @@
-declare namespace AIK {
+declare namespace AstroIntegrationKit {
 	export interface ExtraHooks {}
 }

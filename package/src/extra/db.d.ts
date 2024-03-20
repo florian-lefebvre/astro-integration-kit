@@ -3,6 +3,6 @@ type DbHooks = Omit<
 	keyof import("astro").AstroIntegration["hooks"]
 >;
 
-declare namespace AIK {
+declare namespace AstroIntegrationKit {
 	export interface ExtraHooks extends DbHooks {}
 }
