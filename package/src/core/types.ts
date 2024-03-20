@@ -8,14 +8,14 @@ import type {
 export type Plugin<
 	TName extends string,
 	THook extends keyof Hooks,
-	TImplementation extends (
-		params: HookParameters<THook>,
-		integrationOptions: { name: string },
-	) => (...args: Array<any>) => any,
+	TImplementation extends (...args: Array<any>) => any,
 > = {
 	name: TName;
 	hook: THook;
-	implementation: TImplementation;
+	implementation: (
+		params: HookParameters<THook>,
+		integrationOptions: { name: string },
+	) => TImplementation;
 };
 
 // To avoud having to call this manually for every generic
