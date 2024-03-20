@@ -1,11 +1,13 @@
 import Component from "@@COMPONENT_SRC@@";
 
+/**
+ * @type {import('astro').DevToolbarApp}
+ */
 export default {
 	id: "@@ID@@",
 	name: "@@NAME@@",
-
 	icon: `@@ICON@@`,
-	init: (canvas, eventTarget) => {
+	init(canvas, eventTarget) {
 		const renderWindow = document.createElement("astro-dev-toolbar-window");
 
 		canvas.appendChild(renderWindow);

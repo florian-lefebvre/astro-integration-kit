@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import { type HookParameters } from "astro";
 import { createResolver } from "../core/create-resolver.js";
 import { addVirtualImports } from "./add-virtual-imports.js";
@@ -67,7 +67,7 @@ export const addDevToolbarFrameworkApp = ({
 	const { resolve } = createResolver(import.meta.url);
 
 	let content = readFileSync(
-		resolve(`../stubs/add-devtoolbar-framework-app/${framework}.ts`),
+		resolve(`../stubs/add-devtoolbar-framework-app/${framework}.mjs`),
 		"utf-8",
 	);
 
