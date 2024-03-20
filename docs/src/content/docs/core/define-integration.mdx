@@ -152,23 +152,24 @@ It needs to return Astro hooks.
 
 ## Using non-built-in Astro hooks
 
-Some official Astro tools, like [`@astrojs/db`](https://docs.astro.build/en/guides/integrations-guide/db/), define new integration hooks that are not built into Astro core. AIK, by default, don't integrate with those hooks.
+Some official Astro integrations, like [`@astrojs/db`](https://docs.astro.build/en/guides/integrations-guide/db/), define new integration hooks that are not built into Astro core. Astro Integration Kit does not integrate with those hooks by default as they are optional.
 
-If you want to use those hooks on your integration, you can import that extra behavior when defining your integration:
+If you want to use those hooks on your integration or plugin, you can import that extra behavior.
+
+### Astro DB (`@astrojs/db`)
 
 ```ts title="my-integration/index.ts" ins={2,8-10}
 import { defineIntegration } from "astro-integration-kit";
 import "astro-integration-kit/extras/db";
 
 export default defineIntegration({
-    // ...
-    setup() {
-        return {
-            "astro:db:setup": ({extendDb}) => {
-                // ...
-            }
-        }
-    }
-})
+  // ...
+  setup() {
+    return {
+      "astro:db:setup": ({ extendDb }) => {
+        // ...
+      },
+    };
+  },
+});
 ```
-
