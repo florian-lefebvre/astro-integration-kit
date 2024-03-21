@@ -18,7 +18,7 @@ export type Plugin<
 	) => TImplementation;
 };
 
-// To avoud having to call this manually for every generic
+// To avoid having to call this manually for every generic
 export type AnyPlugin = Omit<
 	Plugin<string, keyof Hooks, any>,
 	"implementation"
