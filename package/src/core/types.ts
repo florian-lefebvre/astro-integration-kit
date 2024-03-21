@@ -9,25 +9,28 @@ import type {
 export type Plugin<
 	TName extends string,
 	THook extends keyof Hooks,
-	TImplementation extends (
-		params: HookParameters<THook>,
-		integrationOptions: { name: string },
-	) => (...args: Array<any>) => any,
+	TImplementation extends (...args: Array<any>) => any,
 > = {
 	name: TName;
 	hook: THook;
-	implementation: TImplementation;
+	implementation: (
+		params: HookParameters<THook>,
+		integrationOptions: { name: string },
+	) => TImplementation;
 };
 
-// To avoud having to call this manually for every generic
-export type AnyPlugin = Plugin<string, keyof Hooks, any>;
+// To avoid having to call this manually for every generic
+export type AnyPlugin = Omit<
+	Plugin<string, keyof Hooks, any>,
+	"implementation"
+> & { implementation: any };
 
 export type Hooks = Prettify<
 	Required<NonNullable<import("astro").AstroIntegration["hooks"]>> &
 		AIK.ExtraHooks
 >;
 
-type HookParameters<THook extends keyof Hooks> = Parameters<Hooks[THook]>[0];
+export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
 
 // From an array of plugins, returns an array of plugins where the hook
 // is the same as the THook generic. Otherwise, returns never.
@@ -82,7 +85,7 @@ type PluginsToImplementation<TPlugins extends Record<string, AnyPlugin>> = {
 		infer _Hook,
 		infer Implementation
 	>
-		? ReturnType<Implementation>
+		? Implementation
 		: never;
 };
 

@@ -39,6 +39,7 @@ const main = async () => {
 	await run("git add .");
 	await run('git commit -m "chore: update version"');
 	await run("git push");
+	await run("pnpm --filter astro-integration-kit build");
 	await run("pnpm changeset publish");
 	await run("git push --follow-tags");
 	const tag = (await run("git describe --abbrev=0")).replace("\n", "");
