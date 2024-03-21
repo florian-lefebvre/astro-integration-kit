@@ -1,9 +1,13 @@
-import type { AstroIntegration, HookParameters } from "astro";
+import type { AstroIntegration } from "astro";
 import { AstroError } from "astro/errors";
 import { z } from "astro/zod";
-import { DEFAULT_HOOK_NAMES } from "../internal/constants.js";
 import { errorMap } from "../internal/error-map.js";
-import type { AnyPlugin, ExtendedHooks } from "./types.js";
+import type {
+	AnyPlugin,
+	ExtendedHooks,
+	HookParameters,
+	Hooks,
+} from "./types.js";
 
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality
@@ -79,10 +83,14 @@ export const defineIntegration = <
 
 		const providedHooks = setup({ name, options });
 
+		const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
+
 		const hooks: AstroIntegration["hooks"] = Object.fromEntries(
-			DEFAULT_HOOK_NAMES.map((hookName) => [
+			definedHooks.map((hookName) => [
 				hookName,
-				(params: HookParameters<typeof hookName>) => {
+				// We know all hook parameters are objects, but the generic correlation makes TS ignore that fact.
+				// The intersection with `object` is a workaround so TS doesn't complay about the spread below.
+				(params: object & HookParameters<typeof hookName>) => {
 					const plugins = resolvedPlugins.filter((p) => p.hook === hookName);
 
 					return providedHooks[hookName]?.({
