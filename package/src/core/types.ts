@@ -24,8 +24,16 @@ export type AnyPlugin = Omit<
 	"implementation"
 > & { implementation: any };
 
+declare global {
+	namespace AstroIntegrationKit {
+		// biome-ignore lint/suspicious/noEmptyInterface: Requires for interface merging
+		export interface ExtraHooks {}
+	}
+}
+
 export type Hooks = Prettify<
-	Required<NonNullable<import("astro").AstroIntegration["hooks"]>>
+	Required<NonNullable<import("astro").AstroIntegration["hooks"]>> &
+		AstroIntegrationKit.ExtraHooks
 >;
 
 export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
@@ -107,48 +115,11 @@ type AddParam<Func, Param = never> = [Param] extends [never]
 	  ? (params: Params & Param) => ReturnType
 	  : never;
 
-export interface ExtendedHooks<TPlugins extends Array<AnyPlugin>> {
-	"astro:config:setup"?: AddParam<
-		Hooks["astro:config:setup"],
-		AddedParam<TPlugins, "astro:config:setup">
-	>;
-	"astro:config:done"?: AddParam<
-		Hooks["astro:config:done"],
-		AddedParam<TPlugins, "astro:config:done">
-	>;
-	"astro:server:setup"?: AddParam<
-		Hooks["astro:server:setup"],
-		AddedParam<TPlugins, "astro:server:setup">
-	>;
-	"astro:server:start"?: AddParam<
-		Hooks["astro:server:start"],
-		AddedParam<TPlugins, "astro:server:start">
-	>;
-	"astro:server:done"?: AddParam<
-		Hooks["astro:server:done"],
-		AddedParam<TPlugins, "astro:server:done">
-	>;
-	"astro:build:start"?: AddParam<
-		Hooks["astro:build:start"],
-		AddedParam<TPlugins, "astro:build:start">
-	>;
-	"astro:build:setup"?: AddParam<
-		Hooks["astro:build:setup"],
-		AddedParam<TPlugins, "astro:build:setup">
-	>;
-	"astro:build:generated"?: AddParam<
-		Hooks["astro:build:generated"],
-		AddedParam<TPlugins, "astro:build:generated">
-	>;
-	"astro:build:ssr"?: AddParam<
-		Hooks["astro:build:ssr"],
-		AddedParam<TPlugins, "astro:build:ssr">
-	>;
-	"astro:build:done"?: AddParam<
-		Hooks["astro:build:done"],
-		AddedParam<TPlugins, "astro:build:done">
-	>;
-}
+export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
+	[Hook in keyof Hooks]?: Hooks[Hook] extends Function
+		? AddParam<Hooks[Hook], AddedParam<TPlugins, Hook>>
+		: never;
+};
 
 export interface DevToolbarFrameworkAppProps {
 	canvas: Parameters<Required<DevToolbarApp>["init"]>[0];

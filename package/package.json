@@ -8,7 +8,12 @@
 		"url": "https://florian-lefebvre.dev"
 	},
 	"license": "MIT",
-	"keywords": ["withastro", "astro", "utils", "utilities"],
+	"keywords": [
+		"withastro",
+		"astro",
+		"utils",
+		"utilities"
+	],
 	"homepage": "https://github.com/florian-lefebvre/astro-integration-kit",
 	"publishConfig": {
 		"access": "public"
@@ -26,9 +31,15 @@
 		"./plugins": {
 			"types": "./dist/plugins/index.d.ts",
 			"default": "./dist/plugins/index.js"
+		},
+		"./types/db": {
+			"types": "./types/db.d.ts"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist",
+		"types"
+	],
 	"scripts": {
 		"dev": "tsup --watch",
 		"build": "tsup",
@@ -36,6 +47,7 @@
 	},
 	"type": "module",
 	"peerDependencies": {
+		"@astrojs/db": "^0.9.0",
 		"@vitejs/plugin-react": "^4.2.1",
 		"astro": "^4.4.1",
 		"preact": "^10.19.4",
@@ -46,6 +58,9 @@
 		"vue": "^3.4.19"
 	},
 	"peerDependenciesMeta": {
+		"@astrojs/db": {
+			"optional": true
+		},
 		"@vitejs/plugin-react": {
 			"optional": true
 		},
