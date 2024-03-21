@@ -44,14 +44,19 @@ export const defineIntegration = <
 		options: z.output<TOptionsSchema>;
 	}) => ExtendedHooks<TPlugins>;
 }): ((
-	...args: undefined extends z.input<TOptionsSchema>
-		? [options?: z.input<TOptionsSchema>]
-		: [options: z.input<TOptionsSchema>]
+	...args: [z.input<TOptionsSchema>] extends [never]
+		? []
+		: undefined extends z.input<TOptionsSchema>
+		  ? [options?: z.input<TOptionsSchema>]
+		  : [options: z.input<TOptionsSchema>]
 ) => AstroIntegration) => {
 	return (...args) => {
-		const parsedOptions = (optionsSchema ?? z.any()).safeParse(args[0], {
-			errorMap,
-		});
+		const parsedOptions = (optionsSchema ?? z.never().optional()).safeParse(
+			args[0],
+			{
+				errorMap,
+			},
+		);
 
 		if (!parsedOptions.success) {
 			throw new AstroError(
