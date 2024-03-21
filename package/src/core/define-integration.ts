@@ -32,7 +32,7 @@ import type {
  * ```
  */
 export const defineIntegration = <
-	TOptionsSchema extends z.ZodTypeAny = z.ZodTypeAny,
+	TOptionsSchema extends z.ZodTypeAny = z.ZodNever,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
