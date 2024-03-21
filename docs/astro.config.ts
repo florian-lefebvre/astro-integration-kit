@@ -89,14 +89,6 @@ export default defineConfig({
 							link: "/core/define-integration/",
 						},
 						{
-							label: "defineOptions",
-							link: "/getting-started/breaking-changes/#removed-defineoptions",
-							badge: badge("removed"),
-							attrs: {
-								style: "opacity:0.5;",
-							},
-						},
-						{
 							label: "createResolver",
 							link: "/core/create-resolver/",
 						},
