@@ -22,4 +22,4 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Test
-        run: pnpm --filter package build
+        run: pnpm --filter astro-integration-kit build
