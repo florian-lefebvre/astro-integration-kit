@@ -1,5 +1,28 @@
 # astro-integration-kit
 
+## 0.7.0
+
+### Minor Changes
+
+- 236bfbe: Introduces a build step internally that fixes a few types issues for integrations authors. This _should_ be non-breaking
+- 2cd6d63: Updates how `defineIntegration`'s `options` are handled (breaking change). They're not optional by default, you need to manually add `.optional()` at the end of your zod schema. If it's optional, users can still pass nothing or `undefined`.
+- 236bfbe: Simplifies plugins generics, allowing simpler plugin builds. This should be non-breaking for plugin relying on type inference, plugins with explicitly declared signature should update the following:
+
+  ```diff
+  type SomePlugin = Plugin<
+    "utilityName",
+    "astro:config:setup",
+  -  (p: HookParams) => (params: UtilityParams) => UtilityOutput
+  +  (params: UtilityParams) => UtilityOutput
+  >;
+
+  export const somePlugin: SomePlugin = definePlugin();
+  ```
+
+### Patch Changes
+
+- 0499791: Add support for Astro DB hooks. See [docs](https://astro-integration-kit.netlify.app/core/define-integration/#astro-db-astrojsdb).
+
 ## 0.6.1
 
 ### Patch Changes
