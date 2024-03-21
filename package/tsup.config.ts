@@ -4,7 +4,7 @@ import { peerDependencies } from "./package.json";
 export default defineConfig((options) => {
 	const dev = !!options.watch;
 	return {
-		entry: ["src/**/*.(ts|js)", "!src/internal/ambient.d.ts"],
+		entry: ["src/**/*.(ts|js)", "!src/internal/internal.d.ts"],
 		format: ["esm"],
 		target: "node18",
 		bundle: true,
