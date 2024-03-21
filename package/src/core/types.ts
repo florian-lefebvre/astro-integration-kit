@@ -27,7 +27,7 @@ export type AnyPlugin = Omit<
 
 export type Hooks = Prettify<
 	Required<NonNullable<import("astro").AstroIntegration["hooks"]>> &
-		AIK.ExtraHooks
+		AstroIntegrationKit.ExtraHooks
 >;
 
 export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
@@ -110,7 +110,9 @@ type AddParam<Func, Param = never> = [Param] extends [never]
 	  : never;
 
 export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
-	[Hook in keyof Hooks]?: AddParam<Hooks[Hook], AddedParam<TPlugins, Hook>>;
+	[Hook in keyof Hooks]?: Hooks[Hook] extends Function
+		? AddParam<Hooks[Hook], AddedParam<TPlugins, Hook>>
+		: never;
 };
 
 export interface DevToolbarFrameworkAppProps {
