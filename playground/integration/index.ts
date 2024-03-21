@@ -20,6 +20,8 @@ const optionsSchema = z
 			.default("abc")
 			.transform((val) => val.length),
 	})
+	.optional()
+	.default({})
 	.refine((val) => val.resource > 1, {
 		message: "Must be at least 2 chars long",
 		path: ["resource"],

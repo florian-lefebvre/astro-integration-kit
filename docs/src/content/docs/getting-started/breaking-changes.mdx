@@ -9,9 +9,20 @@ Features get added and removed, and breaking changes are introduced! This docume
 
 ## `0.7.0`
 
----
+### Updated `options` and `optionsSchema`
 
-## Plugins types
+They're not optional by default, you need to manually add `.optional()` at the end of your zod schema.
+If it's optional, users can still pass nothing or `undefined`.
+
+```ts del={3} ins={4}
+defineIntegration({
+    // ...
+    optionsSchema: z.object({ foo: z.string() }),
+    optionsSchema: z.object({ foo: z.string() }).optional(),
+})
+```
+
+### Plugins types
 
 Plugin generics have been simplified, allowing simpler plugin builds. This should be non-breaking for plugin
 relying on type inference, plugins with explicitly declared signature should update the following:

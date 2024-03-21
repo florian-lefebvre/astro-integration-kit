@@ -32,7 +32,7 @@ import type {
  * ```
  */
 export const defineIntegration = <
-	TOptionsSchema extends z.ZodTypeAny = z.ZodTypeAny,
+	TOptionsSchema extends z.ZodTypeAny = z.ZodNever,
 	TPlugins extends Array<AnyPlugin> = [],
 >({
 	name,
@@ -47,11 +47,19 @@ export const defineIntegration = <
 		name: string;
 		options: z.output<TOptionsSchema>;
 	}) => ExtendedHooks<TPlugins>;
-}): ((options?: z.input<TOptionsSchema>) => AstroIntegration) => {
-	return (_options: z.input<TOptionsSchema> = {}) => {
-		const parsedOptions = (optionsSchema || z.record(z.any())).safeParse(
-			_options,
-			{ errorMap },
+}): ((
+	...args: [z.input<TOptionsSchema>] extends [never]
+		? []
+		: undefined extends z.input<TOptionsSchema>
+		  ? [options?: z.input<TOptionsSchema>]
+		  : [options: z.input<TOptionsSchema>]
+) => AstroIntegration) => {
+	return (...args) => {
+		const parsedOptions = (optionsSchema ?? z.never().optional()).safeParse(
+			args[0],
+			{
+				errorMap,
+			},
 		);
 
 		if (!parsedOptions.success) {
