@@ -1,5 +1,4 @@
 import type { DevToolbarApp } from "astro";
-import "../internal/ambient.d.ts";
 import type {
 	Prettify,
 	UnionToArray,
@@ -24,6 +23,13 @@ export type AnyPlugin = Omit<
 	Plugin<string, keyof Hooks, any>,
 	"implementation"
 > & { implementation: any };
+
+declare global {
+	namespace AstroIntegrationKit {
+		// biome-ignore lint/suspicious/noEmptyInterface: Requires for interface merging
+		export interface ExtraHooks {}
+	}
+}
 
 export type Hooks = Prettify<
 	Required<NonNullable<import("astro").AstroIntegration["hooks"]>> &

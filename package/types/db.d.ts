@@ -1,7 +1,9 @@
-type DbHooks = Omit<
-	import("@astrojs/db/types").AstroDbIntegration["hooks"],
-	keyof import("astro").AstroIntegration["hooks"]
+type AstroHookNames = keyof import("astro").AstroIntegration["hooks"];
+type AstroDbHooks = Required<
+	import("@astrojs/db/types").AstroDbIntegration["hooks"]
 >;
+
+type DbHooks = Omit<AstroDbHooks, AstroHookNames>;
 
 declare namespace AstroIntegrationKit {
 	export interface ExtraHooks extends DbHooks {}
