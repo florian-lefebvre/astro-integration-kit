@@ -22,6 +22,22 @@ defineIntegration({
 })
 ```
 
+### Plugins types
+
+Plugin generics have been simplified, allowing simpler plugin builds. This should be non-breaking for plugin
+relying on type inference, plugins with explicitly declared signature should update the following:
+
+```ts del={4} ins={5}
+type SomePlugin = Plugin<
+    "utilityName",
+    "astro:config:setup",
+    (p: HookParams) => (params: UtilityParams) => UtilityOutput
+    (params: UtilityParams) => UtilityOutput
+>;
+
+export const somePlugin: SomePlugin = definePlugin();
+```
+
 ## `0.6.0`
 
 ---

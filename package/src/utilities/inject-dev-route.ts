@@ -1,4 +1,10 @@
-import type { HookParameters, InjectedRoute } from "astro";
+import type { InjectedRoute } from "astro";
+import type { HookParameters } from "../core/types";
+
+type HookParameterProperties = Pick<
+	HookParameters<"astro:config:setup">,
+	"command" | "injectRoute"
+>;
 
 /**
  * Allows you to inject a route in development only
@@ -26,7 +32,7 @@ export const injectDevRoute = ({
 	command,
 	injectRoute,
 	injectedRoute,
-}: Pick<HookParameters<"astro:config:setup">, "command" | "injectRoute"> & {
+}: HookParameterProperties & {
 	injectedRoute: InjectedRoute;
 }) => {
 	if (command === "dev") {

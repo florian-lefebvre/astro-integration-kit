@@ -6,6 +6,7 @@
 		"node": ">=18.19.0"
 	},
 	"scripts": {
+		"package:dev": "pnpm --filter astro-integration-kit dev",
 		"playground:dev": "pnpm --filter playground dev",
 		"docs:dev": "pnpm --filter docs dev",
 		"changeset": "changeset",
