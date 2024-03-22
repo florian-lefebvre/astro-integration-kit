@@ -33,7 +33,8 @@
 			"default": "./dist/plugins/index.js"
 		},
 		"./types/db": {
-			"types": "./types/db.d.ts"
+			"types": "./types/db.d.ts",
+			"default": "./types/noop.js"
 		}
 	},
 	"files": [

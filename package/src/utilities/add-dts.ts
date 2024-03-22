@@ -3,7 +3,7 @@ import { dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { AstroIntegrationLogger } from "astro";
 import { parse, prettyPrint } from "recast";
-import typescriptParser from "recast/parsers/typescript";
+import typescriptParser from "recast/parsers/typescript.js";
 
 const injectEnvDTS = ({
 	srcDir,
