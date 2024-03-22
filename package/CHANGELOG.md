@@ -1,5 +1,12 @@
 # astro-integration-kit
 
+## 0.7.1
+
+### Patch Changes
+
+- 23a41b8: Fixes runtime error when importing the new DB type extension
+- 23a41b8: Fixes ESM import resolution after new build step
+
 ## 0.7.0
 
 ### Minor Changes
