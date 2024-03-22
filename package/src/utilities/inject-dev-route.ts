@@ -1,5 +1,5 @@
 import type { InjectedRoute } from "astro";
-import type { HookParameters } from "../core/types";
+import type { HookParameters } from "../core/types.js";
 
 type HookParameterProperties = Pick<
 	HookParameters<"astro:config:setup">,
