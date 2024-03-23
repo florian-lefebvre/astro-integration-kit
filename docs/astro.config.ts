@@ -1,6 +1,7 @@
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 import { version } from "../package/package.json";
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 
 const badge = (type: "new" | "updated" | "soon" | "removed") => ({
 	variant: {
@@ -54,6 +55,14 @@ export default defineConfig({
 			],
 			expressiveCode: {
 				themes: ["one-dark-pro", "starlight-light"],
+				plugins: [pluginLineNumbers()],
+				defaultProps: {
+					overridesByLang: {
+						bash: {
+							showLineNumbers: false,
+						},
+					},
+				},
 			},
 			sidebar: [
 				{

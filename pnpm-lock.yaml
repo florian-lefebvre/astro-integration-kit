@@ -20,6 +20,9 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.21.2
         version: 0.21.2(astro@4.5.9)
+      '@expressive-code/plugin-line-numbers':
+        specifier: ^0.33.5
+        version: 0.33.5
       astro:
         specifier: ^4.5.9
         version: 4.5.9(typescript@5.4.3)
@@ -2477,6 +2480,13 @@ packages:
 
   /@expressive-code/plugin-frames@0.33.5:
     resolution: {integrity: sha512-lFt/gbnZscBSxHovg4XiWohp5nrxk4McS6RGABdj6+0gJcX8/YrFTM23GKBIkaDePxdDidVY0jQYGYDL/RrQHw==}
+    dependencies:
+      '@expressive-code/core': 0.33.5
+      hastscript: 7.2.0
+    dev: false
+
+  /@expressive-code/plugin-line-numbers@0.33.5:
+    resolution: {integrity: sha512-jGHorejNS7tj/FPKwLqV5PCAai43ydlxVQUW4kO8g+/6f0BqkJGD0JaIylOnSD3MWmQXaOFs9a7FEJHn0EZvBQ==}
     dependencies:
       '@expressive-code/core': 0.33.5
       hastscript: 7.2.0
