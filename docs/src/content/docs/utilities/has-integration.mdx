@@ -2,54 +2,30 @@
 title: hasIntegration
 description: Checks whether an integration been added to the Astro config.
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `hasIntegration` checks whether an integration has already been added to the Astro config. For example:
 
-<Tabs>
-	<TabItem label="Extended hooks">
-	```ts title="my-integration/index.ts" /hasIntegration\\b/ {2,6}
-	import { defineIntegration } from "astro-integration-kit";
-	import { hasIntegrationPlugin } from "astro-integration-kit/plugins";
+```ts title="my-integration/index.ts" {3,13}
+import {
+	defineIntegration,
+	hasIntegration
+} from "astro-integration-kit";
 
-	export default defineIntegration({
-		name: "my-integration",
-		plugins: [hasIntegrationPlugin],
-		setup() {
-			return {
-				"astro:config:setup": ({ hasIntegration, logger }) => {
-					if (hasIntegration("@astrojs/tailwind")) {
-						logger.info("Tailwind is installed!");
-					}
+export default defineIntegration({
+	// ...
+	setup() {
+		return {
+			"astro:config:setup": (params) => {
+				const { logger } = params
+
+				if (hasIntegration(params, { name: "@astrojs/tailwind" })) {
+					logger.info("Tailwind is installed!");
 				}
 			}
 		}
-	})
-	```
-	</TabItem>
-	<TabItem label="Standalone utilities">
-	```ts title="my-integration/index.ts" "hasIntegration"
-	import type { AstroIntegration } from "astro";
-	import { hasIntegration } from "astro-integration-kit/utilities";
-
-	export default function myIntegration(): AstroIntegration {
-		return {
-			name: "my-integration",
-			hooks: {
-				"astro:config:setup": ({ config, logger }) => {
-					if (hasIntegration({
-						name: "@astrojs/tailwind",
-						config,
-					})) {
-						logger.info("Tailwind is installed!")
-					}
-				},
-			}
-		}
 	}
-	``` 
-	</TabItem>
-</Tabs>
+})
+```
 
 ### Relative position check
 
@@ -59,74 +35,52 @@ For that use-case, this utility accepts optional `position` and `relativeTo` par
 
 Checking for the presence of an integration in relation to an uninstalled integration will result in an error.
 
-<Tabs>
-	<TabItem label="Extended hooks">
+```ts title="my-integration/index.ts" {14-16,22-24,30-32,38-40}
+import {
+	defineIntegration,
+	hasIntegration
+} from "astro-integration-kit";
 
-	With extended hooks, `hasIntegration` can receive the position and relative reference as optional positional parameters.
-	If a relative reference is not given the result will be relative to the current integration being defined.
+export default defineIntegration({
+	// ...
+	setup({ name }) {
+		return {
+			"astro:config:setup": (params) => {
+				const { logger } = params
 
-	```ts title="my-integration/index.ts" /hasIntegration\\(.*?\\)/
-	import { defineIntegration } from "astro-integration-kit";
+				if (hasIntegration(params, {
+					name: "@astrojs/tailwind",
+					position: "before",
+					relativeTo: name
+				})) {
+					logger.info("Tailwind is installed before my-integration");
+				}
 
-	export default defineIntegration({
-		name: "my-integration",
-		setup() {
-			return {
-				"astro:config:setup": ({ hasIntegration, logger }) => {
-					if (hasIntegration("@astrojs/tailwind", "before")) {
-						logger.info("Tailwind is installed before my-integration");
-					}
-					if (hasIntegration("astro-env", "after")) {
-						logger.info("AstroEnv is installed after my-integration");
-					}
-					if (hasIntegration("astro-expressive-code", "before", "@astrojs/mdx")) {
-						logger.info("Expressice Code is installed before MDX");
-					}
-					if (hasIntegration("astro-expressive-code", "after", "@astrojs/tailwind")) {
-						logger.info("Expressice Code is installed after Tailwind");
-					}
+				if (hasIntegration(params, {
+					name: "astro-env",
+					position: "after",
+					relativeTo: name
+				})) {
+					logger.info("AstroEnv is installed after my-integration");
+				}
+
+				if (hasIntegration(params, {
+					name: "astro-expressive-code",
+					position: "before",
+					relativeTo: "@astrojs/mdx"
+				})) {
+					logger.info("Expressive Code is installed before MDX");
+				}
+
+				if (hasIntegration(params, {
+					name: "astro-expressive-code",
+					position: "after",
+					relativeTo: "@astrojs/tailwind"
+				})) {
+					logger.info("Expressive Code is installed after Tailwind");
 				}
 			}
 		}
-	})
-	```
-	</TabItem>
-	<TabItem label="Standalone utilities">
-
-	As a standalone utility `hasIntegration` can receive the position and relative reference as optional fields in its parameter.
-	When a position is given, a relative reference must also be given, otherwise the utility will throw an error.
-
-	```ts title="my-integration/index.ts" {9-14,17-22}
-	import type { AstroIntegration } from "astro";
-	import { hasIntegration } from "astro-integration-kit";
-
-	export default function myIntegration(): AstroIntegration {
-		return {
-			name: "my-integration",
-			hooks: {
-				"astro:config:setup": ({ config, logger }) => {
-					if (hasIntegration({
-						name: "@astrojs/tailwind",
-						position: "before",
-						relativeTo: "my-integration",
-						config,
-					})) {
-						logger.warn("my-integration should be installed before tailwind to work correctly");
-					}
-					if (hasIntegration({
-						name: "astro-env",
-						position: "after",
-						relativeTo: "my-integration",
-						config,
-					})) {
-						logger.warn("my-integration should be installed after astro-env to work correctly");
-					}
-				},
-			}
-		}
 	}
-	``` 
-	</TabItem>
-</Tabs>
-
-
+})
+```
