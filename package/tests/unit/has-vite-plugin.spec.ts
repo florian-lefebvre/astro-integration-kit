@@ -7,73 +7,78 @@ describe("hasVitePlugin", () => {
 	const plugin = { name };
 
 	test("Should not detect a plugin", () => {
-		const config = {} as AstroConfig;
-
 		expect(
-			hasVitePlugin({
+			hasVitePlugin({ config: {} } as any, {
 				plugin: null,
-				config,
 			}),
 		).toBe(false);
 	});
 
 	test("Should detect a plugin using a string", () => {
-		const config = {
-			vite: {
-				plugins: [plugin],
-			},
-		} as AstroConfig;
-
 		expect(
-			hasVitePlugin({
-				plugin: name,
-				config,
-			}),
+			hasVitePlugin(
+				{
+					config: {
+						vite: {
+							plugins: [plugin],
+						},
+					},
+				} as any,
+				{
+					plugin: name,
+				},
+			),
 		).toBe(true);
 	});
 
 	test("Should detect a plugin using a plugin", () => {
-		const config = {
-			vite: {
-				plugins: [plugin],
-			},
-		} as AstroConfig;
-
 		expect(
-			hasVitePlugin({
-				plugin,
-				config,
-			}),
+			hasVitePlugin(
+				{
+					config: {
+						vite: {
+							plugins: [plugin],
+						},
+					},
+				} as any,
+				{
+					plugin,
+				},
+			),
 		).toBe(true);
 	});
 
 	test("Should detect a plugin using a nested plugin", () => {
-		const config = {
-			vite: {
-				plugins: [plugin],
-			},
-		} as AstroConfig;
-
 		expect(
-			hasVitePlugin({
-				plugin: [[[plugin]]],
-				config,
-			}),
+			hasVitePlugin(
+				{
+					config: {
+						vite: {
+							plugins: [plugin],
+						},
+					},
+				} as any,
+				{
+					plugin: [[[plugin]]],
+				},
+			),
 		).toBe(true);
 	});
 
 	test("Should detect a nested plugin", () => {
-		const config = {
-			vite: {
-				plugins: [[[plugin]]],
-			},
-		} as AstroConfig;
-
 		expect(
-			hasVitePlugin({
-				plugin,
-				config,
-			}),
+			hasVitePlugin(
+				{
+					config: {
+						vite: {
+							plugins: [[[plugin]]],
+						},
+					},
+				} as any,
+				{
+					plugin,
+				},
+			),
 		).toBe(true);
 	});
 });

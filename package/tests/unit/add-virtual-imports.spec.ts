@@ -1,4 +1,4 @@
-import type { AstroConfig } from "astro";
+import type { HookParameters } from "astro";
 import { AstroError } from "astro/errors";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
 import { addVirtualImports } from "../../src/utilities/add-virtual-imports.js";
@@ -9,52 +9,50 @@ vi.mock("../../src/utilities/add-vite-plugin.js");
 const pluginNameStub = <T extends string>(name: T): `vite-plugin-${T}` =>
 	`vite-plugin-${name}`;
 
+const getParams = () =>
+	({
+		config: {},
+		updateConfig: vi.fn(),
+	}) as unknown as HookParameters<"astro:config:setup">;
+
 describe("add-virtual-imports", () => {
 	const name = "test-module";
 	const content = "export default {}";
 	const imports = { [name]: content };
-	const updateConfig = vi.fn();
-	const config = {} as AstroConfig;
-
+	const params = getParams();
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
 	test("It should call `addVitePlugin`", () => {
-		addVirtualImports({
+		addVirtualImports(params, {
 			name,
 			imports,
-			config,
-			updateConfig,
 		});
 
 		expect(addVitePlugin).toHaveBeenCalled();
 	});
 
 	test("`addVitePlugin` should get called with the correct plugin name", () => {
-		addVirtualImports({
+		addVirtualImports(params, {
 			name,
 			imports,
-			config,
-			updateConfig,
 		});
 
 		const expectedName = pluginNameStub(name);
 
-		const { plugin } = (addVitePlugin as Mock).mock.lastCall[0];
+		const { plugin } = (addVitePlugin as Mock).mock.lastCall[1];
 
 		expect(plugin.name).toEqual(expectedName);
 	});
 
 	test("Virtual module should resolve correct name", () => {
-		addVirtualImports({
+		addVirtualImports(params, {
 			name,
 			imports,
-			config,
-			updateConfig,
 		});
 
-		const { plugin } = (addVitePlugin as Mock).mock.lastCall[0];
+		const { plugin } = (addVitePlugin as Mock).mock.lastCall[1];
 
 		const resolvedVirtualModuleId = plugin.resolveId(name);
 
@@ -63,11 +61,9 @@ describe("add-virtual-imports", () => {
 
 	test("It should throw an error if you try and prefix your virtual import with 'astro:'", () => {
 		const testFunction = () =>
-			addVirtualImports({
+			addVirtualImports(params, {
 				name,
 				imports: { [`astro:${name}`]: content },
-				config,
-				updateConfig,
 			});
 
 		expect(testFunction).toThrowError();
@@ -75,11 +71,9 @@ describe("add-virtual-imports", () => {
 
 	test("It should throw an AstroError if you try and prefix your virtual import with 'astro:'", () => {
 		const testFunction = () =>
-			addVirtualImports({
+			addVirtualImports(params, {
 				name,
 				imports: { [`astro:${name}`]: content },
-				config,
-				updateConfig,
 			});
 
 		expect(testFunction).toThrowError(AstroError);

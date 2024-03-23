@@ -1,5 +1,5 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
-import type { AstroIntegrationLogger } from "astro";
+import type { HookParameters } from "astro";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { createResolver } from "../../src/core/create-resolver.js";
 import { addDts } from "../../src/utilities/add-dts.js";
@@ -24,6 +24,17 @@ const deleteTempFiles = () => {
 	});
 };
 
+const getParams = () =>
+	({
+		config: {
+			root: new URL(tempFolderName, import.meta.url),
+			srcDir: new URL(tempFolderName, import.meta.url),
+		},
+		logger: {
+			info: vi.fn(),
+		},
+	}) as unknown as HookParameters<"astro:config:setup">;
+
 describe("addDts", () => {
 	beforeAll(() => {
 		createTempFiles();
@@ -36,19 +47,12 @@ describe("addDts", () => {
 	test("Should run", () => {
 		const dtsFileName = "TEST";
 		const dtsFileContent = 'declare module "my-integration" {}';
-		const root = new URL(tempFolderName, import.meta.url);
-		const srcDir = new URL(tempFolderName, import.meta.url);
-		const logger = {
-			info: vi.fn(),
-		} as unknown as AstroIntegrationLogger;
+		const params = getParams();
 
 		expect(() =>
-			addDts({
+			addDts(params, {
 				name: dtsFileName,
 				content: dtsFileContent,
-				logger,
-				root,
-				srcDir,
 			}),
 		).not.toThrow();
 	});
@@ -56,20 +60,13 @@ describe("addDts", () => {
 	test("Should update the env.d.ts (double quotes)", () => {
 		const dtsFileName = "TEST";
 		const dtsFileContent = 'declare module "my-integration" {}';
-		const root = new URL(tempFolderName, import.meta.url);
-		const srcDir = new URL(tempFolderName, import.meta.url);
-		const logger = {
-			info: vi.fn(),
-		} as unknown as AstroIntegrationLogger;
+		const params = getParams();
 
 		const expectedEnvDtsContent = `/// <reference types="astro/client" />\n/// <reference types=".astro/${dtsFileName}.d.ts" />`;
 
-		addDts({
+		addDts(params, {
 			name: dtsFileName,
 			content: dtsFileContent,
-			logger,
-			root,
-			srcDir,
 		});
 
 		const fileContents = readFileSync(envDtsPath, {
@@ -82,11 +79,7 @@ describe("addDts", () => {
 	test("Should update the env.d.ts (single quotes)", () => {
 		const dtsFileName = "TEST";
 		const dtsFileContent = 'declare module "my-integration" {}';
-		const root = new URL(tempFolderName, import.meta.url);
-		const srcDir = new URL(tempFolderName, import.meta.url);
-		const logger = {
-			info: vi.fn(),
-		} as unknown as AstroIntegrationLogger;
+		const params = getParams();
 
 		const expectedEnvDtsContent = `/// <reference types='astro/client' />\n/// <reference types='.astro/${dtsFileName}.d.ts' />`;
 
@@ -94,12 +87,9 @@ describe("addDts", () => {
 			encoding: "utf-8",
 		});
 
-		addDts({
+		addDts(params, {
 			name: dtsFileName,
 			content: dtsFileContent,
-			logger,
-			root,
-			srcDir,
 		});
 
 		const fileContents = readFileSync(envDtsPath, {
@@ -112,18 +102,11 @@ describe("addDts", () => {
 	test("Should create the virtual file", () => {
 		const dtsFileName = "TEST";
 		const dtsFileContent = 'declare module "my-integration" {}';
-		const root = new URL(tempFolderName, import.meta.url);
-		const srcDir = new URL(tempFolderName, import.meta.url);
-		const logger = {
-			info: vi.fn(),
-		} as unknown as AstroIntegrationLogger;
+		const params = getParams();
 
-		addDts({
+		addDts(params, {
 			name: dtsFileName,
 			content: dtsFileContent,
-			logger,
-			root,
-			srcDir,
 		});
 
 		const fileContents = readFileSync(
