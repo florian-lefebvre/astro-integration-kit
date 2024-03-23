@@ -2,26 +2,28 @@
 title: addVirtualImports
 description: Allows adding Vite virtual modules easily to access data across your integration.
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `addVirtualImports` allows you to create virtual modules and share data from your integration. For example:
 
-<Tabs>
-    <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" /addVirtualImports\\b/ {2,6}
-    import { defineIntegration } from "astro-integration-kit";
-    import { addVirtualImportsPlugin } from "astro-integration-kit/plugins";
+```ts title="my-integration/index.ts" {2,11-15,17-30}
+import {
+    defineIntegration,
+    addVirtualImports
+} from "astro-integration-kit";
 
-    export default defineIntegration({
-        name: "my-integration",
-        plugins: [addVirtualImportsPlugin],
-        setup() {
-            return {
-                "astro:config:setup": ({ addVirtualImports }) => {
-                    addVirtualImports({
+export default defineIntegration({
+    // ...
+    setup() {
+        return {
+            "astro:config:setup": (params) => {
+                addVirtualImports(params, {
+                    imports: {
                         'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
-                    })
-                    addVirtualImports([
+                    }
+                })
+
+                addVirtualImports(params, {
+                    imports: [
                         {
                             id: "virtual:my-integration/advanced",
                             content: "export const foo = 'server'",
@@ -32,55 +34,13 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
                             content: "export const foo = 'client'",
                             context: "client"
                         },
-                    ])
-                }
-            }
-        }
-    })
-    ```
-    </TabItem>
-    <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" "addVirtualImports"
-    import type { AstroIntegration } from "astro";
-    import { addVirtualImports } from "astro-integration-kit/utilities";
-
-    export default function myIntegration(): AstroIntegration {
-        return {
-            name: "my-integration",
-            hooks: {
-                "astro:config:setup": ({ config, updateConfig }) => {
-                    addVirtualImports({
-                        updateConfig,
-                        config,
-                        name: 'my-integration',
-                        imports: {
-                            'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
-                        },
-                    })
-                    addVirtualImports({
-                        config,
-                        updateConfig,
-                        name: 'my-integration',
-                        imports: [
-                            {
-                                id: "virtual:my-integration/advanced",
-                                content: "export const foo = 'server'",
-                                context: "server"
-                            },
-                            {
-                                id: "virtual:my-integration/advanced",
-                                content: "export const foo = 'client'",
-                                context: "client"
-                            },
-                        ]
-                    })
-                }
+                    ]
+                })
             }
         }
     }
-    ```
-    </TabItem>
-</Tabs>
+})
+```
 
 :::note
 While you can choose any name for your virtual module, it's a good idea to stick to this convention as much as possible:
