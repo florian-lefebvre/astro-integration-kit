@@ -93,6 +93,11 @@ export default defineConfig({
 							link: "/core/create-resolver/",
 						},
 						{
+							label: "defineUtility",
+							link: "/core/define-utility/",
+							badge: badge("new"),
+						},
+						{
 							label: "definePlugin",
 							link: "/core/define-plugin/",
 						},
