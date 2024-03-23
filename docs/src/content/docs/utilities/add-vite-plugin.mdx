@@ -2,52 +2,27 @@
 title: addVitePlugin
 description: Allows adding Vite plugins easily.
 ---
-import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `addVitePlugin` allows you add a [vite plugin](https://vitejs.dev/guide/using-plugins)
 to the Astro config. For example:
 
-<Tabs>
-    <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" /addVitePlugin\\b/ {2,7}
-    import { defineIntegration } from "astro-integration-kit";
-    import { addVitePluginPlugin } from "astro-integration-kit/plugins";
-    import { VitePWA } from 'vite-plugin-pwa'
+```ts title="my-integration/index.ts" {3,12-14}
+import {
+    defineIntegration,
+    addVitePlugin
+} from "astro-integration-kit";
+import { VitePWA } from 'vite-plugin-pwa'
 
-    export default defineIntegration({
-        name: "my-integration",
-        plugins: [addVitePluginPlugin],
-        setup(options) {
-            return {
-                "astro:config:setup": ({ addVitePlugin }) => {
-                    addVitePlugin(VitePWA({ registerType: 'autoUpdate' }))
-                }
-            }
-        }
-    })
-    ```
-    </TabItem>
-    <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" "addVitePlugin"
-    import type { AstroIntegration } from "astro";
-    import { addVitePlugin } from "astro-integration-kit/utilities";
-    import { VitePWA } from 'vite-plugin-pwa'
-
-    export default function myIntegration(): AstroIntegration {
+export default defineIntegration({
+    // ...
+    setup() {
         return {
-            name: "my-integration",
-            hooks: {
-                "astro:config:setup": ({ config, logger, updateConfig }) => {
-                    addVitePlugin({
-                        plugin: VitePWA({ registerType: 'autoUpdate' }),
-                        config,
-                        logger,
-                        updateConfig
-                    })
-                }
+            "astro:config:setup": (params) => {
+                addVitePlugin(params, {
+                    plugin: VitePWA({ registerType: 'autoUpdate' })
+                })
             }
         }
     }
-    ```
-    </TabItem>
-</Tabs>
+})
+```
