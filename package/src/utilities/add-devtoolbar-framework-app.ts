@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { createResolver } from "../core/create-resolver.js";
-import { addVirtualImports } from "./add-virtual-imports.js";
 import { defineUtility } from "../core/define-utility.js";
+import { addVirtualImports } from "./add-virtual-imports.js";
 
 /**
  * Add a Dev Toolbar Plugin that uses a Framework component.

@@ -1,6 +1,6 @@
 import { type AstroIntegration } from "astro";
-import { hasIntegration } from "./has-integration.js";
 import { defineUtility } from "../core/define-utility.js";
+import { hasIntegration } from "./has-integration.js";
 
 export type AddIntegrationParams = {
 	integration: AstroIntegration;

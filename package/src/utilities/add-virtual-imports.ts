@@ -1,8 +1,8 @@
 import { AstroError } from "astro/errors";
 import type { Plugin } from "vite";
+import { defineUtility } from "../core/define-utility.js";
 import { addVitePlugin } from "./add-vite-plugin.js";
 import { hasVitePlugin } from "./has-vite-plugin.js";
-import { defineUtility } from "../core/define-utility.js";
 
 type VirtualImport = {
 	id: string;

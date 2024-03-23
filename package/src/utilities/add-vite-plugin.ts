@@ -1,6 +1,6 @@
 import type { Plugin, PluginOption } from "vite";
-import { hasVitePlugin } from "./has-vite-plugin.js";
 import { defineUtility } from "../core/define-utility.js";
+import { hasVitePlugin } from "./has-vite-plugin.js";
 
 /**
  * Adds a [vite plugin](https://vitejs.dev/guide/using-plugins) to the
