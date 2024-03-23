@@ -24,10 +24,6 @@
 			"types": "./dist/core/index.d.ts",
 			"default": "./dist/core/index.js"
 		},
-		"./utilities": {
-			"types": "./dist/utilities/index.d.ts",
-			"default": "./dist/utilities/index.js"
-		},
 		"./plugins": {
 			"types": "./dist/plugins/index.d.ts",
 			"default": "./dist/plugins/index.js"
