@@ -1,12 +1,11 @@
-import type { HookParameters } from "astro";
 import { AstroError } from "astro/errors";
+import { defineUtility } from "../core/define-utility.js";
 
 type HasIntegrationParams = (
 	| { position?: undefined; relativeTo?: string }
 	| { position: "before" | "after"; relativeTo: string }
 ) & {
 	name: string;
-	config: HookParameters<"astro:config:setup">["config"];
 };
 
 /**
@@ -15,11 +14,11 @@ type HasIntegrationParams = (
  * If `before` is given, returns true only if the integration is installed before the named|provided integration.
  * If `after` is given, returns true only if the integration is installed after the named|provided integration.
  *
- * @param {object} params
- * @param {string} params.name - Integration to look up.
- * @param {undefined | "before" | "after"} params.position - Position in relation to another integration to check.
- * @param {undefined | string} params.relativeTo - Other integration to check for relative poisition.
- * @param {config} params.config
+ * @param {import("astro").HookParameters<"astro:config:setup">} params
+ * @param {object} options
+ * @param {string} options.name - Integration to look up.
+ * @param {undefined | "before" | "after"} options.position - Position in relation to another integration to check.
+ * @param {undefined | string} options.relativeTo - Other integration to check for relative poisition.
  *
  * @returns {boolean}
  *
@@ -29,44 +28,43 @@ type HasIntegrationParams = (
  *
  * @example
  * ```ts
- * hasIntegration({
+ * hasIntegration(params, {
  * 		name: "@astrojs/tailwind",
- * 		config
  * })
  * ```
  */
-export const hasIntegration = ({
-	name,
-	position,
-	relativeTo,
-	config,
-}: HasIntegrationParams): boolean => {
-	const integrationPosition = config.integrations.findIndex(
-		(integration) => integration.name === name,
-	);
-
-	// Integration is not installed
-	if (integrationPosition === -1) return false;
-
-	// Not a relative check, the integration is present.
-	if (position === undefined) return true;
-
-	if (relativeTo === undefined)
-		throw new AstroError(
-			"Cannot perform a relative integration check without a relative reference.",
-			"Pass `relativeTo` on your call to `hasIntegration` or remove the `position` option.",
+export const hasIntegration = defineUtility("astro:config:setup")(
+	(
+		{ config },
+		{ name, position, relativeTo }: HasIntegrationParams,
+	): boolean => {
+		const integrationPosition = config.integrations.findIndex(
+			(integration) => integration.name === name,
 		);
 
-	const otherPosition = config.integrations.findIndex(
-		(integration) => integration.name === relativeTo,
-	);
+		// Integration is not installed
+		if (integrationPosition === -1) return false;
 
-	if (otherPosition === -1)
-		throw new AstroError(
-			"Cannot check relative position against an absent integration.",
+		// Not a relative check, the integration is present.
+		if (position === undefined) return true;
+
+		if (relativeTo === undefined)
+			throw new AstroError(
+				"Cannot perform a relative integration check without a relative reference.",
+				"Pass `relativeTo` on your call to `hasIntegration` or remove the `position` option.",
+			);
+
+		const otherPosition = config.integrations.findIndex(
+			(integration) => integration.name === relativeTo,
 		);
 
-	return position === "before"
-		? integrationPosition < otherPosition
-		: integrationPosition > otherPosition;
-};
+		if (otherPosition === -1)
+			throw new AstroError(
+				"Cannot check relative position against an absent integration.",
+			);
+
+		return position === "before"
+			? integrationPosition < otherPosition
+			: integrationPosition > otherPosition;
+	},
+);

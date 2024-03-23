@@ -1,57 +1,50 @@
-import { type AstroIntegration, type HookParameters } from "astro";
+import { type AstroIntegration } from "astro";
 import { hasIntegration } from "./has-integration.js";
+import { defineUtility } from "../core/define-utility.js";
 
 export type AddIntegrationParams = {
 	integration: AstroIntegration;
-	options?:
-		| {
-				ensureUnique?: boolean;
-		  }
-		| undefined;
-} & Pick<
-	HookParameters<"astro:config:setup">,
-	"updateConfig" | "config" | "logger"
->;
+	ensureUnique?: boolean | undefined;
+};
 
 /**
  * Easily add an integration from within an integration.
  *
- * @param {import("astro").AstroIntegration} integration
- * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
- * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
- * @param {import("astro").HookParameters<"astro:config:setup">["logger"]} params.logger
+ * @param {import("astro").HookParameters<"astro:config:setup">} params
+ * @param {object} options
+ * @param {import("astro").AstroIntegration} options.integration
+ * @param {boolean} options.ensureUnique
  *
  * @example
  * ```ts
  * import Vue from "@astrojs/vue";
  *
- * addIntegration(Vue())
+ * addIntegration(params, {
+ * 	integration: Vue(),
+ * 	ensureUnique: true,
+ * })
  * ```
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-integration/
  */
-export const addIntegration = ({
-	integration,
-	options,
-	updateConfig,
-	config,
-	logger,
-}: AddIntegrationParams) => {
-	if (
-		options?.ensureUnique &&
-		hasIntegration({
-			name: integration.name,
-			config,
-		})
-	) {
-		logger.warn(
-			`Integration "${integration.name}" has already been added by the user or another integration. Skipping.`,
-		);
+export const addIntegration = defineUtility("astro:config:setup")(
+	(params, { integration, ensureUnique }: AddIntegrationParams) => {
+		const { logger, updateConfig } = params;
+		if (
+			ensureUnique &&
+			hasIntegration(params, {
+				name: integration.name,
+			})
+		) {
+			logger.warn(
+				`Integration "${integration.name}" has already been added by the user or another integration. Skipping.`,
+			);
 
-		return;
-	}
+			return;
+		}
 
-	updateConfig({
-		integrations: [integration],
-	});
-};
+		updateConfig({
+			integrations: [integration],
+		});
+	},
+);

@@ -1,8 +1,8 @@
 import { AstroError } from "astro/errors";
 import type { Plugin } from "vite";
-import type { HookParameters } from "../core/types.js";
 import { addVitePlugin } from "./add-vite-plugin.js";
 import { hasVitePlugin } from "./has-vite-plugin.js";
+import { defineUtility } from "../core/define-utility.js";
 
 type VirtualImport = {
 	id: string;
@@ -90,19 +90,14 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 	};
 };
 
-type HookParameterProperties = Pick<
-	HookParameters<"astro:config:setup">,
-	"config" | "updateConfig"
->;
-
 /**
  * Creates a Vite virtual module and updates the Astro config.
  * Virtual imports are useful for passing things like config options, or data computed within the integration.
  *
- * @param {object} params
- * @param {string} params.name
- * @param {Imports} params.imports
- * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
+ * @param {import("astro").HookParameters<"astro:config:setup">} params
+ * @param {object} options
+ * @param {string} options.name
+ * @param {Imports} options.imports
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-virtual-imports/
  *
@@ -111,14 +106,12 @@ type HookParameterProperties = Pick<
  * // my-integration/index.ts
  * import { addVirtualImports } from "astro-integration-kit";
  *
- * addVirtualImports(
+ * addVirtualImports(params, {
  * 		name: 'my-integration',
- * 		config,
- * 		updateConfig,
  * 		imports: {
  * 			'virtual:my-integration/config': `export default ${ JSON.stringify({foo: "bar"}) }`,
- * 		}
- * );
+ * 		},
+ *	});
  * ```
  *
  * This is then readable anywhere else in your integration:
@@ -130,23 +123,25 @@ type HookParameterProperties = Pick<
  * console.log(config.foo) // "bar"
  * ```
  */
-export const addVirtualImports = ({
-	name,
-	imports,
-	config,
-	updateConfig,
-}: HookParameterProperties & {
-	name: string;
-	imports: Imports;
-}) => {
-	let pluginName = `vite-plugin-${name}`;
+export const addVirtualImports = defineUtility("astro:config:setup")(
+	(
+		params,
+		{
+			name,
+			imports,
+		}: {
+			name: string;
+			imports: Imports;
+		},
+	) => {
+		let pluginName = `vite-plugin-${name}`;
 
-	while (hasVitePlugin({ plugin: pluginName, config }))
-		pluginName = incrementPluginName(pluginName);
+		while (hasVitePlugin(params, { plugin: pluginName }))
+			pluginName = incrementPluginName(pluginName);
 
-	addVitePlugin({
-		warnDuplicated: false,
-		plugin: createVirtualModule(pluginName, imports),
-		updateConfig,
-	});
-};
+		addVitePlugin(params, {
+			warnDuplicated: false,
+			plugin: createVirtualModule(pluginName, imports),
+		});
+	},
+);

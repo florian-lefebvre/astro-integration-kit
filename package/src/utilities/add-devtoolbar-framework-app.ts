@@ -1,39 +1,22 @@
 import { readFileSync } from "node:fs";
-import { type HookParameters } from "astro";
 import { createResolver } from "../core/create-resolver.js";
 import { addVirtualImports } from "./add-virtual-imports.js";
-
-type SupportedFrameworks = "react" | "preact" | "vue" | "svelte" | "solid";
-
-export type AddDevToolbarFrameworkAppParams = {
-	id: string;
-	name: string;
-	icon: string;
-	framework: SupportedFrameworks;
-	src: string;
-	style?: string;
-} & Pick<
-	HookParameters<"astro:config:setup">,
-	"config" | "addDevToolbarApp" | "updateConfig" | "injectScript"
->;
+import { defineUtility } from "../core/define-utility.js";
 
 /**
  * Add a Dev Toolbar Plugin that uses a Framework component.
  *
- * @param {object} params
- * @param {string} params.name - The name of the toolbar plugin
- * @param {string} params.icon - This should be an inline SVG
- * @param {string} params.framework - The framework your component is using. Can be either "react", "vue", "svelte", "solid", or "preact"
- * @param {URL} params.src - Path to your component
- * @param {string} params.style - A stylesheet to pass to your plugin
- * @param {import("astro").HookParameters<"astro:config:setup">["config"]} params.config
- * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
- * @param {import("astro").HookParameters<"astro:config:setup">["addDevToolbarApp"]} params.addDevToolbarApp
- * @param {import("astro").HookParameters<"astro:config:setup">["injectScript"]} params.injectScript
+ * @param {import("astro").HookParameters<"astro:config:setup">} params
+ * @param {object} options
+ * @param {string} options.name - The name of the toolbar plugin
+ * @param {string} options.icon - This should be an inline SVG
+ * @param {string} options.framework - The framework your component is using. Can be either "react", "vue", "svelte", "solid", or "preact"
+ * @param {URL} options.src - Path to your component
+ * @param {string} options.style - A stylesheet to pass to your plugin
  *
  * @example
  * ```ts
- * addDevToolbarFrameworkApp({
+ * addDevToolbarFrameworkApp(params, {
  *      framework: "vue",
  *      name: "Test Vue Plugin",
  *      id: "test-vue-plugin",
@@ -44,56 +27,62 @@ export type AddDevToolbarFrameworkAppParams = {
  *              background-color: rebeccapurple;
  *          }
  *      `,
- *      config
  * });
  * ```
  *
  * @see https://astro-integration-kit.netlify.app/utilities/add-devtoolbar-framework-app/
  */
-export const addDevToolbarFrameworkApp = ({
-	id,
-	name,
-	icon,
-	framework,
-	src,
-	style,
-	config,
-	addDevToolbarApp,
-	updateConfig,
-	injectScript,
-}: AddDevToolbarFrameworkAppParams) => {
-	const virtualModuleName = `virtual:astro-devtoolbar-app-${id}`;
+export const addDevToolbarFrameworkApp = defineUtility("astro:config:setup")(
+	(
+		params,
+		{
+			id,
+			framework,
+			icon,
+			name,
+			src,
+			style,
+		}: {
+			id: string;
+			name: string;
+			icon: string;
+			framework: "react" | "preact" | "vue" | "svelte" | "solid";
+			src: string;
+			style?: string;
+		},
+	) => {
+		const { injectScript, addDevToolbarApp } = params;
+		const virtualModuleName = `virtual:astro-devtoolbar-app-${id}`;
 
-	const { resolve } = createResolver(import.meta.url);
+		const { resolve } = createResolver(import.meta.url);
 
-	let content = readFileSync(
-		resolve(`../stubs/add-devtoolbar-framework-app/${framework}.js`),
-		"utf-8",
-	);
+		let content = readFileSync(
+			resolve(`../stubs/add-devtoolbar-framework-app/${framework}.js`),
+			"utf-8",
+		);
 
-	const escapedIcon = icon.replace("`", '${"`"}');
+		const escapedIcon = icon.replace("`", '${"`"}');
 
-	content = content
-		.replace("@@COMPONENT_SRC@@", src)
-		.replace("@@ID@@", id)
-		.replace("@@NAME@@", name)
-		.replace("@@ICON@@", escapedIcon)
-		.replace("@@STYLE@@", style ?? "");
+		content = content
+			.replace("@@COMPONENT_SRC@@", src)
+			.replace("@@ID@@", id)
+			.replace("@@NAME@@", name)
+			.replace("@@ICON@@", escapedIcon)
+			.replace("@@STYLE@@", style ?? "");
 
-	addVirtualImports({
-		name: id,
-		imports: { [virtualModuleName]: content },
-		config,
-		updateConfig,
-	});
-
-	if (framework === "react") {
-		import("@vitejs/plugin-react").then((react) => {
-			const FAST_REFRESH_PREAMBLE = react.default.preambleCode;
-			const preamble = FAST_REFRESH_PREAMBLE.replace("__BASE__", "/");
-			injectScript("page", preamble);
+		addVirtualImports(params, {
+			name: id,
+			imports: { [virtualModuleName]: content },
 		});
-	}
 
-	addDevToolbarApp(virtualModuleName);
-};
+		if (framework === "react") {
+			import("@vitejs/plugin-react").then((react) => {
+				const FAST_REFRESH_PREAMBLE = react.default.preambleCode;
+				const preamble = FAST_REFRESH_PREAMBLE.replace("__BASE__", "/");
+				injectScript("page", preamble);
+			});
+		}
+
+		addDevToolbarApp(virtualModuleName);
+	},
+);
