@@ -10,7 +10,7 @@ import type {
 } from "./types.js";
 
 /**
- * A powerful wrapper around the standard Astro Integrations API. It allows to handle options and global logic easily.
+ * A powerful wrapper around the standard Astro Integrations API. It allows integration authors to handle user options and global logic easily.
  *
  * @param {object} params
  * @param {string} params.name - The name of your integration
