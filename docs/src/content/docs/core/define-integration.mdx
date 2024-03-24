@@ -1,19 +1,18 @@
 ---
 title: defineIntegration
-description: A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality and best-practices when creating Astro Integrations.
+description: A powerful wrapper around the standard Astro Integrations API. It allows to handle options and global logic easily.
 ---
 import Disabled from "~/components/Disabled.astro"
 import { LinkCard } from '@astrojs/starlight/components';
 
-`defineIntegration` is a powerful wrapper around the standard Astro Integrations API. It allows to provide
-extra hooks, functionality and best-practices when creating Astro Integrations.
+`defineIntegration` is a powerful wrapper around the standard Astro Integrations API. It allows to handle options and global logic easily.
 
 ```ts title="my-integration/index.ts" "defineIntegration"
 import {
     createResolver,
     defineIntegration,
+    watchIntegration
 } from "astro-integration-kit";
-import { corePlugins } from "astro-integration-kit/plugins";
 import { z } from "astro/zod";
 
 export default defineIntegration({
@@ -22,13 +21,12 @@ export default defineIntegration({
         /** A comment */
         foo: z.string().optional().default("bar"),
     }),
-    plugins: [...corePlugins],
     setup({ options }) {
         const { resolve } = createResolver(import.meta.url);
 
         return {
-            "astro:config:setup": ({ watchIntegration }) => {
-                watchIntegration(resolve())
+            "astro:config:setup": (params) => {
+                watchIntegration(params, resolve())
             }
         }
     }
@@ -50,16 +48,8 @@ export default defineIntegration({
 
 :::caution
 Never pass generics manually to `defineIntegration` or it will break all the
-TypeScript magic of options and plugins.
+TypeScript magic of options.
 :::
-
-<Disabled>
-    <LinkCard
-    title="Authoring an integration (soon)"
-    description="Learn how to write an integration the right way using Astro Integration Kit."
-    href="#"
-    />
-</Disabled>
 
 It accepts a few arguments, whose usage is explained in the sections below.
 
@@ -89,31 +79,6 @@ This way, you can:
 - Add proper documentation using JSDoc annotations
 - Provide defaults
 - Well, take full advantage of `zod`'s power!
-
-## Using plugins
-
-Plugins allow us (and you!) to make Astro Integration Kit really powerful. It allows to add arguments
-to built-in hooks in a type-safe way. Get started by using our `corePlugins`:
-
-```ts title="my-integration/index.ts" ins={2,6}
-import { defineIntegration } from "astro-integration-kit";
-import { corePlugins } from "astro-integration-kit/plugins";
-
-export default defineIntegration({
-    // ...
-    plugins: [...corePlugins]
-})
-```
-
-Under the hood, those plugins define using `definePlugin` pass "metadata" as types thanks to generics.
-
-<Disabled>
-    <LinkCard
-    title="Authoring a plugin (soon)"
-    description="Learn how to write an Astro Integration Kit plugin the right way."
-    href="#"
-    />
-</Disabled>
 
 ## Adding the logic with `setup`
 

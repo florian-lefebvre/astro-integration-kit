@@ -107,7 +107,7 @@ export default defineConfig({
 							badge: badge("new"),
 						},
 						{
-							label: "definePlugin",
+							label: "definePlugin (advanced)",
 							link: "/core/define-plugin/",
 						},
 					],
@@ -162,21 +162,21 @@ export default defineConfig({
 						},
 					],
 				},
-				{
-					label: "Guides",
-					items: [
-						{
-							label: "Authoring an integration",
-							link: "/guides/authoring-an-integration",
-							badge: badge("soon"),
-						},
-						{
-							label: "Authoring a plugin",
-							link: "/guides/authoring-a-plugin",
-							badge: badge("soon"),
-						},
-					],
-				},
+				// {
+				// 	label: "Guides",
+				// 	items: [
+				// 		{
+				// 			label: "Authoring an integration",
+				// 			link: "/guides/authoring-an-integration",
+				// 			badge: badge("soon"),
+				// 		},
+				// 		{
+				// 			label: "Authoring a plugin",
+				// 			link: "/guides/authoring-a-plugin",
+				// 			badge: badge("soon"),
+				// 		},
+				// 	],
+				// },
 				{
 					label: `v${version} changelog ↗`,
 					link: `https://github.com/florian-lefebvre/astro-integration-kit/blob/main/package/CHANGELOG.md#${version.replaceAll(
