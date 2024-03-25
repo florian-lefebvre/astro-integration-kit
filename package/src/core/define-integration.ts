@@ -93,13 +93,13 @@ export const defineIntegration = <
 					const plugins = resolvedPlugins.filter((p) => p.hook === hookName);
 
 					return providedHooks[hookName]?.({
-						...params,
 						...Object.fromEntries(
 							plugins.map((plugin) => [
 								plugin.name,
 								plugin.implementation(params, { name }),
 							]),
 						),
+						...params,
 					} as any);
 				},
 			]),
