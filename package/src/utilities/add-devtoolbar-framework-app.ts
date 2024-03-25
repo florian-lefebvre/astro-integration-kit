@@ -61,7 +61,9 @@ export const addDevToolbarFrameworkApp = defineUtility("astro:config:setup")(
 			"utf-8",
 		);
 
-		const escapedIcon = icon.replace("`", '${"`"}');
+		const escapedIcon = icon
+			.replace('"', '\"')
+			.replace("`", '${"`"}');
 
 		content = content
 			.replace("@@COMPONENT_SRC@@", src)
