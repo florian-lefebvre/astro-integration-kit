@@ -1,5 +1,16 @@
 # astro-integration-kit
 
+## 0.8.0
+
+### Minor Changes
+
+- 4faa81b: Adds a new `defineUtility` utility, [see docs](https://astro-integration-kit.netlify.app/core/define-utility/)
+- 4faa81b: Reworks all utilities to use the new `defineUtility`. Most core plugins are removed. **This is a breaking change**, check out the [migration guide](https://astro-integration-kit.netlify.app/getting-started/breaking-changes/#080)
+
+### Patch Changes
+
+- 4faa81b: Improves documentation
+
 ## 0.7.1
 
 ### Patch Changes
