@@ -116,7 +116,7 @@ type AddParam<Func, Param = never> = [Param] extends [never]
 	  : never;
 
 export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
-	[Hook in keyof Hooks]?: Hooks[Hook] extends Function
+	[Hook in keyof Hooks]?: Hooks[Hook] extends (...args: Array<any>) => any
 		? AddParam<Hooks[Hook], AddedParam<TPlugins, Hook>>
 		: never;
 };

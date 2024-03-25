@@ -1,26 +1,21 @@
 import Vue from "@astrojs/vue";
-import { createResolver, defineIntegration } from "astro-integration-kit";
 import {
-	addDevToolbarFrameworkAppPlugin,
-	addIntegrationPlugin,
-	corePlugins,
-} from "astro-integration-kit/plugins";
+	addDevToolbarFrameworkApp,
+	addIntegration,
+	createResolver,
+	defineIntegration,
+} from "astro-integration-kit";
 
 export default defineIntegration({
 	name: "test-vue-app",
-	plugins: [
-		...corePlugins,
-		addDevToolbarFrameworkAppPlugin,
-		addIntegrationPlugin,
-	],
 	setup: () => {
+		const { resolve } = createResolver(import.meta.url);
+
 		return {
-			"astro:config:setup": ({ addDevToolbarFrameworkApp, addIntegration }) => {
-				const { resolve } = createResolver(import.meta.url);
+			"astro:config:setup": (params) => {
+				addIntegration(params, { integration: Vue() });
 
-				addIntegration(Vue());
-
-				addDevToolbarFrameworkApp({
+				addDevToolbarFrameworkApp(params, {
 					framework: "vue",
 					name: "Test Vue Plugin",
 					id: "test-vue-plugin",

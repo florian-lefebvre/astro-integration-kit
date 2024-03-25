@@ -42,9 +42,8 @@ export const hasVitePluginPlugin = definePlugin({
 		};
 
 		return (plugin: string | PluginOption) =>
-			hasVitePlugin({
+			hasVitePlugin(params, {
 				plugin,
-				config,
 			});
 	},
 });

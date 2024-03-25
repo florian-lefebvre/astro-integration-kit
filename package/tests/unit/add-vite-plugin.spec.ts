@@ -7,29 +7,32 @@ import type { Plugin } from "vite";
 import { describe, expect, test, vi } from "vitest";
 import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 
+const getParams = () =>
+	({
+		updateConfig: vi.fn(),
+	}) as unknown as HookParameters<"astro:config:setup">;
+
 describe("addVitePlugin", () => {
 	test("Should run", () => {
-		const updateConfig = vi.fn();
+		const params = getParams();
 
 		expect(() =>
-			addVitePlugin({
+			addVitePlugin(params, {
 				warnDuplicated: false,
 				plugin: null,
-				updateConfig,
 			}),
 		).not.toThrow();
 	});
 
 	test("Should call updateConfig", () => {
-		const updateConfig = vi.fn();
+		const params = getParams();
 
-		addVitePlugin({
+		addVitePlugin(params, {
 			warnDuplicated: false,
 			plugin: null,
-			updateConfig,
 		});
 
-		expect(updateConfig).toHaveBeenCalled();
+		expect(params.updateConfig).toHaveBeenCalled();
 	});
 
 	test("Should add vite plugin", () => {
@@ -44,10 +47,9 @@ describe("addVitePlugin", () => {
 			name: pluginName,
 		};
 
-		addVitePlugin({
+		addVitePlugin({ updateConfig } as any, {
 			warnDuplicated: false,
 			plugin: expectedPlugin,
-			updateConfig,
 		});
 
 		// @ts-ignore
@@ -66,10 +68,9 @@ describe("addVitePlugin", () => {
 			name: pluginName,
 		};
 
-		addVitePlugin({
+		addVitePlugin({ updateConfig } as any, {
 			warnDuplicated: false,
 			plugin: expectedPlugin,
-			updateConfig,
 		});
 
 		// @ts-ignore
@@ -90,13 +91,8 @@ describe("addVitePlugin", () => {
 			warn: vi.fn(),
 		} as unknown as AstroIntegrationLogger;
 
-		const updateConfig = vi.fn();
-
-		addVitePlugin({
+		addVitePlugin({ ...getParams(), config, logger } as any, {
 			plugin,
-			config,
-			logger,
-			updateConfig,
 		});
 
 		// @ts-ignore

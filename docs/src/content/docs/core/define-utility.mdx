@@ -1,0 +1,96 @@
+---
+title: defineUtility
+description: Allows defining a type-safe function requiring all the params of a given hook.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Allows defining a type-safe function requiring all the params of a given hook.
+
+```ts title="package/src/utilities/inject-dev-route.ts"
+import type { InjectedRoute } from "astro";
+import { defineUtility } from "astro-integration-kit";
+
+export const injectDevRoute = defineUtility("astro:config:setup")(
+	({ command, injectRoute }, injectedRoute: InjectedRoute) => {
+		if (command === "dev") {
+			injectRoute(injectedRoute);
+		}
+	},
+);
+```
+
+## Usage
+
+Even though the syntax looks a bit scary, it's actually very simple!
+
+<Steps>
+
+1. Call `defineUtility` with a hook name. That will be used to type the next steps:
+
+    ```ts
+    import { defineUtility } from "astro-integration-kit";
+
+    export const injectDevRoute = defineUtility("astro:config:setup")
+    ```
+
+2. Using [currying](https://javascript.info/currying-partials), call the returned function with the typed params:
+
+    ```ts {4-5}
+    import { defineUtility } from "astro-integration-kit";
+
+    export const injectDevRoute = defineUtility("astro:config:setup")(
+        // Typed as HookParameters<"astro:config:setup">
+        (params) => {}
+    )
+    ```
+
+3. (Optional) Add your own parameters:
+
+    ```ts "injectedRoute: InjectedRoute"
+    import type { InjectedRoute } from "astro";
+    import { defineUtility } from "astro-integration-kit";
+
+    export const injectDevRoute = defineUtility("astro:config:setup")(
+        (params, injectedRoute: InjectedRoute) => {}
+    )
+    ```
+
+4. Implement the actual logic:
+
+    ```ts {6-8}
+    import type { InjectedRoute } from "astro";
+    import { defineUtility } from "astro-integration-kit";
+
+    export const injectDevRoute = defineUtility("astro:config:setup")(
+        ({ command, injectRoute }, injectedRoute: InjectedRoute) => {
+            if (command === "dev") {
+                injectRoute(injectedRoute);
+            }
+        },
+    );
+    ```
+
+5. Use the utility in your integration:
+
+    ```ts "params" {10-13}
+    import { defineIntegration, createResolver, injectDevRoute } from "astro-integration-kit"
+
+    export const integration = defineIntegration({
+        name: "my-integration",
+        setup() {
+            const { resolve } = createResolver(import.meta.url)
+
+            return {
+                "astro:config:setup": (params) => {
+                    injectDevRoute(params, {
+                        pattern: "/",
+                        entrypoint: resolve("./pages/index.astro")
+                    })
+                }
+            }
+        }
+    })
+    ```
+
+</Steps>

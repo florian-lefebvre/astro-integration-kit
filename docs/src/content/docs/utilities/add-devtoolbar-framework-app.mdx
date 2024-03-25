@@ -7,121 +7,56 @@ import { Tabs, TabItem, LinkCard, Aside } from '@astrojs/starlight/components';
 `addDevToolbarFrameworkApp` allows you to register a framework component as a Dev Toolbar App!
 You can now use a React, Preact, Solid, Vue or Svelte component instead of manipulating the DOM imperatively!
 
-<Tabs>
-    <TabItem label="Extended hooks">
-    ```ts title="my-integration/index.ts" /addDevToolbarFrameworkApp\\b/ /addDevToolbarFrameworkAppPlugin\\b/ {3,11}
-    import { defineIntegration, createResolver } from "astro-integration-kit";
-    import { addDevToolbarFrameworkAppPlugin, addIntegrationPlugin } from "astro-integration-kit/plugins";
-    import Vue from "@astrojs/vue";
+```ts title="integration/index.ts" {5,20-31}
+import {
+    defineIntegration,
+    createResolver,
+    addIntegration,
+    addDevToolbarFrameworkApp,
+} from "astro-integration-kit";
+import Vue from "@astrojs/vue";
 
-    export default defineIntegration({
-        name: "my-integration",
-        plugins: [addDevToolbarFrameworkAppPlugin, addIntegrationPlugin],
-        setup(options) {
-            return {
-                "astro:config:setup": ({
-                    addDevToolbarFrameworkApp,
-                    addIntegration,
-                }) => {
-                    const { resolve } = createResolver(import.meta.url);
+export default defineIntegration({
+    // ...
+    setup() {
+        const { resolve } = createResolver(import.meta.url);
 
-                    addIntegration(Vue())
-
-                    addDevToolbarFrameworkApp({
-                        framework: "vue",
-                        name: "Test Vue Plugin",
-                        id: "my-vue-plugin",
-                        icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
-                        src: resolve("./my-plugin.vue"),
-                        style: `
-                            h1 {
-                                font-family: Inter;
-                            }
-                        `,
-                    });
-                }
-            }
-        }
-    })
-    ```
-    ```vue title="my-integration/my-app.vue"
-    <script setup lang="ts">
-        import { ref } from 'vue'
-
-        const count = ref(0)
-    </script>
-
-    <template>
-        <h1>Count is: {{ count }}</h1>
-        <button type="button" @click="count++">Increment</button>
-    </template>
-    ```
-    </TabItem>
-    <TabItem label="Standalone utilities">
-    ```ts title="integration/index.ts" "addDevToolbarFrameworkApp" {7, 24}
-    import type { AstroIntegration } from "astro";
-    import {
-        addDevToolbarFrameworkApp,
-        addIntegration,
-        createResolver,
-    } from "astro-integration-kit";
-    import Vue from "@astrojs/vue";
-
-    export default function myIntegration(): AstroIntegration {
         return {
-            name: "my-integration",
-            hooks: {
-                "astro:config:setup": ({
-                    addDevToolbarApp,
-                    config,
-                    injectScript,
-                    logger,
-                    updateConfig,
-                }) => {
-                    const { resolve } = createResolver(import.meta.url);
+            "astro:config:setup": (params) => {
+                addIntegration(params, {
+                    integration: Vue(),
+                })
 
-                    addIntegration({
-                        integration: Vue(),
-                        updateConfig,
-                        config,
-                        logger,
-                    })
-
-                    addDevToolbarFrameworkApp({
-                        framework: "vue",
-                        name: "Test Vue Plugin",
-                        id: "my-vue-plugin",
-                        icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
-                        src: resolve("./my-plugin.vue"),
-                        style: `
-                            h1 {
-                                font-family: Inter;
-                            }
-                        `,
-                        config,
-                        updateConfig,
-                        addDevToolbarApp,
-                        injectScript,
-                    })
-                }
+                addDevToolbarFrameworkApp(params, {
+                    framework: "vue",
+                    name: "Test Vue Plugin",
+                    id: "my-vue-plugin",
+                    icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+                    src: resolve("./my-plugin.vue"),
+                    style: `
+                        h1 {
+                            font-family: Inter;
+                        }
+                    `,
+                })
             }
         }
     }
-    ```
-    ```vue title="integration/my-app.vue"
-    <script setup lang="ts">
-        import { ref } from 'vue'
+})
+```
 
-        const count = ref(0)
-    </script>
+```vue title="integration/my-app.vue"
+<script setup lang="ts">
+    import { ref } from 'vue'
 
-    <template>
-        <h1>Count is: {{ count }}</h1>
-        <button type="button" @click="count++">Increment</button>
-    </template>
-    ```
-    </TabItem>
-</Tabs>
+    const count = ref(0)
+</script>
+
+<template>
+    <h1>Count is: {{ count }}</h1>
+    <button type="button" @click="count++">Increment</button>
+</template>
+```
 
 ## Component Props
 
@@ -199,25 +134,27 @@ The dependencies required your users need are:
 - Solid: `@astrojs/solid-js`, `solid-js`
 </Aside>
 
-```ts title="my-integration/index.ts" /addIntegration\\b/ {3,16}
-import { defineIntegration, createResolver } from "astro-integration-kit";
-import { addDevToolbarFrameworkAppPlugin, addIntegrationPlugin } from "astro-integration-kit/plugins";
+```ts title="integration/index.ts" {4,7,16-18}
+import {
+    defineIntegration,
+    createResolver,
+    addIntegration,
+    addDevToolbarFrameworkApp,
+} from "astro-integration-kit";
 import Vue from "@astrojs/vue";
 
 export default defineIntegration({
-    name: "my-integration",
-    plugins: [addDevToolbarFrameworkAppPlugin, addIntegrationPlugin],
-    setup(options) {
+    // ...
+    setup() {
+        const { resolve } = createResolver(import.meta.url);
+
         return {
-            "astro:config:setup": ({
-                addDevToolbarFrameworkApp,
-                addIntegration,
-            }) => {
-                const { resolve } = createResolver(import.meta.url);
+            "astro:config:setup": (params) => {
+                addIntegration(params, {
+                    integration: Vue(),
+                })
 
-                addIntegration(Vue())
-
-                addDevToolbarFrameworkApp({
+                addDevToolbarFrameworkApp(params, {
                     framework: "vue",
                     name: "Test Vue Plugin",
                     id: "my-vue-plugin",
@@ -228,7 +165,7 @@ export default defineIntegration({
                             font-family: Inter;
                         }
                     `,
-                });
+                })
             }
         }
     }
@@ -281,72 +218,28 @@ pnpm exec tailwindcss -o ./src/styles.css
 
 Then you can read that file in your integration.
 
-```ts title="my-integration/src/index.ts" /readFileSync\\b/ {23}
-import { defineIntegration, createResolver } from "astro-integration-kit"
+```ts title="integration/index.ts" {7,22}
 import {
-    addDevToolbarFrameworkAppPlugin,
-} from "astro-integration-kit/plugins";
+    defineIntegration,
+    createResolver,
+    addDevToolbarFrameworkApp,
+} from "astro-integration-kit";
+import Vue from "@astrojs/vue";
 import { readFileSync } from "node:fs";
 
 export default defineIntegration({
-    name: "my-integration",
-    plugins: [addDevToolbarFrameworkAppPlugin],
+    // ...
     setup() {
         const { resolve } = createResolver(import.meta.url);
 
         return {
-            "astro:config:setup": ({
-                addDevToolbarFrameworkApp,
-            }) => {
-                addDevToolbarFrameworkApp({
-                    framework: "svelte",
-                    name: "Test Svelte Plugin",
-                    id: "my-svelte-plugin",
+            "astro:config:setup": (params) => {
+                addDevToolbarFrameworkApp(params, {
+                    framework: "vue",
+                    name: "Test Vue Plugin",
+                    id: "my-vue-plugin",
                     icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
-                    src: resolve("./my-plugin.svelte"),
-                    style: readFileSync(resolve('./styles.css'), 'utf-8'),
-                })
-            }
-        }
-    }
-})
-```
-
-#### Bonus 🎉
-
-If you use the `watch` flag on the Tailwind CLI and use the [watchIntegration](/utilities/watch-integration)
-plugin, you can then get automatic reloading of your plugin. Not HMR yet though!
-
-```bash
-pnpm exec tailwindcss -o ./src/styles.css --watch
-```
-
-```ts title="my-integration/src/index.ts" /watchIntegration\\b/ {16,18}
-import { defineIntegration, createResolver } from "astro-integration-kit"
-import {
-    addDevToolbarFrameworkAppPlugin,
-    watchIntegrationPlugin,
-} from "astro-integration-kit/plugins";
-
-export default defineIntegration({
-    name: "my-integration",
-    plugins: [addDevToolbarFrameworkAppPlugin, watchIntegrationPlugin],
-    setup() {
-        const { resolve } = createResolver(import.meta.url);
-
-        return {
-            "astro:config:setup": ({
-                addDevToolbarFrameworkApp,
-                watchIntegration
-            }) => {
-                watchIntegration(resolve());
-            
-                addDevToolbarFrameworkApp({
-                    framework: "svelte",
-                    name: "Test Svelte Plugin",
-                    id: "my-svelte-plugin",
-                    icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
-                    src: resolve("./my-plugin.svelte"),
+                    src: resolve("./my-plugin.vue"),
                     style: readFileSync(resolve('./styles.css'), 'utf-8'),
                 })
             }

@@ -1,13 +1,22 @@
 import { readFileSync } from "node:fs";
-import { createResolver, defineIntegration } from "astro-integration-kit";
-import { corePlugins } from "astro-integration-kit/plugins";
+import {
+	addDevToolbarFrameworkApp,
+	addDts,
+	addIntegration,
+	addVirtualImports,
+	addVitePlugin,
+	createResolver,
+	defineIntegration,
+	hasIntegration,
+	watchIntegration,
+} from "astro-integration-kit";
+import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
 import { z } from "astro/zod";
 
 import Preact from "@astrojs/preact";
 import React from "@astrojs/react";
 import Solid from "@astrojs/solid-js";
 import Svelte from "@astrojs/svelte";
-import Vue from "@astrojs/vue";
 import { VitePWA } from "vite-plugin-pwa";
 
 const optionsSchema = z
@@ -30,8 +39,8 @@ const optionsSchema = z
 const testIntegration = defineIntegration({
 	name: "test-integration",
 	optionsSchema,
-	plugins: [...corePlugins],
-	setup: ({ options }) => {
+	plugins: [hasVitePluginPlugin],
+	setup: ({ name, options }) => {
 		const { resolve } = createResolver(import.meta.url);
 		options.resource;
 
@@ -39,26 +48,16 @@ const testIntegration = defineIntegration({
 		console.log({ options, pluginPath });
 
 		return {
-			"astro:config:setup": ({
-				config,
-				updateConfig,
-				watchIntegration,
-				hasVitePlugin,
-				hasIntegration,
-				addDts,
-				addDevToolbarFrameworkApp,
-				addIntegration,
-				addVirtualImports,
-				addVitePlugin,
-			}) => {
-				watchIntegration(resolve());
+			"astro:config:setup": (params) => {
+				const { config, updateConfig, hasVitePlugin } = params;
+				watchIntegration(params, resolve());
 
-				addDts({
+				addDts(params, {
 					name: "test-integration",
 					content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
 				});
 
-				addDts({
+				addDts(params, {
 					name: "test-format",
 					content: `declare module "test:whatever" {
 						interface A {
@@ -73,10 +72,13 @@ const testIntegration = defineIntegration({
 					hasVitePlugin("vite-plugin-test-integration"),
 				);
 
-				addVirtualImports({
-					"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
-						{ foo: "bar" },
-					)}`,
+				addVirtualImports(params, {
+					name,
+					imports: {
+						"virtual:astro-integration-kit-playground/config": `export default ${JSON.stringify(
+							{ foo: "bar" },
+						)}`,
+					},
 				});
 
 				console.log(
@@ -88,43 +90,56 @@ const testIntegration = defineIntegration({
 				);
 
 				// Should log warning about duplicate plugin
-				addVitePlugin({ name: "vite-plugin-test-integration" });
-
-				addVitePlugin(VitePWA({ registerType: "autoUpdate" }));
-
-				addVirtualImports({
-					"virtual:playground/simple": `const x = "simple"; export default x;`,
+				addVitePlugin(params, {
+					plugin: { name: "vite-plugin-test-integration" },
 				});
-				addVirtualImports([
-					{
-						id: "virtual:playground/array-simple",
-						content: `const x = "array-simple"; export default x;`,
+
+				addVitePlugin(params, {
+					plugin: VitePWA({ registerType: "autoUpdate" }),
+				});
+
+				addVirtualImports(params, {
+					name,
+					imports: {
+						"virtual:playground/simple": `const x = "simple"; export default x;`,
 					},
-					{
-						id: "virtual:playground/array-complex",
-						content: `const x = "array-server"; export default x;`,
-						context: "server",
-					},
-					{
-						id: "virtual:playground/array-complex",
-						content: `const x = "array-client"; export default x;`,
-						context: "client",
-					},
-				]);
+				});
+				addVirtualImports(params, {
+					name,
+					imports: [
+						{
+							id: "virtual:playground/array-simple",
+							content: `const x = "array-simple"; export default x;`,
+						},
+						{
+							id: "virtual:playground/array-complex",
+							content: `const x = "array-server"; export default x;`,
+							context: "server",
+						},
+						{
+							id: "virtual:playground/array-complex",
+							content: `const x = "array-client"; export default x;`,
+							context: "client",
+						},
+					],
+				});
 				{
 					let error = false;
 					try {
-						addVirtualImports([
-							{
-								id: "a",
-								content: "",
-							},
-							{
-								id: "a",
-								content: "",
-								context: "server",
-							},
-						]);
+						addVirtualImports(params, {
+							name,
+							imports: [
+								{
+									id: "a",
+									content: "",
+								},
+								{
+									id: "a",
+									content: "",
+									context: "server",
+								},
+							],
+						});
 					} catch (err) {
 						console.log((err as Error).message);
 						error = true;
@@ -134,23 +149,47 @@ const testIntegration = defineIntegration({
 					}
 				}
 
-				if (hasIntegration("@astrojs/tailwind")) {
+				if (hasIntegration(params, { name: "@astrojs/tailwind" })) {
 					console.log("Tailwind is installed");
 				}
 
-				if (hasIntegration("@astrojs/tailwind", "before")) {
+				if (
+					hasIntegration(params, {
+						name: "@astrojs/tailwind",
+						position: "before",
+						relativeTo: name,
+					})
+				) {
 					console.log("Tailwind is installed before this");
 				}
 
-				if (hasIntegration("integration-a", "after")) {
+				if (
+					hasIntegration(params, {
+						name: "integration-a",
+						position: "after",
+						relativeTo: name,
+					})
+				) {
 					console.log("Integration A is installed after this");
 				}
 
-				if (hasIntegration("integration-a", "before", "integration-b")) {
+				if (
+					hasIntegration(params, {
+						name: "integration-a",
+						position: "before",
+						relativeTo: "integration-b",
+					})
+				) {
 					console.log("Integration A is installed before Integration B");
 				}
 
-				if (hasIntegration("integration-b", "after", "integration-a")) {
+				if (
+					hasIntegration(params, {
+						name: "integration-b",
+						position: "after",
+						relativeTo: "integration-a",
+					})
+				) {
 					console.log("Integration B is installed after Integration A");
 				}
 
@@ -162,41 +201,41 @@ const testIntegration = defineIntegration({
 					},
 				});
 
-				addIntegration(
-					React({
+				addIntegration(params, {
+					integration: React({
 						include: ["**/*.react.jsx"],
 					}),
-				);
-				addIntegration(
-					Preact({
+				});
+				addIntegration(params, {
+					integration: Preact({
 						include: ["**/*.preact.jsx"],
 					}),
-				);
-				addIntegration(Svelte());
+				});
+				addIntegration(params, { integration: Svelte() });
 
-				addIntegration(
-					Solid({
+				addIntegration(params, {
+					integration: Solid({
 						include: ["**/*.solid.jsx"],
 					}),
-				);
+				});
 
-				addDevToolbarFrameworkApp({
+				addDevToolbarFrameworkApp(params, {
 					framework: "react",
-					name: "Test React Plugin",
-					id: "test-react-plugin",
+					name: "Test React Plugin 1 ",
+					id: "test-react-plugin-1",
 					icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><title>React Logo</title><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`,
 					src: resolve("./devToolbarApps/Test.react.jsx"),
 				});
 
-				addDevToolbarFrameworkApp({
+				addDevToolbarFrameworkApp(params, {
 					framework: "react",
-					name: "Test React Plugin",
-					id: "test-react-plugin",
+					name: "Test React Plugin 2",
+					id: "test-react-plugin-2",
 					icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><title>React Logo</title><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`,
 					src: resolve("./devToolbarApps/Test.react.jsx"),
 				});
 
-				addDevToolbarFrameworkApp({
+				addDevToolbarFrameworkApp(params, {
 					framework: "preact",
 					name: "Test Preact Plugin",
 					id: "test-preact-plugin",
@@ -204,7 +243,7 @@ const testIntegration = defineIntegration({
 					src: resolve("./devToolbarApps/Test.preact.jsx"),
 				});
 
-				addDevToolbarFrameworkApp({
+				addDevToolbarFrameworkApp(params, {
 					framework: "svelte",
 					name: "Test Svelte Plugin",
 					id: "test-svelte-plugin",
@@ -226,7 +265,7 @@ const testIntegration = defineIntegration({
 					src: resolve("./devToolbarApps/Test.svelte"),
 				});
 
-				addDevToolbarFrameworkApp({
+				addDevToolbarFrameworkApp(params, {
 					framework: "solid",
 					name: "Test Solid Plugin",
 					id: "test-solid-plugin",
@@ -303,7 +342,7 @@ const testIntegration = defineIntegration({
 
 				console.log(
 					"VITE PLUGINS",
-					config.vite.plugins?.map((p) => p.name),
+					config.vite.plugins?.map((p) => p && "name" in p && p.name),
 				);
 
 				// Test addVirtualImports disallowed list

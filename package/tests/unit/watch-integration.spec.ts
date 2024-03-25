@@ -40,9 +40,14 @@ const deleteTempFiles = () => {
 	});
 };
 
-describe("watchIntegration", () => {
-	const command = "dev";
+const getParams = () =>
+	({
+		command: "dev",
+		addWatchFile: vi.fn(),
+		updateConfig: vi.fn(),
+	}) as any;
 
+describe("watchIntegration", () => {
 	beforeAll(() => {
 		createTempFiles(tempPaths);
 	});
@@ -52,89 +57,53 @@ describe("watchIntegration", () => {
 	});
 
 	test("Should run", () => {
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn();
+		const params = getParams();
 
 		expect(() =>
-			watchIntegration({
-				dir: resolve(tempFolderName),
-				addWatchFile,
-				updateConfig,
-				command,
-			}),
+			watchIntegration(params, resolve(tempFolderName)),
 		).not.toThrow();
 	});
 
 	test("Should call updateConfig", () => {
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn();
+		const params = getParams();
 
-		watchIntegration({
-			dir: resolve(tempFolderName),
-			addWatchFile,
-			updateConfig,
-			command,
-		});
+		watchIntegration(params, resolve(tempFolderName));
 
-		expect(updateConfig).toBeCalled();
+		expect(params.updateConfig).toBeCalled();
 	});
 
 	test("Should call updateConfig once", () => {
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn();
+		const params = getParams();
 
-		watchIntegration({
-			dir: resolve(tempFolderName),
-			addWatchFile,
-			updateConfig,
-			command,
-		});
+		watchIntegration(params, resolve(tempFolderName));
 
-		expect(updateConfig).toBeCalledTimes(1);
+		expect(params.updateConfig).toBeCalledTimes(1);
 	});
 
 	test("Should call addWatchFile", () => {
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn();
+		const params = getParams();
 
-		watchIntegration({
-			dir: resolve(tempFolderName),
-			addWatchFile,
-			updateConfig,
-			command,
-		});
+		watchIntegration(params, resolve(tempFolderName));
 
-		expect(addWatchFile).toBeCalled();
+		expect(params.addWatchFile).toBeCalled();
 	});
 
 	test("Should call addWatchFile for each path (count)", () => {
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn();
+		const params = getParams();
 
-		watchIntegration({
-			dir: resolve(tempFolderName),
-			addWatchFile,
-			updateConfig,
-			command,
-		});
+		watchIntegration(params, resolve(tempFolderName));
 
-		const calls = addWatchFile.mock.calls.flatMap((entry) => entry[0]);
+		const calls = params.addWatchFile.mock.calls.flatMap((entry) => entry[0]);
 
 		expect(calls.length).toEqual(tempPaths.length);
 	});
 
 	test("Should call addWatchFile for each path (path check)", () => {
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn();
+		const params = getParams();
 
-		watchIntegration({
-			dir: resolve(tempFolderName),
-			addWatchFile,
-			updateConfig,
-			command,
-		});
+		watchIntegration(params, resolve(tempFolderName));
 
-		const calls = addWatchFile.mock.calls.flatMap((entry) =>
+		const calls = params.addWatchFile.mock.calls.flatMap((entry) =>
 			normalize(entry[0]),
 		);
 
@@ -149,17 +118,14 @@ describe("watchIntegration", () => {
 
 	test("Should create a vite plugin", () => {
 		let plugin: Plugin;
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn((config) => {
-			plugin = config.vite.plugins[0];
-		});
+		const params = {
+			...getParams(),
+			updateConfig: vi.fn((config) => {
+				plugin = config.vite.plugins[0];
+			}),
+		};
 
-		watchIntegration({
-			dir: resolve(tempFolderName),
-			addWatchFile,
-			updateConfig,
-			command,
-		});
+		watchIntegration(params, resolve(tempFolderName));
 
 		// @ts-ignore - TS can't figure out that plugin _will_ actually be defined here
 		expect(plugin).toBeDefined();
@@ -167,17 +133,14 @@ describe("watchIntegration", () => {
 
 	test("Should create a vite plugin (check name)", () => {
 		let plugin: Plugin;
-		const addWatchFile = vi.fn();
-		const updateConfig = vi.fn((config) => {
-			plugin = config.vite.plugins[0];
-		});
+		const params = {
+			...getParams(),
+			updateConfig: vi.fn((config) => {
+				plugin = config.vite.plugins[0];
+			}),
+		};
 
-		watchIntegration({
-			dir: resolve(tempFolderName),
-			addWatchFile,
-			updateConfig,
-			command,
-		});
+		watchIntegration(params, resolve(tempFolderName));
 
 		// @ts-ignore - TS can't figure out that plugin _will_ actually be defined here
 		expect(plugin.name).toBeDefined();

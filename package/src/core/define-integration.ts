@@ -10,8 +10,7 @@ import type {
 } from "./types.js";
 
 /**
- * A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality
- * and best-practices when creating Astro Integrations.
+ * A powerful wrapper around the standard Astro Integrations API. It allows integration authors to handle user options and global logic easily.
  *
  * @param {object} params
  * @param {string} params.name - The name of your integration
@@ -94,13 +93,13 @@ export const defineIntegration = <
 					const plugins = resolvedPlugins.filter((p) => p.hook === hookName);
 
 					return providedHooks[hookName]?.({
-						...params,
 						...Object.fromEntries(
 							plugins.map((plugin) => [
 								plugin.name,
 								plugin.implementation(params, { name }),
 							]),
 						),
+						...params,
 					} as any);
 				},
 			]),

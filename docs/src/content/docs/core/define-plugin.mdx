@@ -13,6 +13,10 @@ This utility is for advanced use-cases. It's useful for developers that want to 
 about the internals.
 :::
 
+:::caution
+This API will radically change in `0.9.x`.
+:::
+
 ```ts title="package/plugins/add-vite-plugin.ts"
 import { definePlugin } from "../core/define-plugin.js";
 import { addVitePlugin } from "../utilities/add-vite-plugin.js";
@@ -58,11 +62,3 @@ export default defineIntegration({
 
 Astro Integration Kit uses `definePlugin` for its core plugins under the hood,
 have a look at our source for practical examples!
-
-<Disabled>
-    <LinkCard
-    title="Authoring a plugin (soon)"
-    description="Learn how to write an Astro Integration Kit plugin the right way."
-    href="#"
-    />
-</Disabled>

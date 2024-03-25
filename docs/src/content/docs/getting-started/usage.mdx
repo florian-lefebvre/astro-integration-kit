@@ -5,131 +5,35 @@ description: Learn how to use astro-integration-kit in your project.
 import Disabled from "~/components/Disabled.astro"
 import { LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 
-Astro Integration Kit can be used in 2 ways: as **extended hooks** or as **standalone utilities**.
+Astro Integration Kit provides a suite of useful utilities to help you build your integrations. Some of them
+are "global" (eg. `defineIntegration`), others are meant to be used in hooks (eg. `addDts`) and
+plugins are available for more advanced usecases (eg. `hasVitePluginPlugin`).
+Each utility is fully documented with examples and options!
 
-## Which flavor should you use?
+Here we are using the [addDts](/utilities/add-dts/) utility to add a TypeScript declaration file to the user's project! This is useful for typing things like Virtual Modules!
 
-**Extended hooks** provide a way better DX and we recommend picking this one by default. However, if you have
-an existing integration that you want to migrate to `astro-integration-kit`, using **standalone utilities**
-will allow you to migrate progressively. Any **standalone utility** is also available as an **extended hook**
-argument.
-
-## Extended hooks
-
-:::note
-Extended hooks provide great DX. Using this flavor allows you to take fully advantage of Astro Integration Kit's
-power. **We recommend picking this one by default.**
-:::
-
-### Plugins
-
-Astro Integration Kit is built in a modular way. By default, it brings a solid foundation
-that makes it easily extendable by plugins. By default, no plugin is enabled but the package ships
-with some `corePlugins` (documented on this website), that you can easily enable, either all at once
-or one by one as needed.
-
-<Tabs>
-    <TabItem label="All plugins">
-    ```ts title="my-integration/index.ts" "corePlugins" "...corePlugins" "astro-integration-kit/plugins"
-    import { defineIntegration } from "astro-integration-kit";
-    import { corePlugins } from "astro-integration-kit/plugins";
-
-    export default defineIntegration({
-        name: "my-integration",
-        plugins: [...corePlugins],
-        setup() {
-            return {
-                "astro:config:setup": ({ addDts }) => {}
-            }
-        }
-    })
-    ```
-    </TabItem>
-    <TabItem label="One by one">
-    ```ts title="my-integration/index.ts" "addDtsPlugin" "astro-integration-kit/plugins"
-    import { defineIntegration } from "astro-integration-kit";
-    import { addDtsPlugin } from "astro-integration-kit/plugins";
-
-    export default defineIntegration({
-        name: "my-integration",
-        plugins: [addDtsPlugin],
-        setup() {
-            return {
-                "astro:config:setup": ({ addDts }) => {}
-            }
-        }
-    })
-    ```
-    </TabItem>
-</Tabs>
-
-This allows other developers to easily add their own plugins.
-
-<Disabled>
-    <LinkCard
-    title="Using plugins (soon)"
-    description="Learn how to use plugins to fully take advantage of Astro Integration Kit."
-    href="#"
-    />
-</Disabled>
-
-### Defining an integration
-
-To define your integration, use the `defineIntegration` utility:
-
-```ts title="my-integration/index.ts" "defineIntegration"
-import { createResolver, defineIntegration } from "astro-integration-kit";
-import { corePlugins } from "astro-integration-kit/plugins"
+```ts title="my-integration/index.ts"
+import { defineIntegration, addDts } from "astro-integration-kit"
+import { z } from "astro/zod"
 
 export default defineIntegration({
     name: "my-integration",
-    plugins: [...corePlugins],
-    setup() {
-        const { resolve } = createResolver(import.meta.url);
+    optionsSchema: z.object({
+        virtualModuleId: z.string()
+    }),
+    setup({ options, name }) {
         return {
-            "astro:config:setup": ({ watchIntegration }) => {
-                watchIntegration(resolve())
+            "astro:config:setup": (params) => {
+                addDts(params, {
+                    name,
+                    content: `declare module ${JSON.stringify(options.virtualModuleId)} {}`
+                })
             }
         }
     }
 })
 ```
 
-<LinkCard
-title="Learn more about defineIntegration"
-description="A powerful wrapper around the standard Astro Integrations API. It allows to provide extra hooks, functionality and best-practices when creating Astro Integrations."
-href="/core/define-integration/"
-/>
-
-## Standalone utilities
-
-:::note
-Standalone utilities will allow you to **migrate progressively** if you have an existing
-integration you want to migrate to `astro-integration-kit`. Any standalone utility is also available
-as an extended hook plugin.
+:::tip
+For the easiest way to start creating an integration with Astro Integration Kit, we recommend using this template: [`astro-integration-template`](https://github.com/florian-lefebvre/astro-integration-template)!
 :::
-
-Use utilities exported from `astro-integration-kit/utilities`:
-
-```ts title="integration/index.ts" "watchIntegration" "astro-integration-kit/utilities"
-import type { AstroIntegration } from "astro";
-import { createResolver } from "astro-integration-kit";
-import { watchIntegration } from "astro-integration-kit/utilities";
-
-export default function myIntegration(): AstroIntegration {
-    const { resolve } = createResolver(import.meta.url);
-    return {
-        name: "my-integration",
-        hooks: {
-            "astro:config:setup": ({ addWatchFile, command, updateConfig }) => {
-                watchIntegration({
-                    addWatchFile,
-                    command,
-                    dir: resolve(),
-                    updateConfig,
-                });
-            },
-        }
-    }
-}
-```

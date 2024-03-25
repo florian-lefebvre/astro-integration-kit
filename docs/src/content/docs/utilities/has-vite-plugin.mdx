@@ -5,20 +5,53 @@ description: Checks whether a Vite plugin been added to the Astro config.
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-`hasVitePlugin` checks whether a Vite plugin has already been added to the Astro config. For example:
+`hasVitePlugin` checks whether a Vite plugin has already been added to the Astro config.
+
+:::note[When to use the plugin?]
+The utility can only detect Vite plugins added from previously loaded integrations. If you want
+to correctly detect Vite plugins added inside your integration, use the plugin and make sure it's
+the _first_ plugin inside the `plugins` array.
+:::
+
+For example:
 
 <Tabs>
-	<TabItem label="Extended hooks">
+	<TabItem label="Utility">
+	```ts title="my-integration/index.ts" /hasVitePlugin\\b/
+	import {
+		defineIntegration,
+		hasVitePlugin
+	} from "astro-integration-kit";
+
+	export default defineIntegration({
+		// ...
+		setup() {
+			return {
+				"astro:config:setup": (params) => {
+					const { logger } = params
+
+					if (hasVitePlugin(params, { plugin: "vite-plugin-my-integration" })) {
+						logger.warn("Vite plugin already exists!");
+					}
+				}
+			}
+		}
+	})
+	```
+	</TabItem>
+	<TabItem label="Plugin">
 	```ts title="my-integration/index.ts" /hasVitePlugin\\b/ {2,6}
 	import { defineIntegration } from "astro-integration-kit";
 	import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
 
 	export default defineIntegration({
-		name: "my-integration",
+		// ...
 		plugins: [hasVitePluginPlugin],
 		setup() {
 			return {
-				"astro:config:setup": ({ hasVitePlugin, logger }) => {
+				"astro:config:setup": (params) => {
+					const { hasVitePlugin, logger } = params
+
 					if (hasVitePlugin("vite-plugin-my-integration")) {
 						logger.warn("Vite plugin already exists!");
 					}
@@ -28,32 +61,8 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 	})
 	```
 	</TabItem>
-	<TabItem label="Standalone utilities">
-	```ts title="my-integration/index.ts" "hasVitePlugin"
-	import type { AstroIntegration } from "astro";
-	import { hasVitePlugin } from "astro-integration-kit/utilities";
-
-	export default function myIntegration(): AstroIntegration {
-		return {
-			name: "my-integration",
-			hooks: {
-				"astro:config:setup": ({ config, logger }) => {
-					if (hasVitePlugin({
-						plugin: "vite-plugin-my-integration",
-						config,
-					})) {
-						logger.warn("Vite plugin already exists!")
-					}
-				},
-			}
-		}
-	}
-	``` 
-	</TabItem>
 </Tabs>
 
-:::caution
-- `hasVitePlugin` cannot check for asynchronous Vite plugins
-- **Extended Hook**: has to be the _first_ plugin inside the `plugins` array in order to correctly detect Vite plugins added inside your integration
-- **Standalone Utility**: can only detect Vite plugins added from previously loaded integrations
+:::caution[Limitations]
+`hasVitePlugin` cannot check for asynchronous Vite plugins
 :::

@@ -1,6 +1,6 @@
 import { readdirSync, statSync } from "node:fs";
-import type { HookParameters } from "astro";
 import { join, relative, resolve } from "pathe";
+import { defineUtility } from "../core/define-utility.js";
 
 const getFilesRecursively = (dir: string, baseDir = dir) => {
 	const files = readdirSync(dir);
@@ -28,57 +28,42 @@ const getFilesRecursively = (dir: string, baseDir = dir) => {
  * In development, will reload the Astro dev server if any files within
  * the integration directory has changed.
  *
- * @param {object} params
- * @param {string} params.dir
- * @param {import("astro").HookParameters<"astro:config:setup">["addWatchFile"]} params.addWatchFile
- * @param {import("astro").HookParameters<"astro:config:setup">["command"]} params.command
- * @param {import("astro").HookParameters<"astro:config:setup">["updateConfig"]} params.updateConfig
+ * @param {import("astro").HookParameters<"astro:config:setup">} params
+ * @param {object} options
+ * @param {string} options.dir
  *
  * @see https://astro-integration-kit.netlify.app/utilities/watch-integration/
  *
  * @example
  * ```ts
- * watchIntegration({
- * 		dir: resolve(),
- * 		addWatchFile,
- * 		command,
- * 		updateConfig,
- * })
+ * watchIntegration(params, resolve())
  * ```
  */
-export const watchIntegration = ({
-	addWatchFile,
-	command,
-	dir,
-	updateConfig,
-}: {
-	addWatchFile: HookParameters<"astro:config:setup">["addWatchFile"];
-	command: HookParameters<"astro:config:setup">["command"];
-	dir: string;
-	updateConfig: HookParameters<"astro:config:setup">["updateConfig"];
-}) => {
-	if (command !== "dev") {
-		return;
-	}
+export const watchIntegration = defineUtility("astro:config:setup")(
+	({ addWatchFile, command, updateConfig }, dir: string) => {
+		if (command !== "dev") {
+			return;
+		}
 
-	const paths = getFilesRecursively(dir).map((p) => resolve(dir, p));
+		const paths = getFilesRecursively(dir).map((p) => resolve(dir, p));
 
-	for (const path of paths) {
-		addWatchFile(path);
-	}
+		for (const path of paths) {
+			addWatchFile(path);
+		}
 
-	updateConfig({
-		vite: {
-			plugins: [
-				{
-					name: "rollup-plugin-astro-tailwind-config-viewer",
-					buildStart() {
-						for (const path of paths) {
-							this.addWatchFile(path);
-						}
+		updateConfig({
+			vite: {
+				plugins: [
+					{
+						name: "rollup-plugin-astro-tailwind-config-viewer",
+						buildStart() {
+							for (const path of paths) {
+								this.addWatchFile(path);
+							}
+						},
 					},
-				},
-			],
-		},
-	});
-};
+				],
+			},
+		});
+	},
+);
