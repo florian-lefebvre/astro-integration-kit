@@ -221,16 +221,16 @@ const testIntegration = defineIntegration({
 
 				addDevToolbarFrameworkApp(params, {
 					framework: "react",
-					name: "Test React Plugin",
-					id: "test-react-plugin",
+					name: "Test React Plugin 1 ",
+					id: "test-react-plugin-1",
 					icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><title>React Logo</title><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`,
 					src: resolve("./devToolbarApps/Test.react.jsx"),
 				});
 
 				addDevToolbarFrameworkApp(params, {
 					framework: "react",
-					name: "Test React Plugin",
-					id: "test-react-plugin",
+					name: "Test React Plugin 2",
+					id: "test-react-plugin-2",
 					icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><title>React Logo</title><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`,
 					src: resolve("./devToolbarApps/Test.react.jsx"),
 				});
