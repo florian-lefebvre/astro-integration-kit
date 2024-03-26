@@ -20,8 +20,14 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 	plugins,
 	hooks: providedHooks,
 }: { name: string; plugins: TPlugins; hooks: ExtendedHooks<TPlugins> }) => {
-// Overrides plugins with same name
-const resolvedPlugins = Object.values(Object.fromEntries(plugins.map(plugin => [plugin.name, plugin])))
+	// Overrides plugins with same name
+	const resolvedPlugins = Object.values(
+		Object.fromEntries(
+			plugins.map((plugin) => [plugin.name, plugin.setup({ name })]),
+		),
+	) as Array<
+		Partial<Record<keyof Hooks, (params: any) => Record<string, unknown>>>
+	>;
 
 	const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
 
@@ -31,15 +37,20 @@ const resolvedPlugins = Object.values(Object.fromEntries(plugins.map(plugin => [
 			// We know all hook parameters are objects, but the generic correlation makes TS ignore that fact.
 			// The intersection with `object` is a workaround so TS doesn't complay about the spread below.
 			(params: object & HookParameters<typeof hookName>) => {
-				const plugins = resolvedPlugins.filter((p) => p.hook === hookName);
+				const plugins = resolvedPlugins.filter((p) =>
+					Object.keys(p).includes(hookName),
+				);
+				const additionalParams = plugins.reduce(
+					(params, plugin) => {
+						// biome-ignore lint/style/noNonNullAssertion: We checked above already
+						Object.assign(params, plugin[hookName]!(params));
+						return params;
+					},
+					{} as Record<string, unknown>,
+				);
 
 				return providedHooks[hookName]?.({
-					...Object.fromEntries(
-						plugins.map((plugin) => [
-							plugin.name,
-							plugin.implementation(params, { name }),
-						]),
-					),
+					...additionalParams,
 					...params,
 				} as any);
 			},
