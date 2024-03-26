@@ -20,15 +20,8 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 	plugins,
 	hooks: providedHooks,
 }: { name: string; plugins: TPlugins; hooks: ExtendedHooks<TPlugins> }) => {
-	const resolvedPlugins = Object.values(
-		(() => {
-			const _plugins: Record<string, AnyPlugin> = {};
-			for (const plugin of plugins) {
-				_plugins[plugin.name] = plugin;
-			}
-			return _plugins;
-		})(),
-	);
+// Overrides plugins with same name
+const resolvedPlugins = Object.values(Object.fromEntries(plugins.map(plugin => [plugin.name, plugin])))
 
 	const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
 

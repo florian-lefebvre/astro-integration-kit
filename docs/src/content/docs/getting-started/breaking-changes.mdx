@@ -13,7 +13,7 @@ Features get added and removed, and breaking changes are introduced! This docume
 
 ### New `withPlugins` utility, `plugins` removed from `defineIntegration`
 
-Plugins are not longer passed to `defineIntegration`. Instead, there's a new `withPlugins` utility.
+Plugins are no longer passed to `defineIntegration`. Instead, there's a new `withPlugins` utility.
 
 ```ts title="my-integration/index.ts" del={9,11-13} ins={3,14-20}
 import {
@@ -27,13 +27,13 @@ export default defineIntegration({
     plugins: [hasVitePluginPlugin],
     setup({ name }) {
         return {
-            "astro:config:setup": ({ hasVitePluginPlugin }) => {}
+            "astro:config:setup": ({ hasVitePlugin }) => {}
         }
         return withPlugins({
             name,
             plugins: [hasVitePluginPlugin],
             hooks: {
-                "astro:config:setup": ({ hasVitePluginPlugin }) => {}
+                "astro:config:setup": ({ hasVitePlugin }) => {}
             }
         })
     }
