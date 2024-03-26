@@ -27,3 +27,5 @@ export type UnionToArray<T> = IsUnion<T> extends true
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 } & {};
+
+export type NonEmptyArray<T> = [T, ...Array<T>];
