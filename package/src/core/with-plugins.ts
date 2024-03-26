@@ -8,7 +8,7 @@ import type {
 } from "./types.js";
 
 /**
- * Allows to extend hooks with custom parameters. Advanced.
+ * Allows to extend hooks with custom parameters. Only used for advanced use-cases.
  *
  * @param {object} params
  * @param {string} params.name The integration name
