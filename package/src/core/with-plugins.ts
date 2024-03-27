@@ -20,8 +20,8 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 	plugins,
 	hooks: providedHooks,
 }: { name: string; plugins: TPlugins; hooks: ExtendedHooks<TPlugins> }) => {
-// Overrides plugins with same name
-const resolvedPlugins = Object.values(Object.fromEntries(plugins.map(plugin => [plugin.name, plugin])))
+	// Overrides plugins with same name
+	const resolvedPlugins = Object.values(Object.fromEntries(plugins.map(plugin => [plugin.name, plugin])))
 
 	const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
 
@@ -29,7 +29,7 @@ const resolvedPlugins = Object.values(Object.fromEntries(plugins.map(plugin => [
 		definedHooks.map((hookName) => [
 			hookName,
 			// We know all hook parameters are objects, but the generic correlation makes TS ignore that fact.
-			// The intersection with `object` is a workaround so TS doesn't complay about the spread below.
+			// The intersection with `object` is a workaround so TS doesn't complain about the spread below.
 			(params: object & HookParameters<typeof hookName>) => {
 				const plugins = resolvedPlugins.filter((p) => p.hook === hookName);
 
