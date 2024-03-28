@@ -40,23 +40,26 @@ For example:
 	```
 	</TabItem>
 	<TabItem label="Plugin">
-	```ts title="my-integration/index.ts" /hasVitePlugin\\b/ {2,6}
-	import { defineIntegration } from "astro-integration-kit";
+	```ts title="my-integration/index.ts" "withPlugins" /hasVitePlugin\\b/ {2,9}
+	import { defineIntegration, withPlugins } from "astro-integration-kit";
 	import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
 
 	export default defineIntegration({
 		// ...
-		plugins: [hasVitePluginPlugin],
-		setup() {
-			return {
-				"astro:config:setup": (params) => {
-					const { hasVitePlugin, logger } = params
+		setup({ name }) {
+			return withPlugins({
+				name,
+				plugins: [hasVitePluginPlugin],
+				hooks: {
+					"astro:config:setup": (params) => {
+						const { hasVitePlugin, logger } = params
 
-					if (hasVitePlugin("vite-plugin-my-integration")) {
-						logger.warn("Vite plugin already exists!");
+						if (hasVitePlugin("vite-plugin-my-integration")) {
+							logger.warn("Vite plugin already exists!");
+						}
 					}
 				}
-			}
+			})
 		}
 	})
 	```
