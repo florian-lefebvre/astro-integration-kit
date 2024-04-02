@@ -40,6 +40,48 @@ export default defineIntegration({
 })
 ```
 
+### New `Plugin` signature (and `definePlugin`)
+
+You should not use the `Plugin` type manually but if you do, you'll need to update it:
+
+```ts del={3-4} ins={5-9}
+type SomePlugin = Plugin<
+    "utilityName",
+    "astro:config:setup",
+    (params: UtilityParams) => UtilityOutput,
+    {
+        "astro:config:setup": (HookParameters<"astro:config:setup">) => {
+            utilityName: (params: UtilityParams) => UtilityOutput
+        }
+    }
+>;
+```
+
+The `definePlugin` signature has been updated as well:
+
+```ts del={8-11} ins={12-19}
+import type { AstroConfig } from "astro";
+import type { Plugin, PluginOption } from "vite";
+import { definePlugin } from "astro-integration-kit";
+import { hasVitePlugin } from "../utilities/has-vite-plugin.js";
+
+export const hasVitePluginPlugin = definePlugin({
+    name: "hasVitePlugin",
+    hook: "astro:config:setup",
+    implementation: (params) =>
+        (plugin: string | PluginOption) =>
+            hasVitePlugin(params, { plugin }),
+    setup() {
+        return {
+            "astro:config:setup": (params) => ({
+                hasVitePlugin: (plugin: string | PluginOption) =>
+                    hasVitePlugin(params, { plugin }),
+            }),
+        };
+    },
+});
+```
+
 ## `0.8.0`
 
 ---
