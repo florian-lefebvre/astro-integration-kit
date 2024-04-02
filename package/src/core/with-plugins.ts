@@ -41,10 +41,10 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 					Object.keys(p).includes(hookName),
 				);
 				const additionalParams = plugins.reduce(
-					(params, plugin) => {
+					(_params, plugin) => {
 						// biome-ignore lint/style/noNonNullAssertion: We checked above already
-						Object.assign(params, plugin[hookName]!(params));
-						return params;
+						Object.assign(_params, plugin[hookName]!(params));
+						return _params;
 					},
 					{} as Record<string, unknown>,
 				);
