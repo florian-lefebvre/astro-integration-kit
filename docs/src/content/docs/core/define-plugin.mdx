@@ -32,19 +32,22 @@ export const addVitePluginPlugin = definePlugin({
 });
 ```
 
-You can then use it in `defineIntegration`:
+You can then use it in [`withPlugins`](/core/with-plugins/):
 
-```ts title="my-integration/index.ts" "addVitePluginPlugin"
-import { defineIntegration } from "astro-integration-kit";
+```ts title="my-integration/index.ts" "withPlugins" "addVitePluginPlugin"
+import { defineIntegration, withPlugins } from "astro-integration-kit";
 import { addVitePluginPlugin } from "../package/plugins/add-vite-plugin.js";
 
 export default defineIntegration({
     name: "my-integration",
-    plugins: [addVitePluginPlugin],
-    setup() {
-        return {
-            "astro:config:setup": ({ addVitePlugin }) => {}
-        }
+    setup({ name }) {
+        return withPlugins({
+            name,
+            plugins: [addVitePluginPlugin],
+            hooks: {
+                "astro:config:setup": ({ addVitePlugin }) => {}
+            }
+        })
     }
 })
 ```
@@ -52,11 +55,7 @@ export default defineIntegration({
 
 ## Limitations
 
-1. A plugin only defines a utility that will be injected for a given hook
-2. A plugin can only use the built-in utilities (ie. the ones from the official
-    [Integration API](https://docs.astro.build/en/reference/integrations-reference/))
-3. Plugins support overrides. That means that if 2 plugins declare the same `name` and
-    `hook`, the latest will be kept.
+1. Plugins support overrides. That means that if 2 plugins declare the same `name`, the latest will be kept.
 
 ## Practical examples
 

@@ -61,9 +61,7 @@ export const addDevToolbarFrameworkApp = defineUtility("astro:config:setup")(
 			"utf-8",
 		);
 
-		const escapedIcon = icon
-			.replace('"', '\"')
-			.replace("`", '${"`"}');
+		const escapedIcon = icon.replace('"', '"').replace("`", '${"`"}');
 
 		content = content
 			.replace("@@COMPONENT_SRC@@", src)
@@ -80,19 +78,23 @@ export const addDevToolbarFrameworkApp = defineUtility("astro:config:setup")(
 		if (framework === "react") {
 			import("@vitejs/plugin-react").then((react) => {
 				const FAST_REFRESH_PREAMBLE = react.default.preambleCode;
-				const preamble = FAST_REFRESH_PREAMBLE
-					.replace("__BASE__", "/")
-					.replace(`import RefreshRuntime from "/@react-refresh"`, '')
-				
-				injectScript("page", `
+				const preamble = FAST_REFRESH_PREAMBLE.replace("__BASE__", "/").replace(
+					`import RefreshRuntime from "/@react-refresh"`,
+					"",
+				);
+
+				injectScript(
+					"page",
+					`
 					if (!window.__vite_plugin_react_preamble_installed__) {
 						(async () => {
 							const { default: RefreshRuntime } = await import("/@react-refresh");
 
-							${ preamble }
+							${preamble}
 						})()
 					}
-				`);
+				`,
+				);
 			});
 		}
 

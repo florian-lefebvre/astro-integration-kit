@@ -1,38 +1,5 @@
-import type {
-	AstroConfig,
-	AstroIntegrationLogger,
-	HookParameters,
-} from "astro";
 import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
 import { defineIntegration } from "../../src/core/define-integration.js";
-import type { ExtendedHooks as _ExtendedHooks } from "../../src/core/types.js";
-import { hasVitePluginPlugin } from "../../src/plugins/index.js";
-import { hasVitePlugin as mockHasVitePlugin } from "../../src/utilities/has-vite-plugin.js";
-
-vi.mock("../../src/utilities/has-vite-plugin.js");
-
-const astroConfigSetupParamsStub = (
-	params?: HookParameters<"astro:config:setup">,
-): HookParameters<"astro:config:setup"> => ({
-	logger: vi.fn() as unknown as AstroIntegrationLogger,
-	addClientDirective: vi.fn(),
-	addDevToolbarApp: vi.fn(),
-	addMiddleware: vi.fn(),
-	addRenderer: vi.fn(),
-	addWatchFile: vi.fn(),
-	command: "dev",
-	injectRoute: vi.fn(),
-	injectScript: vi.fn(),
-	isRestart: false,
-	updateConfig: vi.fn(),
-	addDevOverlayPlugin: vi.fn(),
-	config: {} as unknown as AstroConfig,
-	...(params || {}),
-});
-
-const plugins = [hasVitePluginPlugin];
-
-type ExtendedHooks = _ExtendedHooks<typeof plugins>;
 
 describe("defineIntegration", () => {
 	afterEach(() => {
@@ -46,7 +13,6 @@ describe("defineIntegration", () => {
 		expect(() =>
 			defineIntegration({
 				name,
-				plugins,
 				setup,
 			}),
 		).not.toThrow();
@@ -55,12 +21,11 @@ describe("defineIntegration", () => {
 	test("Setup should get called", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {} as ExtendedHooks;
+			return {};
 		});
 
 		defineIntegration({
 			name,
-			plugins,
 			setup,
 		})();
 
@@ -70,12 +35,11 @@ describe("defineIntegration", () => {
 	test("Setup should get called with correct name", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {} as ExtendedHooks;
+			return {};
 		});
 
 		defineIntegration({
 			name,
-			plugins,
 			setup,
 		})();
 
@@ -87,8 +51,8 @@ describe("defineIntegration", () => {
 	test.skip("Setup should get called with default args", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {} as ExtendedHooks;
-		}) as any;
+			return {};
+		});
 
 		defineIntegration({
 			name,
@@ -103,8 +67,8 @@ describe("defineIntegration", () => {
 	test.skip("Setup should get called with overwritten args", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {} as ExtendedHooks;
-		}) as any;
+			return {};
+		});
 
 		const expectedOptions = {
 			foo: "baz",
@@ -124,8 +88,8 @@ describe("defineIntegration", () => {
 	test("Integration should have correct name", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {} as ExtendedHooks;
-		}) as any;
+			return {};
+		});
 
 		const integration = defineIntegration({
 			name,
@@ -133,39 +97,5 @@ describe("defineIntegration", () => {
 		})();
 
 		expect(integration.name).toBe(name);
-	});
-
-	describe("astro:config:setup", () => {
-		describe("hasVitePlugin", () => {
-			test("Should pass the correct plugin name", () => {
-				const name = "my-integration";
-				const plugin = {
-					name: "vite-plugin-my-integration",
-				};
-
-				const setup = (): ExtendedHooks => {
-					return {
-						"astro:config:setup": ({ hasVitePlugin }) => {
-							hasVitePlugin(plugin);
-						},
-					};
-				};
-
-				const integration = defineIntegration({
-					name,
-					setup,
-					plugins,
-				})();
-
-				const params = astroConfigSetupParamsStub();
-
-				integration.hooks["astro:config:setup"]?.(params);
-
-				const hasVitePluginCallArgs = (mockHasVitePlugin as Mock).mock
-					.lastCall[1];
-
-				expect(hasVitePluginCallArgs.plugin.name).toBe(plugin.name);
-			});
-		});
 	});
 });

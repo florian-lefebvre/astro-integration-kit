@@ -104,11 +104,16 @@ export default defineConfig({
 						{
 							label: "defineUtility",
 							link: "/core/define-utility/",
+						},
+						{
+							label: "withPlugins (advanced)",
+							link: "/core/with-plugins/",
 							badge: badge("new"),
 						},
 						{
 							label: "definePlugin (advanced)",
 							link: "/core/define-plugin/",
+							badge: badge("updated"),
 						},
 					],
 				},
@@ -118,27 +123,22 @@ export default defineConfig({
 						{
 							label: "addDevToolbarFrameworkApp",
 							link: "/utilities/add-devtoolbar-framework-app/",
-							badge: badge("updated"),
 						},
 						{
 							label: "addDts",
 							link: "/utilities/add-dts/",
-							badge: badge("updated"),
 						},
 						{
 							label: "addIntegration",
 							link: "/utilities/add-integration/",
-							badge: badge("updated"),
 						},
 						{
 							label: "addVirtualImports",
 							link: "/utilities/add-virtual-imports/",
-							badge: badge("updated"),
 						},
 						{
 							label: "addVitePlugin",
 							link: "/utilities/add-vite-plugin/",
-							badge: badge("updated"),
 						},
 						{
 							label: "hasVitePlugin",
@@ -148,17 +148,14 @@ export default defineConfig({
 						{
 							label: "hasIntegration",
 							link: "/utilities/has-integration/",
-							badge: badge("updated"),
 						},
 						{
 							label: "injectDevRoute",
 							link: "/utilities/inject-dev-route/",
-							badge: badge("updated"),
 						},
 						{
 							label: "watchIntegration (HMR)",
 							link: "/utilities/watch-integration/",
-							badge: badge("updated"),
 						},
 					],
 				},
