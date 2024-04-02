@@ -50,7 +50,7 @@ For example:
 			return withPlugins({
 				name,
 				plugins: [hasVitePluginPlugin],
-				{
+				hooks: {
 					"astro:config:setup": (params) => {
 						const { hasVitePlugin, logger } = params
 
