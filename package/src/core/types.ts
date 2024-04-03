@@ -34,6 +34,11 @@ export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
 
 type AnyFunction = (...args: Array<any>) => any;
 
+/**
+ * Turn the plugin into a simplified type representation of itself that can be more easily manipulated.
+ *
+ * No value of this type exists at runtime, it's only used for type manipulation.
+ */
 type SimplifyPlugin<TPlugin extends AnyPlugin = AnyPlugin> = {
 	name: TPlugin["name"];
 	hooks: {
@@ -58,12 +63,10 @@ type FilterPluginsByHook<
 > = TPlugins extends [infer Head, ...infer Tail]
 	? Head extends AnyPlugin
 		? Tail extends Array<AnyPlugin>
-			? THook extends keyof SimplifyPlugin<Head>["hooks"]
-				? // Handle explicitly undefined hooks
-				  undefined extends SimplifyPlugin<Head>["hooks"][THook]
-					? FilterPluginsByHook<THook, Tail>
-					: [SimplifyPlugin<Head>, ...FilterPluginsByHook<THook, Tail>]
-				: []
+			? undefined extends SimplifyPlugin<Head>["hooks"][THook]
+				? // Drop plugin if the hook is not defined.
+				  FilterPluginsByHook<THook, Tail>
+				: [SimplifyPlugin<Head>, ...FilterPluginsByHook<THook, Tail>]
 			: []
 		: []
 	: [];
@@ -98,6 +101,11 @@ type OverridePluginParamsForHook<
 	: Record<never, never>;
 
 /**
+ * Compute plugin-added parametes for a hook.
+ *
+ * Plugins are applied in order, so the last plugin to define a parameter wins.
+ * Plugins that don't define any value for the given hook are ignored.
+ *
  * @internal
  */
 export type AddedParam<
@@ -110,6 +118,11 @@ export type AddedParam<
 	>
 >;
 
+/**
+ * Extend the signature of a function to receive extra parameters.
+ *
+ * Used to inject plugin-defined parameters into hooks.
+ */
 type AddParam<Func, Param = never> = [Param] extends [never]
 	? Func
 	: Func extends (params: infer Params) => infer ReturnType
