@@ -101,7 +101,7 @@ type OverridePluginParamsForHook<
 	: Record<never, never>;
 
 /**
- * Compute plugin-added parametes for a hook.
+ * Compute plugin-added parameters for a hook.
  *
  * Plugins are applied in order, so the last plugin to define a parameter wins.
  * Plugins that don't define any value for the given hook are ignored.
