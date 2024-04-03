@@ -1,5 +1,5 @@
 import type { DevToolbarApp } from "astro";
-import type { Prettify, UnionToIntersection } from "../internal/types.js";
+import type { Prettify } from "../internal/types.js";
 
 export type PluginHooksConstraint = {
 	[Hook in keyof Hooks]?: (
@@ -44,58 +44,58 @@ type SimplifyPlugin<TPlugin extends AnyPlugin = AnyPlugin> = {
 			: never;
 	};
 };
-type SimplifyPlugins<TPlugins extends Array<AnyPlugin>> = {
-	[K in keyof TPlugins]: SimplifyPlugin<TPlugins[K]>;
-};
 
-// This type is pretty crazy. It's a recursive type that allows to override
-// plugins based on their name and hook. For instance, if we have:
-// type A = Plugin<"test", "astro:config:setup", () => (param: number) => void>
-// type B = Plugin<"test", "astro:config:done", () => () => void>
-// type C = Plugin<"test", "astro:config:setup", () => (param: string) => void>
-// type Input = [A,B,C]
-// type Output = OverridePlugins<Input>
-// 			^? [B,C]
-//
-// Basically, all the A extends ? B : never allow to narrow the types to make sure
-// we get the right ones as input. Then, if there's already a plugin with the same
-// name and hook as the currently checked plugin (Head), we Omit it and put the current
-// type instead.
-// biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
-type OverridePlugins<T extends Array<SimplifyPlugin>, U = {}> = T extends []
-	? UnionToIntersection<U>
-	: T extends [infer Head, ...infer Tail]
-	  ? Head extends SimplifyPlugin
-			? Tail extends Array<SimplifyPlugin>
-				? Head["name"] extends keyof U
-					? OverridePlugins<
-							Tail,
-							Omit<U, Head["name"]> & { [K in Head["name"]]: Head }
-					  >
-					: OverridePlugins<Tail, U & { [K in Head["name"]]: Head }>
-				: never
-			: never
-	  : never;
-
+/**
+ * Return a tuple of simplified plugins that affect the given hook.
+ *
+ * Plugins that don't affect the hook are removed from the tuple. The order of the tuple is preserved.
+ *
+ * @internal
+ */
 type FilterPluginsByHook<
 	THook extends keyof Hooks,
-	TPlugins extends Record<string, SimplifyPlugin>,
-> = {
-	[K in keyof TPlugins]: THook extends keyof TPlugins[K]["hooks"]
-		? TPlugins[K]["hooks"][THook]
-		: never;
-};
+	TPlugins extends Array<AnyPlugin>,
+> = TPlugins extends [infer Head, ...infer Tail]
+	? Head extends AnyPlugin
+		? Tail extends Array<AnyPlugin>
+			? THook extends keyof SimplifyPlugin<Head>["hooks"]
+				? // Handle explicitly undefined hooks
+				  undefined extends SimplifyPlugin<Head>["hooks"][THook]
+					? FilterPluginsByHook<THook, Tail>
+					: [SimplifyPlugin<Head>, ...FilterPluginsByHook<THook, Tail>]
+				: []
+			: []
+		: []
+	: [];
 
 type OmitKeysByValue<T, ValueType> = {
 	[Key in keyof T as T[Key] extends ValueType ? never : Key]: T[Key];
 };
 
-type MergeValues<T extends Record<string, Record<string, unknown>>> =
-	UnionToIntersection<T[keyof T]>;
-
-type AssertShape<T> = T extends Record<string, Record<string, unknown>>
-	? T
-	: never;
+// This type is pretty crazy. It's a recursive type that allows to override
+// params defined by previous hooks. Example:
+// type A = Plugin<"test", {"astro:config:setup": () => {foo: () => string}}>
+// type B = Plugin<"test", {"astro:config:setup": () => {bar: () => number}}>
+// type C = Plugin<"test", {"astro:config:setup": () => {foo: () => boolean}}>
+// type Input = [A,B,C]
+// type Output = OverridePluginParamsForHook<Input>
+// 			^? {foo: () => boolean, bar: () => number}
+//
+// biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
+type OverridePluginParamsForHook<
+	THook extends keyof Hooks,
+	TPlugins extends Array<SimplifyPlugin>,
+> = TPlugins extends [...infer Head, infer Tail]
+	? Tail extends SimplifyPlugin
+		? Head extends SimplifyPlugin[]
+			? Omit<
+					OverridePluginParamsForHook<THook, Head>,
+					keyof Tail["hooks"][THook]
+			  > &
+					Tail["hooks"][THook]
+			: never
+		: never
+	: Record<never, never>;
 
 /**
  * @internal
@@ -104,13 +104,9 @@ export type AddedParam<
 	TPlugins extends Array<AnyPlugin>,
 	THook extends keyof Hooks,
 > = Prettify<
-	MergeValues<
-		AssertShape<
-			OmitKeysByValue<
-				FilterPluginsByHook<THook, OverridePlugins<SimplifyPlugins<TPlugins>>>,
-				never
-			>
-		>
+	OmitKeysByValue<
+		OverridePluginParamsForHook<THook, FilterPluginsByHook<THook, TPlugins>>,
+		never
 	>
 >;
 
