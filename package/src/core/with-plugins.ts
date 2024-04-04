@@ -1,6 +1,7 @@
 import type { AstroIntegration } from "astro";
 import type { NonEmptyArray } from "../internal/types.js";
 import type {
+	AddedParam,
 	AnyPlugin,
 	ExtendedHooks,
 	HookParameters,
@@ -37,17 +38,16 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 			// We know all hook parameters are objects, but the generic correlation makes TS ignore that fact.
 			// The intersection with `object` is a workaround so TS doesn't complain about the spread below.
 			(params: object & HookParameters<typeof hookName>) => {
-				const plugins = resolvedPlugins.filter((p) =>
-					Object.keys(p).includes(hookName),
+				const plugins = resolvedPlugins.filter(
+					(p): p is Required<Pick<typeof p, typeof hookName>> =>
+						hookName in p && !!p[hookName],
 				);
-				const additionalParams = plugins.reduce(
-					(_params, plugin) => {
-						// biome-ignore lint/style/noNonNullAssertion: We checked above already
-						Object.assign(_params, plugin[hookName]!(params));
-						return _params;
-					},
-					{} as Record<string, unknown>,
-				);
+
+				const additionalParams = {} as AddedParam<TPlugins, typeof hookName>;
+
+				for (const plugin of plugins) {
+					Object.assign(additionalParams, plugin[hookName](params));
+				}
 
 				return providedHooks[hookName]?.({
 					...additionalParams,
