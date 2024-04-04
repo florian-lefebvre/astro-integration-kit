@@ -13,45 +13,105 @@ This utility is for advanced use-cases. It's useful for developers that want to 
 about the internals.
 :::
 
-:::caution
-This API will radically change in `0.9.x`.
-:::
-
 ```ts title="package/plugins/add-vite-plugin.ts"
-import { definePlugin } from "../core/define-plugin.js";
-import { addVitePlugin } from "../utilities/add-vite-plugin.js";
-import type { Plugin as VitePlugin } from "vite"
+import type { AstroConfig } from "astro";
+import type { Plugin, PluginOption } from "vite";
+import { definePlugin } from "astro-integration-kit";
+import { hasVitePlugin, getPlugins } from "../utilities/has-vite-plugin.js";
 
-export const addVitePluginPlugin = definePlugin({
-	name: "addVitePlugin",
-	hook: "astro:config:setup",
-	implementation:
-		({ updateConfig }) =>
-		(plugin: VitePlugin) =>
-			addVitePlugin({ plugin, updateConfig }),
+export const hasVitePluginPlugin = definePlugin({
+	name: "hasVitePlugin",
+	setup() {
+		return {
+			"astro:config:setup": (params) => {
+				const currentPlugins = getPlugins(
+					new Set(),
+					params.config.vite?.plugins,
+				);
+
+				const { updateConfig, config } = params;
+
+				params.updateConfig = (newConfig) => {
+					config.vite.plugins = Array.from(
+						getPlugins(currentPlugins, newConfig.vite?.plugins),
+					);
+					return updateConfig(newConfig);
+				};
+
+				return {
+					hasVitePlugin: (plugin: string | PluginOption) =>
+						hasVitePlugin(params, {
+							plugin,
+						}),
+				};
+			},
+		};
+	},
 });
 ```
 
 You can then use it in [`withPlugins`](/core/with-plugins/):
 
-```ts title="my-integration/index.ts" "withPlugins" "addVitePluginPlugin"
+```ts title="my-integration/index.ts" "withPlugins" "hasVitePluginPlugin"
 import { defineIntegration, withPlugins } from "astro-integration-kit";
-import { addVitePluginPlugin } from "../package/plugins/add-vite-plugin.js";
+import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
 
 export default defineIntegration({
     name: "my-integration",
     setup({ name }) {
         return withPlugins({
             name,
-            plugins: [addVitePluginPlugin],
+            plugins: [hasVitePluginPlugin],
             hooks: {
-                "astro:config:setup": ({ addVitePlugin }) => {}
+                "astro:config:setup": ({ hasVitePlugin }) => {}
             }
         })
     }
 })
 ```
 
+## Usage
+
+- A plugin defines a `name` and a `setup` function.
+
+    ```ts
+    definePlugin({
+        name: "my-plugin",
+        setup() {
+            // ...
+        }
+    })
+    ```
+
+- The `setup` function accepts a name and must return an object
+
+    ```ts "{ name }" "{}"
+    definePlugin({
+        name: "my-plugin",
+        setup({ name }) {
+            return {}
+        }
+    })
+    ```
+
+- The returned object is made of astro hooks and must returned an object of additional properties
+
+    ```ts {5-11}
+    definePlugin({
+        name: "my-plugin",
+        setup({ name }) {
+            return {
+                "astro:config:setup": ({ updateConfig }) => ({
+                    doSomething: (foo: string) => {
+                        updateConfig({
+                            // ...
+                        })
+                    }
+                })
+            }
+        }
+    })
+    ```
 
 ## Limitations
 

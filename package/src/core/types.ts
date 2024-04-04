@@ -1,28 +1,22 @@
 import type { DevToolbarApp } from "astro";
-import type {
-	Prettify,
-	UnionToArray,
-	UnionToIntersection,
-} from "../internal/types.js";
+import type { Prettify } from "../internal/types.js";
+
+export type PluginHooksConstraint = {
+	[Hook in keyof Hooks]?: (
+		...args: Parameters<Hooks[Hook]>
+	) => Record<string, unknown>;
+};
 
 export type Plugin<
 	TName extends string,
-	THook extends keyof Hooks,
-	TImplementation extends (...args: Array<any>) => any,
+	THooks extends PluginHooksConstraint,
 > = {
 	name: TName;
-	hook: THook;
-	implementation: (
-		params: HookParameters<THook>,
-		integrationOptions: { name: string },
-	) => TImplementation;
+	setup: (params: { name: string }) => THooks;
 };
 
 // To avoid having to call this manually for every generic
-export type AnyPlugin = Omit<
-	Plugin<string, keyof Hooks, any>,
-	"implementation"
-> & { implementation: any };
+export type AnyPlugin = Plugin<string, Record<string, unknown>>;
 
 declare global {
 	namespace AstroIntegrationKit {
@@ -38,77 +32,97 @@ export type Hooks = Prettify<
 
 export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
 
-// From an array of plugins, returns an array of plugins where the hook
-// is the same as the THook generic. Otherwise, returns never.
-type FilterPluginsByHook<
-	TPlugins extends Array<AnyPlugin>,
-	THook extends keyof Hooks,
-> = Extract<TPlugins[number], { hook: THook }>;
+type AnyFunction = (...args: Array<any>) => any;
 
-// This type is pretty crazy. It's a recursive type that allows to override
-// plugins based on their name and hook. For instance, if we have:
-// type A = Plugin<"test", "astro:config:setup", () => (param: number) => void>
-// type B = Plugin<"test", "astro:config:done", () => () => void>
-// type C = Plugin<"test", "astro:config:setup", () => (param: string) => void>
-// type Input = [A,B,C]
-// type Output = OverridePlugins<Input>
-// 			^? [B,C]
-//
-// Basically, all the A extends ? B : never allow to narrow the types to make sure
-// we get the right ones as input. Then, if there's already a plugin with the same
-// name and hook as the currently checked plugin (Head), we Omit it and put the current
-// type instead.
-// biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
-type OverridePlugins<T extends Array<AnyPlugin>, U = {}> = T extends []
-	? UnionToIntersection<U>
-	: T extends [infer Head, ...infer Tail]
-	  ? Head extends AnyPlugin
-			? Tail extends Array<AnyPlugin>
-				? Head["name"] extends keyof U
-					? OverridePlugins<
-							Tail,
-							Omit<U, Head["name"]> & { [K in Head["name"]]: Head }
-					  >
-					: OverridePlugins<Tail, U & { [K in Head["name"]]: Head }>
-				: never
-			: never
-	  : never;
-
-// The result of UnionToArray if effectively an Array<AnyPlugin> but TS struggles
-// to properly infer the right type. AssertPluginsArray just helps TS.
-type AssertPluginsArray<T extends Array<unknown>> = T extends Array<AnyPlugin>
-	? T
-	: never;
-
-// When we extend the params, we really only want to have this shape:
-// {
-//	  test: (param: string) => void
-// }
-// So this type maps over the object to actually return what we want.
-type PluginsToImplementation<TPlugins extends Record<string, AnyPlugin>> = {
-	[K in keyof TPlugins]: TPlugins[K] extends Plugin<
-		infer _Name,
-		infer _Hook,
-		infer Implementation
-	>
-		? Implementation
-		: never;
+/**
+ * Turn the plugin into a simplified type representation of itself that can be more easily manipulated.
+ *
+ * No value of this type exists at runtime, it's only used for type manipulation.
+ */
+type SimplifyPlugin<TPlugin extends AnyPlugin = AnyPlugin> = {
+	name: TPlugin["name"];
+	hooks: {
+		[K in keyof ReturnType<TPlugin["setup"]>]: ReturnType<
+			TPlugin["setup"]
+		>[K] extends AnyFunction
+			? ReturnType<ReturnType<TPlugin["setup"]>[K]>
+			: never;
+	};
 };
 
 /**
+ * Return a tuple of simplified plugins that affect the given hook.
+ *
+ * Plugins that don't affect the hook are removed from the tuple. The order of the tuple is preserved.
+ *
+ * @internal
+ */
+type FilterPluginsByHook<
+	THook extends keyof Hooks,
+	TPlugins extends Array<AnyPlugin>,
+> = TPlugins extends [infer Head, ...infer Tail]
+	? Head extends AnyPlugin
+		? Tail extends Array<AnyPlugin>
+			? undefined extends SimplifyPlugin<Head>["hooks"][THook]
+				? // Drop plugin if the hook is not defined.
+				  FilterPluginsByHook<THook, Tail>
+				: [SimplifyPlugin<Head>, ...FilterPluginsByHook<THook, Tail>]
+			: []
+		: []
+	: [];
+
+type OmitKeysByValue<T, ValueType> = {
+	[Key in keyof T as T[Key] extends ValueType ? never : Key]: T[Key];
+};
+
+// This type is pretty crazy. It's a recursive type that allows to override
+// params defined by previous hooks. Example:
+// type A = Plugin<"test", {"astro:config:setup": () => {foo: () => string}}>
+// type B = Plugin<"test", {"astro:config:setup": () => {bar: () => number}}>
+// type C = Plugin<"test", {"astro:config:setup": () => {foo: () => boolean}}>
+// type Input = [A,B,C]
+// type Output = OverridePluginParamsForHook<Input>
+// 			^? {foo: () => boolean, bar: () => number}
+//
+// biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
+type OverridePluginParamsForHook<
+	THook extends keyof Hooks,
+	TPlugins extends Array<SimplifyPlugin>,
+> = TPlugins extends [...infer Head, infer Tail]
+	? Tail extends SimplifyPlugin
+		? Head extends SimplifyPlugin[]
+			? Omit<
+					OverridePluginParamsForHook<THook, Head>,
+					keyof Tail["hooks"][THook]
+			  > &
+					Tail["hooks"][THook]
+			: never
+		: never
+	: Record<never, never>;
+
+/**
+ * Compute plugin-added parameters for a hook.
+ *
+ * Plugins are applied in order, so the last plugin to define a parameter wins.
+ * Plugins that don't define any value for the given hook are ignored.
+ *
  * @internal
  */
 export type AddedParam<
 	TPlugins extends Array<AnyPlugin>,
 	THook extends keyof Hooks,
 > = Prettify<
-	PluginsToImplementation<
-		OverridePlugins<
-			AssertPluginsArray<UnionToArray<FilterPluginsByHook<TPlugins, THook>>>
-		>
+	OmitKeysByValue<
+		OverridePluginParamsForHook<THook, FilterPluginsByHook<THook, TPlugins>>,
+		never
 	>
 >;
 
+/**
+ * Extend the signature of a function to receive extra parameters.
+ *
+ * Used to inject plugin-defined parameters into hooks.
+ */
 type AddParam<Func, Param = never> = [Param] extends [never]
 	? Func
 	: Func extends (params: infer Params) => infer ReturnType
@@ -116,7 +130,7 @@ type AddParam<Func, Param = never> = [Param] extends [never]
 	  : never;
 
 export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
-	[Hook in keyof Hooks]?: Hooks[Hook] extends (...args: Array<any>) => any
+	[Hook in keyof Hooks]?: Hooks[Hook] extends AnyFunction
 		? AddParam<Hooks[Hook], AddedParam<TPlugins, Hook>>
 		: never;
 };

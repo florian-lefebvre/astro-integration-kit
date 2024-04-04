@@ -1,4 +1,4 @@
-import type { Hooks, Plugin } from "./types.js";
+import type { Plugin, PluginHooksConstraint } from "./types.js";
 
 /**
  * Allows defining a type-safe plugin that can be used in {defineIntegration}.
@@ -24,8 +24,7 @@ import type { Hooks, Plugin } from "./types.js";
  */
 export const definePlugin = <
 	TName extends string,
-	THook extends keyof Hooks,
-	TImplementation extends (...args: Array<any>) => any,
+	THooks extends PluginHooksConstraint,
 >(
-	plugin: Plugin<TName, THook, TImplementation>,
+	plugin: Plugin<TName, THooks>,
 ) => plugin;

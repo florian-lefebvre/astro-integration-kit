@@ -1,8 +1,17 @@
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, normalize } from "pathe";
 import type { Plugin } from "vite";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+import {
+	type Mocked,
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	test,
+	vi,
+} from "vitest";
 import { createResolver } from "../../src/core/create-resolver.js";
+import type { HookParameters } from "../../src/core/types.js";
 import { watchIntegration } from "../../src/utilities/watch-integration.js";
 
 const tempFolderName = ".TMP_WATCHINTEGRATION";
@@ -45,7 +54,7 @@ const getParams = () =>
 		command: "dev",
 		addWatchFile: vi.fn(),
 		updateConfig: vi.fn(),
-	}) as any;
+	}) as unknown as Mocked<HookParameters<"astro:config:setup">>;
 
 describe("watchIntegration", () => {
 	beforeAll(() => {
@@ -104,7 +113,7 @@ describe("watchIntegration", () => {
 		watchIntegration(params, resolve(tempFolderName));
 
 		const calls = params.addWatchFile.mock.calls.flatMap((entry) =>
-			normalize(entry[0]),
+			normalize(entry[0].toString()),
 		);
 
 		const allPathsPresent = tempPaths.every((path) => {
@@ -123,7 +132,7 @@ describe("watchIntegration", () => {
 			updateConfig: vi.fn((config) => {
 				plugin = config.vite.plugins[0];
 			}),
-		};
+		} as unknown as HookParameters<"astro:config:setup">;
 
 		watchIntegration(params, resolve(tempFolderName));
 
@@ -138,7 +147,7 @@ describe("watchIntegration", () => {
 			updateConfig: vi.fn((config) => {
 				plugin = config.vite.plugins[0];
 			}),
-		};
+		} as unknown as HookParameters<"astro:config:setup">;
 
 		watchIntegration(params, resolve(tempFolderName));
 

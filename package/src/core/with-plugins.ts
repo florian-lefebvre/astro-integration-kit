@@ -1,6 +1,7 @@
 import type { AstroIntegration } from "astro";
 import type { NonEmptyArray } from "../internal/types.js";
 import type {
+	AddedParam,
 	AnyPlugin,
 	ExtendedHooks,
 	HookParameters,
@@ -21,7 +22,11 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 	hooks: providedHooks,
 }: { name: string; plugins: TPlugins; hooks: ExtendedHooks<TPlugins> }) => {
 	// Overrides plugins with same name
-	const resolvedPlugins = Object.values(Object.fromEntries(plugins.map(plugin => [plugin.name, plugin])))
+	// Overrides plugins with same name, keeping only the last occurrence
+	const resolvedPlugins = plugins
+		.filter((plugin, index, self) => self.findLastIndex(other => other.name === plugin.name) === index)
+		// Setup plugins with the integration parameters
+		.map((plugin): Partial<Record<keyof Hooks, (params: any) => Record<string, unknown>>> => plugin.setup({ name }));
 
 	const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
 
@@ -31,15 +36,19 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 			// We know all hook parameters are objects, but the generic correlation makes TS ignore that fact.
 			// The intersection with `object` is a workaround so TS doesn't complain about the spread below.
 			(params: object & HookParameters<typeof hookName>) => {
-				const plugins = resolvedPlugins.filter((p) => p.hook === hookName);
+				const plugins = resolvedPlugins.filter(
+					(p): p is Required<Pick<typeof p, typeof hookName>> =>
+						hookName in p && !!p[hookName],
+				);
+
+				const additionalParams = {} as AddedParam<TPlugins, typeof hookName>;
+
+				for (const plugin of plugins) {
+					Object.assign(additionalParams, plugin[hookName](params));
+				}
 
 				return providedHooks[hookName]?.({
-					...Object.fromEntries(
-						plugins.map((plugin) => [
-							plugin.name,
-							plugin.implementation(params, { name }),
-						]),
-					),
+					...additionalParams,
 					...params,
 				} as any);
 			},

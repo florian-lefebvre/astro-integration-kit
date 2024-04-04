@@ -28,22 +28,30 @@ function getPlugins(
 
 export const hasVitePluginPlugin = definePlugin({
 	name: "hasVitePlugin",
-	hook: "astro:config:setup",
-	implementation: (params) => {
-		const currentPlugins = getPlugins(new Set(), params.config.vite?.plugins);
+	setup() {
+		return {
+			"astro:config:setup": (params) => {
+				const currentPlugins = getPlugins(
+					new Set(),
+					params.config.vite?.plugins,
+				);
 
-		const { updateConfig, config } = params;
+				const { updateConfig, config } = params;
 
-		params.updateConfig = (newConfig) => {
-			config.vite.plugins = Array.from(
-				getPlugins(currentPlugins, newConfig.vite?.plugins),
-			);
-			return updateConfig(newConfig);
+				params.updateConfig = (newConfig) => {
+					config.vite.plugins = Array.from(
+						getPlugins(currentPlugins, newConfig.vite?.plugins),
+					);
+					return updateConfig(newConfig);
+				};
+
+				return {
+					hasVitePlugin: (plugin: string | PluginOption) =>
+						hasVitePlugin(params, {
+							plugin,
+						}),
+				};
+			},
 		};
-
-		return (plugin: string | PluginOption) =>
-			hasVitePlugin(params, {
-				plugin,
-			});
 	},
 });

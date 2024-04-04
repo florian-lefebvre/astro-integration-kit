@@ -1,4 +1,3 @@
-import type { AstroConfig } from "astro";
 import { describe, expect, test } from "vitest";
 import { hasVitePlugin } from "../../src/utilities/has-vite-plugin.js";
 
