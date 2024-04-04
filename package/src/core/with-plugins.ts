@@ -22,13 +22,11 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 	hooks: providedHooks,
 }: { name: string; plugins: TPlugins; hooks: ExtendedHooks<TPlugins> }) => {
 	// Overrides plugins with same name
-	const resolvedPlugins = Object.values(
-		Object.fromEntries(
-			plugins.map((plugin) => [plugin.name, plugin.setup({ name })]),
-		),
-	) as Array<
-		Partial<Record<keyof Hooks, (params: any) => Record<string, unknown>>>
-	>;
+	// Overrides plugins with same name, keeping only the last occurrence
+	const resolvedPlugins = plugins
+		.filter((plugin, index, self) => self.findLastIndex(other => other.name === plugin.name) === index)
+		// Setup plugins with the integration parameters
+		.map((plugin): Partial<Record<keyof Hooks, (params: any) => Record<string, unknown>>> => plugin.setup({ name }));
 
 	const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
 
