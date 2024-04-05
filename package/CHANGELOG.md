@@ -1,5 +1,12 @@
 # astro-integration-kit
 
+## 0.9.0
+
+### Minor Changes
+
+- 083438d: Plugins are no longer passed to `defineIntegration`. Instead, there's a new `withPlugins` utility. **This is a breaking change**, check out the [migration guide](https://astro-integration-kit.netlify.app/getting-started/breaking-changes/#090)
+- 967ca76: The `Plugin` type and `definePlugin` signatures have been updated. **This is a breaking change**, check out the [migration guide](https://astro-integration-kit.netlify.app/getting-started/breaking-changes/#090)
+
 ## 0.8.0
 
 ### Minor Changes
