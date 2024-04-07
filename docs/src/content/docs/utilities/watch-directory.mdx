@@ -26,3 +26,11 @@ export default defineIntegration({
 	}
 })
 ```
+
+## Limitations
+
+Those are due to limitations in Astro core:
+
+1. This utility only watches files (as deep as possible) under the specified directory
+2. Directories under the specified directory are not taken into account
+3. Additions and deletions are not taken into account
