@@ -10,11 +10,11 @@ import {
 	test,
 	vi,
 } from "vitest";
-import { createResolver } from "../../src/core/create-resolver.js";
-import type { HookParameters } from "../../src/core/types.js";
+import { createResolver } from "../../src/core/create-resolver.ts";
+import type { HookParameters } from "../../src/core/types.ts";
 import { watchDirectory } from "../../src/utilities/watch-directory.ts";
 
-const tempFolderName = ".TMP_WATCHINTEGRATION";
+const tempFolderName = ".TMP_WATCHDIRECTORY";
 
 const tempPaths = [
 	`${tempFolderName}/text.txt`,
