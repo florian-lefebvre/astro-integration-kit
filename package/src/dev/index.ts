@@ -1,1 +1,1 @@
-export { hmrIntegration } from "./hmr-integration.js"
+export { hmrIntegration } from "./hmr-integration.js";

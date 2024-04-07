@@ -24,9 +24,18 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 	// Overrides plugins with same name
 	// Overrides plugins with same name, keeping only the last occurrence
 	const resolvedPlugins = plugins
-		.filter((plugin, index, self) => self.findLastIndex(other => other.name === plugin.name) === index)
+		.filter(
+			(plugin, index, self) =>
+				self.findLastIndex((other) => other.name === plugin.name) === index,
+		)
 		// Setup plugins with the integration parameters
-		.map((plugin): Partial<Record<keyof Hooks, (params: any) => Record<string, unknown>>> => plugin.setup({ name }));
+		.map(
+			(
+				plugin,
+			): Partial<
+				Record<keyof Hooks, (params: any) => Record<string, unknown>>
+			> => plugin.setup({ name }),
+		);
 
 	const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
 

@@ -68,9 +68,7 @@ describe("watchDirectory", () => {
 	test("Should run", () => {
 		const params = getParams();
 
-		expect(() =>
-			watchDirectory(params, resolve(tempFolderName)),
-		).not.toThrow();
+		expect(() => watchDirectory(params, resolve(tempFolderName))).not.toThrow();
 	});
 
 	test("Should call updateConfig", () => {
