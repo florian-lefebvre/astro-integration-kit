@@ -1,6 +1,6 @@
 import { readdirSync, statSync } from "node:fs";
 import { join, relative, resolve } from "pathe";
-import { defineUtility } from "../core/define-utility.ts";
+import { defineUtility } from "../core/define-utility.js";
 
 const getFilesRecursively = (dir: string, baseDir = dir) => {
 	const files = readdirSync(dir);
