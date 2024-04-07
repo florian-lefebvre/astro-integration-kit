@@ -8,12 +8,7 @@
 		"url": "https://florian-lefebvre.dev"
 	},
 	"license": "MIT",
-	"keywords": [
-		"withastro",
-		"astro",
-		"utils",
-		"utilities"
-	],
+	"keywords": ["withastro", "astro", "utils", "utilities"],
 	"homepage": "https://github.com/florian-lefebvre/astro-integration-kit",
 	"publishConfig": {
 		"access": "public"
@@ -31,12 +26,13 @@
 		"./types/db": {
 			"types": "./types/db.d.ts",
 			"default": "./types/noop.js"
+		},
+		"./dev": {
+			"types": "./dist/dev/index.d.ts",
+			"default": "./dist/dev/index.js"
 		}
 	},
-	"files": [
-		"dist",
-		"types"
-	],
+	"files": ["dist", "types"],
 	"scripts": {
 		"dev": "tsup --watch",
 		"build": "tsup",
