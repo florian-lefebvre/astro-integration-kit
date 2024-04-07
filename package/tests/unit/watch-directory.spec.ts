@@ -56,7 +56,7 @@ const getParams = () =>
 		updateConfig: vi.fn(),
 	}) as unknown as Mocked<HookParameters<"astro:config:setup">>;
 
-describe("watchIntegration", () => {
+describe("watchDirectory", () => {
 	beforeAll(() => {
 		createTempFiles(tempPaths);
 	});

@@ -92,7 +92,6 @@
 		"vitest": "^1.2.1"
 	},
 	"dependencies": {
-		"callsites": "^4.1.0",
 		"pathe": "^1.1.2",
 		"recast": "^0.23.5"
 	}
