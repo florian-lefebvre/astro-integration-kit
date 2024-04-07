@@ -91,6 +91,16 @@ export default defineConfig({
 					],
 				},
 				{
+					label: "Dev",
+					items: [
+						{
+							label: "hmrIntegration",
+							link: "/dev/hmr-integration/",
+							badge: badge("new"),
+						},
+					],
+				},
+				{
 					label: "Core",
 					items: [
 						{
