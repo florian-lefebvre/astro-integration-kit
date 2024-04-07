@@ -1,6 +1,6 @@
 import { readdirSync, statSync } from "node:fs";
 import { join, relative, resolve } from "pathe";
-import { defineUtility } from "../core/define-utility.js";
+import { defineUtility } from "../core/define-utility.ts";
 
 const getFilesRecursively = (dir: string, baseDir = dir) => {
 	const files = readdirSync(dir);
@@ -26,26 +26,27 @@ const getFilesRecursively = (dir: string, baseDir = dir) => {
 
 /**
  * In development, will reload the Astro dev server if any files within
- * the integration directory has changed.
+ * the directory has changed.
  *
  * @param {import("astro").HookParameters<"astro:config:setup">} params
- * @param {object} options
- * @param {string} options.dir
+ * @param {string} directory
  *
- * @see https://astro-integration-kit.netlify.app/utilities/watch-integration/
+ * @see https://astro-integration-kit.netlify.app/utilities/watch-directory/
  *
  * @example
  * ```ts
- * watchIntegration(params, resolve())
+ * watchDirectory(params, resolve())
  * ```
  */
-export const watchIntegration = defineUtility("astro:config:setup")(
-	({ addWatchFile, command, updateConfig }, dir: string) => {
+export const watchDirectory = defineUtility("astro:config:setup")(
+	({ addWatchFile, command, updateConfig }, directory: string) => {
 		if (command !== "dev") {
 			return;
 		}
 
-		const paths = getFilesRecursively(dir).map((p) => resolve(dir, p));
+		const paths = getFilesRecursively(directory).map((p) =>
+			resolve(directory, p),
+		);
 
 		for (const path of paths) {
 			addWatchFile(path);
@@ -55,7 +56,7 @@ export const watchIntegration = defineUtility("astro:config:setup")(
 			vite: {
 				plugins: [
 					{
-						name: "rollup-plugin-astro-tailwind-config-viewer",
+						name: `rollup-aik-watch-directory-${directory}`,
 						buildStart() {
 							for (const path of paths) {
 								this.addWatchFile(path);
