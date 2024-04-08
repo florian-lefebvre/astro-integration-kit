@@ -31,6 +31,6 @@ export default defineIntegration({
 
 Those are due to limitations in Astro core:
 
-1. This utility only watches files (as deep as possible) under the specified directory
-2. Directories under the specified directory are not taken into account
+1. This utility watches all files deeply under the specified directory
+2. **Only files are considered**. Directories themselves are not watched (eg. an empty folder is deleted)
 3. Additions and deletions are not taken into account
