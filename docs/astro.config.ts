@@ -85,8 +85,9 @@ export default defineConfig({
 							link: "/getting-started/showcase/",
 						},
 						{
-							label: "Breaking changes",
-							link: "/getting-started/breaking-changes/",
+							label: "Upgrade guide",
+							link: "/getting-started/upgrade-guide/",
+							badge: badge("updated"),
 						},
 					],
 				},
@@ -204,4 +205,7 @@ export default defineConfig({
 			lastUpdated: true,
 		}),
 	],
+	redirects: {
+		"/getting-started/breaking-changes/": "/getting-started/upgrade-guide/",
+	},
 });

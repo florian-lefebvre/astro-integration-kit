@@ -1,5 +1,5 @@
 ---
-title: Breaking changes
+title: Upgrade guide
 description: Features get added and removed, and breaking changes are introduced! This documents how to migrate.
 ---
 
@@ -11,53 +11,12 @@ Features get added and removed, and breaking changes are introduced! This docume
 
 ---
 
-### A better way for development HMR using `hmrIntegration`
-
-Until now, we recommended `watchIntegration` to enable HMR in development. However:
-- This can cause perf issues because paths would be also watched once the integration is consumed from npm
-- It doesn't work with a build step, that we highly recommend.
-
-From now on, we recommend that you use dynamic imports in your local playgrounds, alongside the new `hmrIntegration`
-exported from `astro-integration-kit/dev`.
-
-```ts title="package/src/integration.ts" del={3-4,10,13}
-import {
-    defineIntegration,
-    createResolver,
-    watchIntegration
-} from "astro-integration-kit"
-
-export const integration = defineIntegration({
-    // ...
-    setup() {
-        const { resolve } = createResolver(import.meta.url)
-        return {
-            "astro:config:setup": (params) => {
-                watchIntegration(params, resolve())
-            }
-        }
-    }
-})
-```
-
-```ts title="playground/astro.config.mjs" del={2} ins={3-5,10-12}
-import { defineConfig } from "astro/config";
-import packageName from "package-name"
-import { createResolver } from "astro-integration-kit";
-import { hmrIntegration } from "astro-integration-kit/dev";
-const { default: packageName } = await import("package-name");
-
-export default defineConfig({
-	integrations: [
-		packageName(),
-        hmrIntegration({
-            directory: createResolver(import.meta.url).resolve("../package/dist")
-        })
-	],
-});
-```
-
 ### `watchIntegration` renamed to `watchDirectory`
+
+:::note
+Until now, we recommended `watchIntegration` to enable HMR in development. However it comes
+with a few issues. Instead, we now recommend the new `hmrIntegration`, [read the docs](/dev/hmr-integration/).
+:::
 
 Since `watchIntegration` is not recommended for dev HMR anymore, it has been renamed according to what it
 really does, watching a directory:
