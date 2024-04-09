@@ -31,6 +31,10 @@
 		"./types/db": {
 			"types": "./types/db.d.ts",
 			"default": "./types/noop.js"
+		},
+		"./dev": {
+			"types": "./dist/dev/index.d.ts",
+			"default": "./dist/dev/index.js"
 		}
 	},
 	"files": [

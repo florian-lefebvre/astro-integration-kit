@@ -85,8 +85,19 @@ export default defineConfig({
 							link: "/getting-started/showcase/",
 						},
 						{
-							label: "Breaking changes",
-							link: "/getting-started/breaking-changes/",
+							label: "Upgrade guide",
+							link: "/getting-started/upgrade-guide/",
+							badge: badge("updated"),
+						},
+					],
+				},
+				{
+					label: "Dev",
+					items: [
+						{
+							label: "hmrIntegration",
+							link: "/dev/hmr-integration/",
+							badge: badge("new"),
 						},
 					],
 				},
@@ -108,12 +119,10 @@ export default defineConfig({
 						{
 							label: "withPlugins (advanced)",
 							link: "/core/with-plugins/",
-							badge: badge("new"),
 						},
 						{
 							label: "definePlugin (advanced)",
 							link: "/core/define-plugin/",
-							badge: badge("updated"),
 						},
 					],
 				},
@@ -143,7 +152,6 @@ export default defineConfig({
 						{
 							label: "hasVitePlugin",
 							link: "/utilities/has-vite-plugin/",
-							badge: badge("updated"),
 						},
 						{
 							label: "hasIntegration",
@@ -154,8 +162,17 @@ export default defineConfig({
 							link: "/utilities/inject-dev-route/",
 						},
 						{
-							label: "watchIntegration (HMR)",
-							link: "/utilities/watch-integration/",
+							label: "watchDirectory",
+							link: "/utilities/watch-directory/",
+							badge: badge("new"),
+						},
+						{
+							label: "watchIntegration",
+							link: "/getting-started/breaking-changes/#0100",
+							badge: badge("removed"),
+							attrs: {
+								style: "opacity:0.5",
+							},
 						},
 					],
 				},
@@ -188,4 +205,7 @@ export default defineConfig({
 			lastUpdated: true,
 		}),
 	],
+	redirects: {
+		"/getting-started/breaking-changes/": "/getting-started/upgrade-guide/",
+	},
 });

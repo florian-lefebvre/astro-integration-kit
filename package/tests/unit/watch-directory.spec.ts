@@ -10,11 +10,11 @@ import {
 	test,
 	vi,
 } from "vitest";
-import { createResolver } from "../../src/core/create-resolver.js";
-import type { HookParameters } from "../../src/core/types.js";
-import { watchIntegration } from "../../src/utilities/watch-integration.js";
+import { createResolver } from "../../src/core/create-resolver.ts";
+import type { HookParameters } from "../../src/core/types.ts";
+import { watchDirectory } from "../../src/utilities/watch-directory.ts";
 
-const tempFolderName = ".TMP_WATCHINTEGRATION";
+const tempFolderName = ".TMP_WATCHDIRECTORY";
 
 const tempPaths = [
 	`${tempFolderName}/text.txt`,
@@ -56,7 +56,7 @@ const getParams = () =>
 		updateConfig: vi.fn(),
 	}) as unknown as Mocked<HookParameters<"astro:config:setup">>;
 
-describe("watchIntegration", () => {
+describe("watchDirectory", () => {
 	beforeAll(() => {
 		createTempFiles(tempPaths);
 	});
@@ -68,15 +68,13 @@ describe("watchIntegration", () => {
 	test("Should run", () => {
 		const params = getParams();
 
-		expect(() =>
-			watchIntegration(params, resolve(tempFolderName)),
-		).not.toThrow();
+		expect(() => watchDirectory(params, resolve(tempFolderName))).not.toThrow();
 	});
 
 	test("Should call updateConfig", () => {
 		const params = getParams();
 
-		watchIntegration(params, resolve(tempFolderName));
+		watchDirectory(params, resolve(tempFolderName));
 
 		expect(params.updateConfig).toBeCalled();
 	});
@@ -84,7 +82,7 @@ describe("watchIntegration", () => {
 	test("Should call updateConfig once", () => {
 		const params = getParams();
 
-		watchIntegration(params, resolve(tempFolderName));
+		watchDirectory(params, resolve(tempFolderName));
 
 		expect(params.updateConfig).toBeCalledTimes(1);
 	});
@@ -92,7 +90,7 @@ describe("watchIntegration", () => {
 	test("Should call addWatchFile", () => {
 		const params = getParams();
 
-		watchIntegration(params, resolve(tempFolderName));
+		watchDirectory(params, resolve(tempFolderName));
 
 		expect(params.addWatchFile).toBeCalled();
 	});
@@ -100,7 +98,7 @@ describe("watchIntegration", () => {
 	test("Should call addWatchFile for each path (count)", () => {
 		const params = getParams();
 
-		watchIntegration(params, resolve(tempFolderName));
+		watchDirectory(params, resolve(tempFolderName));
 
 		const calls = params.addWatchFile.mock.calls.flatMap((entry) => entry[0]);
 
@@ -110,7 +108,7 @@ describe("watchIntegration", () => {
 	test("Should call addWatchFile for each path (path check)", () => {
 		const params = getParams();
 
-		watchIntegration(params, resolve(tempFolderName));
+		watchDirectory(params, resolve(tempFolderName));
 
 		const calls = params.addWatchFile.mock.calls.flatMap((entry) =>
 			normalize(entry[0].toString()),
@@ -134,7 +132,7 @@ describe("watchIntegration", () => {
 			}),
 		} as unknown as HookParameters<"astro:config:setup">;
 
-		watchIntegration(params, resolve(tempFolderName));
+		watchDirectory(params, resolve(tempFolderName));
 
 		// @ts-ignore - TS can't figure out that plugin _will_ actually be defined here
 		expect(plugin).toBeDefined();
@@ -149,7 +147,7 @@ describe("watchIntegration", () => {
 			}),
 		} as unknown as HookParameters<"astro:config:setup">;
 
-		watchIntegration(params, resolve(tempFolderName));
+		watchDirectory(params, resolve(tempFolderName));
 
 		// @ts-ignore - TS can't figure out that plugin _will_ actually be defined here
 		expect(plugin.name).toBeDefined();

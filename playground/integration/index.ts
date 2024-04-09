@@ -1,5 +1,13 @@
 import { readFileSync } from "node:fs";
-import {
+import { z } from "astro/zod";
+
+import Preact from "@astrojs/preact";
+import React from "@astrojs/react";
+import Solid from "@astrojs/solid-js";
+import Svelte from "@astrojs/svelte";
+import { VitePWA } from "vite-plugin-pwa";
+
+const {
 	addDevToolbarFrameworkApp,
 	addDts,
 	addIntegration,
@@ -8,17 +16,10 @@ import {
 	createResolver,
 	defineIntegration,
 	hasIntegration,
-	watchIntegration,
+	watchDirectory,
 	withPlugins,
-} from "astro-integration-kit";
-import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
-import { z } from "astro/zod";
-
-import Preact from "@astrojs/preact";
-import React from "@astrojs/react";
-import Solid from "@astrojs/solid-js";
-import Svelte from "@astrojs/svelte";
-import { VitePWA } from "vite-plugin-pwa";
+} = await import("astro-integration-kit");
+const { hasVitePluginPlugin } = await import("astro-integration-kit/plugins");
 
 const optionsSchema = z
 	.object({
@@ -53,7 +54,7 @@ const testIntegration = defineIntegration({
 			hooks: {
 				"astro:config:setup": (params) => {
 					const { config, updateConfig, hasVitePlugin } = params;
-					watchIntegration(params, resolve());
+					watchDirectory(params, resolve());
 
 					addDts(params, {
 						name: "test-integration",
