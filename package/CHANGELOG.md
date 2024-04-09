@@ -1,5 +1,12 @@
 # astro-integration-kit
 
+## 0.10.0
+
+### Minor Changes
+
+- 6bf1a25: Renames `watchIntegration` to `watchDirectory`
+- 6bf1a25: Exposes a new `hmrIntegration` integration from `astro-integration-kit`. It's now recommended inside your local playground to benefit from development HMR instead of using the `watchIntegration` utility
+
 ## 0.9.0
 
 ### Minor Changes
