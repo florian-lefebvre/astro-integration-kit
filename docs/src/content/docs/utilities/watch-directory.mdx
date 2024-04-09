@@ -1,10 +1,10 @@
 ---
 title: watchDirectory
-description: In development, will reload the Astro dev server if any files within the directory has changed.
+description: In development, `watchDirectory` will reload the Astro dev server if any files within the directory change.
 ---
 
 In development, `watchDirectory` will reload the Astro dev server if any files within
-the directory has changed. For example:
+the directory change. For example:
 
 ```ts title="my-integration/index.ts" {4,14}
 import {
@@ -33,4 +33,4 @@ Those are due to limitations in Astro core:
 
 1. This utility watches all files deeply under the specified directory
 2. **Only files are considered**. Directories themselves are not watched (eg. an empty folder is deleted)
-3. Files added to the directory won't cause a reload and won't be watched for further changes until one of the old files is changed
+3. Files added to the directory won't cause a reload and won't be watched for further changes until one of the old files is changed or the dev server is restarted

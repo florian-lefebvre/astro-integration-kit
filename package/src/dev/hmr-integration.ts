@@ -3,7 +3,7 @@ import { defineIntegration } from "../core/define-integration.js";
 import { watchDirectory } from "../utilities/watch-directory.js";
 
 export const hmrIntegration = defineIntegration({
-	name: "aik/hmr",
+	name: "astro-integration-kit/hmr",
 	optionsSchema: z.object({
 		directory: z.string(),
 	}),
