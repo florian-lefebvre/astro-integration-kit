@@ -5,7 +5,7 @@ description: Allows adding Vite virtual modules easily to access data across you
 
 `addVirtualImports` allows you to create virtual modules and share data from your integration. For example:
 
-```ts title="my-integration/index.ts" {3,11-15,17-30}
+```ts title="my-integration/index.ts" {3,11-16,18-32} "name"
 import {
     defineIntegration,
     addVirtualImports
@@ -13,16 +13,18 @@ import {
 
 export default defineIntegration({
     // ...
-    setup() {
+    setup({ name }) {
         return {
             "astro:config:setup": (params) => {
                 addVirtualImports(params, {
+                    name,
                     imports: {
                         'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
                     }
                 })
 
                 addVirtualImports(params, {
+                    name,
                     imports: [
                         {
                             id: "virtual:my-integration/advanced",
@@ -48,6 +50,10 @@ While you can choose any name for your virtual module, it's a good idea to stick
 - If the module is an "internal" module (ie. only supposed to be used by other parts of your integration), follow this pattern: `virtual:${integrationName}/${moduleName}`
 - If you want your module to be used by your end user, in other words someone who will install your integration, follow this pattern: `${integrationName}/${moduleName}`
 ::: 
+
+:::note
+You should pass the integration name as the `name` option. You can obtain it from the `setup` arguments.
+:::
 
 You can now access the config somewhere else, for example inside a page injected by your integration:
 
