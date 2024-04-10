@@ -14,9 +14,10 @@ type WithPluginsParams<TPlugins extends NonEmptyArray<AnyPlugin>> = {
 	hooks: ExtendedHooks<TPlugins>;
 };
 
-type WithPluginsReturn<
-	Params extends WithPluginsParams<NonEmptyArray<AnyPlugin>>,
-> = Omit<Params, "name" | "plugins" | "hooks"> & {
+type WithPluginsReturn<Extensions> = Omit<
+	Extensions,
+	"name" | "plugins" | "hooks"
+> & {
 	hooks: AstroIntegration["hooks"];
 };
 
@@ -30,10 +31,10 @@ type WithPluginsReturn<
  */
 export const withPlugins = <
 	TPlugins extends NonEmptyArray<AnyPlugin>,
-	Params extends WithPluginsParams<TPlugins>,
+	Extensions extends Record<any, unknown>,
 >(
-	options: Params,
-): WithPluginsReturn<Params> => {
+	options: WithPluginsParams<TPlugins> & Extensions,
+): WithPluginsReturn<Extensions> => {
 	const {
 		name,
 		plugins,
