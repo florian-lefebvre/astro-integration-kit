@@ -18,11 +18,13 @@ export default defineIntegration({
     }),
     setup({ options, name }) {
         return {
-            "astro:config:setup": (params) => {
-                addDts(params, {
-                    name,
-                    content: `declare module ${JSON.stringify(options.virtualModuleId)} {}`
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addDts(params, {
+                        name,
+                        content: `declare module ${JSON.stringify(options.virtualModuleId)} {}`
+                    })
+                }
             }
         }
     }
@@ -87,7 +89,7 @@ import { defineIntegration } from "astro-integration-kit";
 export default defineIntegration({
     // ...
     setup() {
-        return {}
+        return {hooks: {}}
     }
 })
 ```
@@ -99,7 +101,7 @@ import { defineIntegration } from "astro-integration-kit";
 export default defineIntegration({
     // ...
     setup({ options, name }) {
-        return {}
+        return {hooks: {}}
     }
 })
 ```
@@ -127,8 +129,10 @@ export default defineIntegration({
   // ...
   setup() {
     return {
-      "astro:db:setup": ({ extendDb }) => {
-        // ...
+      hooks: {
+        "astro:db:setup": ({ extendDb }) => {
+          // ...
+        },
       },
     };
   },

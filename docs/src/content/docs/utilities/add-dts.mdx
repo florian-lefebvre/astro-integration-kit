@@ -16,11 +16,13 @@ export default defineIntegration({
     // ...
     setup() {
         return {
-            "astro:config:setup": (params) => {
-                addDts(params, {
-                    name: "my-integration",
-                    content: `declare module "virtual:my-integration" {}`
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addDts(params, {
+                        name: "my-integration",
+                        content: `declare module "virtual:my-integration" {}`
+                    })
+                }
             }
         }
     }
@@ -54,11 +56,13 @@ export default defineIntegration({
         const { resolve } = createResolver(import.meta.url)
 
         return {
-            "astro:config:setup": (params) => {
-                addDts(params, {
-                    name: "my-integration",
-                    content: readFileSync(resolve("./stubs/virtual-import.d.ts"), "utf-8")
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addDts(params, {
+                        name: "my-integration",
+                        content: readFileSync(resolve("./stubs/virtual-import.d.ts"), "utf-8")
+                    })
+                }
             }
         }
     }
@@ -80,13 +84,15 @@ export default defineIntegration({
     optionsSchema: z.object({ locales: z.array(z.string()) }),
     setup({ options }) {
         return {
-            "astro:config:setup": (params) => {
-                addDts(params, {
-                    name: "my-integration",
-                    content: `declare module "virtual:my-integration" {
-                        export type Locale: ${options.locales.map(e => `"${e}"`).join(" | ")};
-                    }`
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addDts(params, {
+                        name: "my-integration",
+                        content: `declare module "virtual:my-integration" {
+                            export type Locale: ${options.locales.map(e => `"${e}"`).join(" | ")};
+                        }`
+                    })
+                }
             }
         }
     }
@@ -104,18 +110,20 @@ export default defineIntegration({
     optionsSchema: z.object({ locales: z.array(z.string()) }),
     setup({ options }) {
         return {
-            "astro:config:setup": (params) => {
-                let content = `declare module "virtual:my-integration" {
-                    export type Locale:`
-                for (const locale of locales) {
-                    content += ` | ${locale}`
-                }
-                content += ";\n}"
+            hooks: {
+                "astro:config:setup": (params) => {
+                    let content = `declare module "virtual:my-integration" {
+                        export type Locale:`
+                    for (const locale of locales) {
+                        content += ` | ${locale}`
+                    }
+                    content += ";\n}"
 
-                addDts(params, {
-                    name: "my-integration",
-                    content
-                })
+                    addDts(params, {
+                        name: "my-integration",
+                        content
+                    })
+                }
             }
         }
     }

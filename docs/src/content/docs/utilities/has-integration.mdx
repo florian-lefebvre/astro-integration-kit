@@ -15,11 +15,13 @@ export default defineIntegration({
 	// ...
 	setup() {
 		return {
-			"astro:config:setup": (params) => {
-				const { logger } = params
+			hooks: {
+				"astro:config:setup": (params) => {
+					const { logger } = params
 
-				if (hasIntegration(params, { name: "@astrojs/tailwind" })) {
-					logger.info("Tailwind is installed!");
+					if (hasIntegration(params, { name: "@astrojs/tailwind" })) {
+						logger.info("Tailwind is installed!");
+					}
 				}
 			}
 		}
@@ -45,39 +47,41 @@ export default defineIntegration({
 	// ...
 	setup({ name }) {
 		return {
-			"astro:config:setup": (params) => {
-				const { logger } = params
+			hooks: {
+				"astro:config:setup": (params) => {
+					const { logger } = params
 
-				if (hasIntegration(params, {
-					name: "@astrojs/tailwind",
-					position: "before",
-					relativeTo: name
-				})) {
-					logger.info("Tailwind is installed before my-integration");
-				}
+					if (hasIntegration(params, {
+						name: "@astrojs/tailwind",
+						position: "before",
+						relativeTo: name
+					})) {
+						logger.info("Tailwind is installed before my-integration");
+					}
 
-				if (hasIntegration(params, {
-					name: "astro-env",
-					position: "after",
-					relativeTo: name
-				})) {
-					logger.info("AstroEnv is installed after my-integration");
-				}
+					if (hasIntegration(params, {
+						name: "astro-env",
+						position: "after",
+						relativeTo: name
+					})) {
+						logger.info("AstroEnv is installed after my-integration");
+					}
 
-				if (hasIntegration(params, {
-					name: "astro-expressive-code",
-					position: "before",
-					relativeTo: "@astrojs/mdx"
-				})) {
-					logger.info("Expressive Code is installed before MDX");
-				}
+					if (hasIntegration(params, {
+						name: "astro-expressive-code",
+						position: "before",
+						relativeTo: "@astrojs/mdx"
+					})) {
+						logger.info("Expressive Code is installed before MDX");
+					}
 
-				if (hasIntegration(params, {
-					name: "astro-expressive-code",
-					position: "after",
-					relativeTo: "@astrojs/tailwind"
-				})) {
-					logger.info("Expressive Code is installed after Tailwind");
+					if (hasIntegration(params, {
+						name: "astro-expressive-code",
+						position: "after",
+						relativeTo: "@astrojs/tailwind"
+					})) {
+						logger.info("Expressive Code is installed after Tailwind");
+					}
 				}
 			}
 		}

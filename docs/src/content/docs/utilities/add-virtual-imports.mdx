@@ -15,29 +15,31 @@ export default defineIntegration({
     // ...
     setup({ name }) {
         return {
-            "astro:config:setup": (params) => {
-                addVirtualImports(params, {
-                    name,
-                    imports: {
-                        'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
-                    }
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addVirtualImports(params, {
+                        name,
+                        imports: {
+                            'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+                        }
+                    })
 
-                addVirtualImports(params, {
-                    name,
-                    imports: [
-                        {
-                            id: "virtual:my-integration/advanced",
-                            content: "export const foo = 'server'",
-                            context: "server"
-                        },
-                        {
-                            id: "virtual:my-integration/advanced",
-                            content: "export const foo = 'client'",
-                            context: "client"
-                        },
-                    ]
-                })
+                    addVirtualImports(params, {
+                        name,
+                        imports: [
+                            {
+                                id: "virtual:my-integration/advanced",
+                                content: "export const foo = 'server'",
+                                context: "server"
+                            },
+                            {
+                                id: "virtual:my-integration/advanced",
+                                content: "export const foo = 'client'",
+                                context: "client"
+                            },
+                        ]
+                    })
+                }
             }
         }
     }

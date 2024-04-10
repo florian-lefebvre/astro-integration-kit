@@ -19,8 +19,10 @@ export default defineIntegration({
 		const { resolve } = createResolver(import.meta.url)
 
 		return {
-			"astro:config:setup": (params) => {
-				watchDirectory(params, resolve())
+			hooks: {
+				"astro:config:setup": (params) => {
+					watchDirectory(params, resolve())
+				}
 			}
 		}
 	}

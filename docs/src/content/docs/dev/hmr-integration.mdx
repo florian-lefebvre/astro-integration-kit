@@ -21,8 +21,10 @@ export const integration = defineIntegration({
     setup() {
         const { resolve } = createResolver(import.meta.url)
         return {
-            "astro:config:setup": (params) => {
-                watchIntegration(params, resolve())
+            hooks: {
+                "astro:config:setup": (params) => {
+                    watchIntegration(params, resolve())
+                }
             }
         }
     }
@@ -37,11 +39,11 @@ import { hmrIntegration } from "astro-integration-kit/dev";
 const { default: packageName } = await import("package-name");
 
 export default defineConfig({
-	integrations: [
-		packageName(),
-		hmrIntegration({
-            		directory: createResolver(import.meta.url).resolve("../package/dist")
-        	})
-	],
+    integrations: [
+        packageName(),
+        hmrIntegration({
+            directory: createResolver(import.meta.url).resolve("../package/dist")
+        })
+    ],
 });
 ```

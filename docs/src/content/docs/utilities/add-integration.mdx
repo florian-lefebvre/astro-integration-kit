@@ -18,10 +18,12 @@ export default defineIntegration({
     // ...
     setup() {
         return {
-            "astro:config:setup": (params) => {
-                addIntegration(params, {
-                    integration: Vue()
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addIntegration(params, {
+                        integration: Vue()
+                    })
+                }
             }
         }
     }

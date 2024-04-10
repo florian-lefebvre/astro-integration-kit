@@ -82,11 +82,13 @@ Even though the syntax looks a bit scary, it's actually very simple!
             const { resolve } = createResolver(import.meta.url)
 
             return {
-                "astro:config:setup": (params) => {
-                    injectDevRoute(params, {
-                        pattern: "/",
-                        entrypoint: resolve("./pages/index.astro")
-                    })
+                hooks: {
+                    "astro:config:setup": (params) => {
+                        injectDevRoute(params, {
+                            pattern: "/",
+                            entrypoint: resolve("./pages/index.astro")
+                        })
+                    }
                 }
             }
         }

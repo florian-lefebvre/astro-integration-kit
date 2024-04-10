@@ -27,11 +27,13 @@ For example:
 		// ...
 		setup() {
 			return {
-				"astro:config:setup": (params) => {
-					const { logger } = params
+				hooks: {
+					"astro:config:setup": (params) => {
+						const { logger } = params
 
-					if (hasVitePlugin(params, { plugin: "vite-plugin-my-integration" })) {
-						logger.warn("Vite plugin already exists!");
+						if (hasVitePlugin(params, { plugin: "vite-plugin-my-integration" })) {
+							logger.warn("Vite plugin already exists!");
+						}
 					}
 				}
 			}

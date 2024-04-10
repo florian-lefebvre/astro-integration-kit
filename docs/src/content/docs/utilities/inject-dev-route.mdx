@@ -18,11 +18,13 @@ export default defineIntegration({
 		const { resolve } = createResolver(import.meta.url);
 
 		return {
-			"astro:config:setup": (params) => {
-				injectDevRoute(params, {
-					pattern: "/foo",
-					entrypoint: resolve("./pages/foo.astro")
-				})
+			hooks: {
+				"astro:config:setup": (params) => {
+					injectDevRoute(params, {
+						pattern: "/foo",
+						entrypoint: resolve("./pages/foo.astro")
+					})
+				}
 			}
 		}
 	}

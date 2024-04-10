@@ -17,10 +17,12 @@ export default defineIntegration({
     // ...
     setup() {
         return {
-            "astro:config:setup": (params) => {
-                addVitePlugin(params, {
-                    plugin: VitePWA({ registerType: 'autoUpdate' })
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addVitePlugin(params, {
+                        plugin: VitePWA({ registerType: 'autoUpdate' })
+                    })
+                }
             }
         }
     }
