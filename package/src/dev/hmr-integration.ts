@@ -9,8 +9,10 @@ export const hmrIntegration = defineIntegration({
 	}),
 	setup({ options }) {
 		return {
-			"astro:config:setup": (params) => {
-				watchDirectory(params, options.directory);
+			hooks: {
+				"astro:config:setup": (params) => {
+					watchDirectory(params, options.directory);
+				},
 			},
 		};
 	},

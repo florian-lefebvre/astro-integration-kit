@@ -8,6 +8,18 @@ import type {
 	Hooks,
 } from "./types.js";
 
+type WithPluginsParams<TPlugins extends NonEmptyArray<AnyPlugin>> = {
+	name: string;
+	plugins: TPlugins;
+	hooks: ExtendedHooks<TPlugins>;
+};
+
+type WithPluginsReturn<
+	Params extends WithPluginsParams<NonEmptyArray<AnyPlugin>>,
+> = Omit<Params, "name" | "plugins" | "hooks"> & {
+	hooks: AstroIntegration["hooks"];
+};
+
 /**
  * Allows to extend hooks with custom parameters. Only used for advanced use-cases.
  *
@@ -16,11 +28,19 @@ import type {
  * @param {Array<AnyPlugin>} params.plugins
  * @param {import("astro".AstroIntegration["hooks"])} params.hooks
  */
-export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
-	name,
-	plugins,
-	hooks: providedHooks,
-}: { name: string; plugins: TPlugins; hooks: ExtendedHooks<TPlugins> }) => {
+export const withPlugins = <
+	TPlugins extends NonEmptyArray<AnyPlugin>,
+	Params extends WithPluginsParams<TPlugins>,
+>(
+	options: Params,
+): WithPluginsReturn<Params> => {
+	const {
+		name,
+		plugins,
+		hooks: providedHooks,
+		...remainingIntegrationObject
+	} = options;
+
 	// Overrides plugins with same name
 	// Overrides plugins with same name, keeping only the last occurrence
 	const resolvedPlugins = plugins
@@ -64,5 +84,8 @@ export const withPlugins = <TPlugins extends NonEmptyArray<AnyPlugin>>({
 		]),
 	);
 
-	return hooks;
+	return {
+		hooks,
+		...remainingIntegrationObject,
+	};
 };
