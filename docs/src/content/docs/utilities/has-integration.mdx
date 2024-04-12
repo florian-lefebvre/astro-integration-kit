@@ -5,7 +5,7 @@ description: Checks whether an integration been added to the Astro config.
 
 `hasIntegration` checks whether an integration has already been added to the Astro config. For example:
 
-```ts title="my-integration/index.ts" {3,13}
+```ts title="my-integration/index.ts" {3,14}
 import {
 	defineIntegration,
 	hasIntegration
@@ -37,7 +37,7 @@ For that use-case, this utility accepts optional `position` and `relativeTo` par
 
 Checking for the presence of an integration in relation to an uninstalled integration will result in an error.
 
-```ts title="my-integration/index.ts" {14-16,22-24,30-32,38-40}
+```ts title="my-integration/index.ts" {15-17,23-25,31-33,39-41}
 import {
 	defineIntegration,
 	hasIntegration

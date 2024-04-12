@@ -7,7 +7,7 @@ import { Tabs, TabItem, LinkCard, Aside } from '@astrojs/starlight/components';
 `addDevToolbarFrameworkApp` allows you to register a framework component as a Dev Toolbar App!
 You can now use a React, Preact, Solid, Vue or Svelte component instead of manipulating the DOM imperatively!
 
-```ts title="integration/index.ts" {5,20-31}
+```ts title="integration/index.ts" {5,21-32}
 import {
     defineIntegration,
     createResolver,
@@ -136,7 +136,7 @@ The dependencies required your users need are:
 - Solid: `@astrojs/solid-js`, `solid-js`
 </Aside>
 
-```ts title="integration/index.ts" {4,7,16-18}
+```ts title="integration/index.ts" {4,7,17-19}
 import {
     defineIntegration,
     createResolver,
@@ -222,7 +222,7 @@ pnpm exec tailwindcss -o ./src/styles.css
 
 Then you can read that file in your integration.
 
-```ts title="integration/index.ts" {7,22}
+```ts title="integration/index.ts" {7,23}
 import {
     defineIntegration,
     createResolver,
