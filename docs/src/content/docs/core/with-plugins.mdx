@@ -16,7 +16,7 @@ export default defineIntegration({
             name,
             plugins: [hasVitePluginPlugin],
             hooks: {
-                "astro:config:setup": ({ hasVitePluginPlugin }) => {}
+                "astro:config:setup": ({ hasVitePlugin }) => {}
             }
         })
     }
