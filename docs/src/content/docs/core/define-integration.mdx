@@ -138,3 +138,54 @@ export default defineIntegration({
   },
 });
 ```
+
+## Defining extra integration fields
+
+Any extra property present on the return of `setup` will be present on the integration object returned by initializing the integration with the options.
+
+You can use this to define fields you might want to access from outside your integration while having access to it's internal state.
+
+```ts title="my-integration.ts" ins={13-20}
+import { defineIntegration } from "astro-integration-kit";
+
+export default defineIntegration({
+  // ...
+  setup() {
+    let counter = 0;
+    return {
+      hooks: {
+        "astro:config:setup": ({ logger }) => {
+          logger.info(`Counter: ${counter++}`);
+        },
+      },
+      api: {
+        get counter() {
+          return counter;
+        },
+        increment() {
+          counter++;
+        },
+      },
+    };
+  },
+});
+```
+
+```ts
+import { defineConfig } from "astro/config";
+import myIntegration from "./my-integration";
+
+const integration = myIntegration();
+
+console.log(myIntegration.api.counter); // 0
+
+myIntegration.api.increment();
+
+console.log(myIntegration.api.counter); // 1
+
+export default defineConfig({
+  // Will log "Counter: 1" during setup
+  integrations: [myIntegration],
+});
+```
+
