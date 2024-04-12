@@ -2,7 +2,7 @@
 "astro-integration-kit": minor
 ---
 
-Support extra properties for extended integration object
+Updates `deineIntegration` `setup` returned object shape to allow extra properties
 
 Previously the return of the `setup` function passed to `defineIntegration` was the Astro hooks defined by the integration, and would be set as the `hooks` property in the final integration object.
 
@@ -26,4 +26,3 @@ export default defineIntegration({
 ```
 
 If you were using the `withPlugins` utility, you don't need to do anything since that utility now returns the updated shape.
-
