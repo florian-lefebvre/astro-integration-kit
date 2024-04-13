@@ -5,7 +5,7 @@ description: Allows to inject a route in development only.
 
 `injectDevRoute` allows you to inject a route in development only. For example:
 
-```ts title="my-integration/index.ts" {4,14-17}
+```ts title="my-integration/index.ts" {4,15-18}
 import {
 	defineIntegration,
 	createResolver,
@@ -18,11 +18,13 @@ export default defineIntegration({
 		const { resolve } = createResolver(import.meta.url);
 
 		return {
-			"astro:config:setup": (params) => {
-				injectDevRoute(params, {
-					pattern: "/foo",
-					entrypoint: resolve("./pages/foo.astro")
-				})
+			hooks: {
+				"astro:config:setup": (params) => {
+					injectDevRoute(params, {
+						pattern: "/foo",
+						entrypoint: resolve("./pages/foo.astro")
+					})
+				}
 			}
 		}
 	}

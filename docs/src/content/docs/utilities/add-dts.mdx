@@ -6,7 +6,7 @@ description: Allows to inject .d.ts file in users project. It will create a file
 `addDts` allows you to inject a `.d.ts` file into the user's project. It will
 create a file inside `.astro` and reference it from `src/env.d.ts`. For example:
 
-```ts title="my-integration/index.ts" {3,11-14}
+```ts title="my-integration/index.ts" {3,12-15}
 import {
     defineIntegration,
     addDts
@@ -16,11 +16,13 @@ export default defineIntegration({
     // ...
     setup() {
         return {
-            "astro:config:setup": (params) => {
-                addDts(params, {
-                    name: "my-integration",
-                    content: `declare module "virtual:my-integration" {}`
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addDts(params, {
+                        name: "my-integration",
+                        content: `declare module "virtual:my-integration" {}`
+                    })
+                }
             }
         }
     }
@@ -44,7 +46,7 @@ we recommend you use a `stub` approach:
 declare module "virtual:my-integration" {}
 ```
 
-```ts title="my-integration/index.ts" {2,13}
+```ts title="my-integration/index.ts" {2,14}
 import { defineIntegration, createResolver, addDts } from "astro-integration-kit";
 import { readFileSync } from "node:fs";
 
@@ -54,11 +56,13 @@ export default defineIntegration({
         const { resolve } = createResolver(import.meta.url)
 
         return {
-            "astro:config:setup": (params) => {
-                addDts(params, {
-                    name: "my-integration",
-                    content: readFileSync(resolve("./stubs/virtual-import.d.ts"), "utf-8")
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addDts(params, {
+                        name: "my-integration",
+                        content: readFileSync(resolve("./stubs/virtual-import.d.ts"), "utf-8")
+                    })
+                }
             }
         }
     }
@@ -71,7 +75,7 @@ If you want to generate type from user data/input (codegen), you can go for **in
 
 #### Interpolation
 
-```ts title="my-integration/index.ts" {12-14}
+```ts title="my-integration/index.ts" {13-15}
 import { defineIntegration, addDts } from "astro-integration-kit";
 import { z } from "astro/zod"
 
@@ -80,13 +84,15 @@ export default defineIntegration({
     optionsSchema: z.object({ locales: z.array(z.string()) }),
     setup({ options }) {
         return {
-            "astro:config:setup": (params) => {
-                addDts(params, {
-                    name: "my-integration",
-                    content: `declare module "virtual:my-integration" {
-                        export type Locale: ${options.locales.map(e => `"${e}"`).join(" | ")};
-                    }`
-                })
+            hooks: {
+                "astro:config:setup": (params) => {
+                    addDts(params, {
+                        name: "my-integration",
+                        content: `declare module "virtual:my-integration" {
+                            export type Locale: ${options.locales.map(e => `"${e}"`).join(" | ")};
+                        }`
+                    })
+                }
             }
         }
     }
@@ -95,7 +101,7 @@ export default defineIntegration({
 
 #### Buffer
 
-```ts title="my-integration/index.ts" {10-15,19}
+```ts title="my-integration/index.ts" {11-16,20}
 import { defineIntegration, addDts } from "astro-integration-kit";
 import { z } from "astro/zod"
 
@@ -104,18 +110,20 @@ export default defineIntegration({
     optionsSchema: z.object({ locales: z.array(z.string()) }),
     setup({ options }) {
         return {
-            "astro:config:setup": (params) => {
-                let content = `declare module "virtual:my-integration" {
-                    export type Locale:`
-                for (const locale of locales) {
-                    content += ` | ${locale}`
-                }
-                content += ";\n}"
+            hooks: {
+                "astro:config:setup": (params) => {
+                    let content = `declare module "virtual:my-integration" {
+                        export type Locale:`
+                    for (const locale of locales) {
+                        content += ` | ${locale}`
+                    }
+                    content += ";\n}"
 
-                addDts(params, {
-                    name: "my-integration",
-                    content
-                })
+                    addDts(params, {
+                        name: "my-integration",
+                        content
+                    })
+                }
             }
         }
     }

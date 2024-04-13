@@ -16,9 +16,41 @@ export default defineIntegration({
             name,
             plugins: [hasVitePluginPlugin],
             hooks: {
-                "astro:config:setup": ({ hasVitePluginPlugin }) => {}
+                "astro:config:setup": ({ hasVitePlugin }) => {}
             }
         })
     }
 })
+```
+
+## Defining extra integration fields
+
+Any extra property (not `name`, `plugins` or `hooks`) passed to `withPlugins` are returned unchanged.
+
+You can use this to define fields you might want to access from outside your integration while having access to it's internal state.
+
+```ts title="my-integration.ts" "withPlugins"
+import { defineIntegration, withPlugins } from "astro-integration-kit";
+
+export default defineIntegration({
+  // ...
+  setup() {
+    let counter = 0;
+    return withPlugins({
+      hooks: {
+        "astro:config:setup": ({ logger }) => {
+          logger.info(`Counter: ${counter++}`);
+        },
+      },
+      api: {
+        get counter() {
+          return counter;
+        },
+        increment() {
+          counter++;
+        },
+      },
+    });
+  },
+});
 ```

@@ -8,7 +8,7 @@ describe("defineIntegration", () => {
 
 	test("Should run", () => {
 		const name = "my-integration";
-		const setup = () => ({});
+		const setup = () => ({ hooks: {} });
 
 		expect(() =>
 			defineIntegration({
@@ -21,7 +21,7 @@ describe("defineIntegration", () => {
 	test("Setup should get called", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {};
+			return { hooks: {} };
 		});
 
 		defineIntegration({
@@ -35,7 +35,7 @@ describe("defineIntegration", () => {
 	test("Setup should get called with correct name", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {};
+			return { hooks: {} };
 		});
 
 		defineIntegration({
@@ -51,7 +51,7 @@ describe("defineIntegration", () => {
 	test.skip("Setup should get called with default args", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {};
+			return { hooks: {} };
 		});
 
 		defineIntegration({
@@ -67,7 +67,7 @@ describe("defineIntegration", () => {
 	test.skip("Setup should get called with overwritten args", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {};
+			return { hooks: {} };
 		});
 
 		const expectedOptions = {
@@ -88,7 +88,7 @@ describe("defineIntegration", () => {
 	test("Integration should have correct name", () => {
 		const name = "my-integration";
 		const setup = vi.fn(() => {
-			return {};
+			return { hooks: {} };
 		});
 
 		const integration = defineIntegration({
@@ -97,5 +97,24 @@ describe("defineIntegration", () => {
 		})();
 
 		expect(integration.name).toBe(name);
+	});
+
+	test("Integration should have all extra fields from setup", () => {
+		const name = "my-integration";
+		const setup = vi.fn(() => {
+			return {
+				hooks: {},
+				config: {
+					foo: "bar",
+				},
+			};
+		});
+
+		const integration = defineIntegration({
+			name,
+			setup,
+		})();
+
+		expect(integration.config).toStrictEqual({ foo: "bar" });
 	});
 });

@@ -6,7 +6,7 @@ description: In development, `watchDirectory` will reload the Astro dev server i
 In development, `watchDirectory` will reload the Astro dev server if any files within
 the directory change. For example:
 
-```ts title="my-integration/index.ts" {4,14}
+```ts title="my-integration/index.ts" {4,15}
 import {
 	defineIntegration,
 	createResolver,
@@ -19,8 +19,10 @@ export default defineIntegration({
 		const { resolve } = createResolver(import.meta.url)
 
 		return {
-			"astro:config:setup": (params) => {
-				watchDirectory(params, resolve())
+			hooks: {
+				"astro:config:setup": (params) => {
+					watchDirectory(params, resolve())
+				}
 			}
 		}
 	}

@@ -9,7 +9,7 @@ Until now, we recommended `watchIntegration` to enable HMR in development. Howev
 From now on, we recommend that you use dynamic imports in your local playgrounds, alongside the new `hmrIntegration`
 integration exported from `astro-integration-kit/dev`.
 
-```ts title="package/src/integration.ts" del={3-4,10,13}
+```ts title="package/src/integration.ts" del={3-4,10,14}
 import {
     defineIntegration,
     createResolver,
@@ -21,8 +21,10 @@ export const integration = defineIntegration({
     setup() {
         const { resolve } = createResolver(import.meta.url)
         return {
-            "astro:config:setup": (params) => {
-                watchIntegration(params, resolve())
+            hooks: {
+                "astro:config:setup": (params) => {
+                    watchIntegration(params, resolve())
+                }
             }
         }
     }
@@ -37,11 +39,11 @@ import { hmrIntegration } from "astro-integration-kit/dev";
 const { default: packageName } = await import("package-name");
 
 export default defineConfig({
-	integrations: [
-		packageName(),
-		hmrIntegration({
-            		directory: createResolver(import.meta.url).resolve("../package/dist")
-        	})
-	],
+    integrations: [
+        packageName(),
+        hmrIntegration({
+            directory: createResolver(import.meta.url).resolve("../package/dist")
+        })
+    ],
 });
 ```

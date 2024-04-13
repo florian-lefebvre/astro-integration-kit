@@ -25,7 +25,7 @@ importers:
         version: 0.33.5
       astro:
         specifier: ^4.5.9
-        version: 4.5.9(typescript@5.4.3)
+        version: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       sharp:
         specifier: ^0.33.3
         version: 0.33.3
@@ -47,7 +47,7 @@ importers:
         version: 4.2.1(vite@5.2.2)
       astro:
         specifier: ^4.4.1
-        version: 4.5.8(@types/node@20.11.30)(typescript@5.4.3)
+        version: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       pathe:
         specifier: ^1.1.2
         version: 1.1.2
@@ -102,13 +102,13 @@ importers:
         version: 4.0.1(solid-js@1.8.16)(vite@5.2.2)
       '@astrojs/svelte':
         specifier: ^5.0.3
-        version: 5.2.0(astro@4.5.8)(svelte@4.2.12)(typescript@5.4.3)(vite@5.2.2)
+        version: 5.2.0(astro@4.5.9)(svelte@4.2.12)(typescript@5.4.3)(vite@5.2.2)
       '@astrojs/tailwind':
         specifier: ^5.1.0
-        version: 5.1.0(astro@4.5.8)(tailwindcss@3.4.1)
+        version: 5.1.0(astro@4.5.9)(tailwindcss@3.4.1)
       '@astrojs/vue':
         specifier: ^4.0.8
-        version: 4.0.9(@babel/core@7.24.3)(astro@4.5.8)(vite@5.2.2)(vue@3.4.21)
+        version: 4.0.9(@babel/core@7.24.3)(astro@4.5.9)(vite@5.2.2)(vue@3.4.21)
       '@types/react':
         specifier: ^18.2.55
         version: 18.2.67
@@ -123,7 +123,7 @@ importers:
         version: 5.0.4(vite@5.2.2)(vue@3.4.21)
       astro:
         specifier: ^4.1.2
-        version: 4.5.8(@types/node@20.11.30)(typescript@5.4.3)
+        version: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       astro-integration-kit:
         specifier: workspace:*
         version: link:../package
@@ -169,10 +169,10 @@ importers:
     dependencies:
       '@astrojs/vue':
         specifier: ^4.0.8
-        version: 4.0.9(@babel/core@7.24.3)(astro@4.5.8)(vite@5.2.2)(vue@3.4.21)
+        version: 4.0.9(@babel/core@7.24.3)(astro@4.5.9)(vite@5.2.2)(vue@3.4.21)
       astro:
         specifier: ^4.4.5
-        version: 4.5.8(@types/node@20.11.30)(typescript@5.4.3)
+        version: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       astro-integration-kit:
         specifier: workspace:*
         version: link:../../package
@@ -212,7 +212,7 @@ packages:
     peerDependencies:
       typescript: ^5.0.0
     dependencies:
-      '@astrojs/language-server': 2.8.3(typescript@5.4.3)
+      '@astrojs/language-server': 2.8.4(typescript@5.4.3)
       chokidar: 3.6.0
       fast-glob: 3.3.2
       kleur: 4.1.5
@@ -292,38 +292,6 @@ packages:
     resolution: {integrity: sha512-tGmHvrhpzuz0JBHaJX8GywN9g4rldVNHtkoVDC3m/DdzBO70jGoVuc0uuNVglRYnsdwkbG0K02Iw3nOOR3/Y4g==}
     dev: false
 
-  /@astrojs/language-server@2.8.3(typescript@5.4.3):
-    resolution: {integrity: sha512-tO47Lcue7OPXfIDbKVDcshwpC13yaWaTVLyiSOnQ2Yng2Z2SgcJf06Cj4xMpJqGp6s7/o/gcQWYUTl2bpkWKig==}
-    hasBin: true
-    peerDependencies:
-      prettier: ^3.0.0
-      prettier-plugin-astro: '>=0.11.0'
-    peerDependenciesMeta:
-      prettier:
-        optional: true
-      prettier-plugin-astro:
-        optional: true
-    dependencies:
-      '@astrojs/compiler': 2.7.0
-      '@jridgewell/sourcemap-codec': 1.4.15
-      '@volar/kit': 2.1.3(typescript@5.4.3)
-      '@volar/language-core': 2.1.3
-      '@volar/language-server': 2.1.3
-      '@volar/language-service': 2.1.3
-      '@volar/typescript': 2.1.3
-      fast-glob: 3.3.2
-      volar-service-css: 0.0.34(@volar/language-service@2.1.3)
-      volar-service-emmet: 0.0.34(@volar/language-service@2.1.3)
-      volar-service-html: 0.0.34(@volar/language-service@2.1.3)
-      volar-service-prettier: 0.0.34(@volar/language-service@2.1.3)
-      volar-service-typescript: 0.0.34(@volar/language-service@2.1.3)
-      volar-service-typescript-twoslash-queries: 0.0.34(@volar/language-service@2.1.3)
-      vscode-html-languageservice: 5.1.2
-      vscode-uri: 3.0.8
-    transitivePeerDependencies:
-      - typescript
-    dev: true
-
   /@astrojs/language-server@2.8.4(typescript@5.4.3):
     resolution: {integrity: sha512-sJH5vGTBkhgA8+hdhzX78UUp4cFz4Mt7xkEkevD188OS5bDMkaue6hK+dtXWM47mnrXFveXA2u38K7S+5+IRjA==}
     hasBin: true
@@ -390,7 +358,7 @@ packages:
       '@astrojs/markdown-remark': 4.3.1
       '@mdx-js/mdx': 3.0.1
       acorn: 8.11.3
-      astro: 4.5.9(typescript@5.4.3)
+      astro: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       es-module-lexer: 1.4.2
       estree-util-visit: 2.0.0
       github-slugger: 2.0.0
@@ -485,7 +453,7 @@ packages:
       '@pagefind/default-ui': 1.0.4
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.3
-      astro: 4.5.9(typescript@5.4.3)
+      astro: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       astro-expressive-code: 0.33.5(astro@4.5.9)
       bcp-47: 2.1.0
       hast-util-from-html: 2.0.1
@@ -505,7 +473,7 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/svelte@5.2.0(astro@4.5.8)(svelte@4.2.12)(typescript@5.4.3)(vite@5.2.2):
+  /@astrojs/svelte@5.2.0(astro@4.5.9)(svelte@4.2.12)(typescript@5.4.3)(vite@5.2.2):
     resolution: {integrity: sha512-GmwbXks2WMkmAfl0rlPM/2gA1RtmZzjGV2mOceV3g7QNyjIsSYBPKrlEnSFnuR+YMvlAtWdbMFBsb3gtGxnTTg==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -514,7 +482,7 @@ packages:
       typescript: ^5.3.3
     dependencies:
       '@sveltejs/vite-plugin-svelte': 3.0.2(svelte@4.2.12)(vite@5.2.2)
-      astro: 4.5.8(@types/node@20.11.30)(typescript@5.4.3)
+      astro: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       svelte: 4.2.12
       svelte2tsx: 0.6.27(svelte@4.2.12)(typescript@5.4.3)
       typescript: 5.4.3
@@ -523,13 +491,13 @@ packages:
       - vite
     dev: false
 
-  /@astrojs/tailwind@5.1.0(astro@4.5.8)(tailwindcss@3.4.1):
+  /@astrojs/tailwind@5.1.0(astro@4.5.9)(tailwindcss@3.4.1):
     resolution: {integrity: sha512-BJoCDKuWhU9FT2qYg+fr6Nfb3qP4ShtyjXGHKA/4mHN94z7BGcmauQK23iy+YH5qWvTnhqkd6mQPQ1yTZTe9Ig==}
     peerDependencies:
       astro: ^3.0.0 || ^4.0.0
       tailwindcss: ^3.0.24
     dependencies:
-      astro: 4.5.8(@types/node@20.11.30)(typescript@5.4.3)
+      astro: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       autoprefixer: 10.4.19(postcss@8.4.38)
       postcss: 8.4.38
       postcss-load-config: 4.0.2(postcss@8.4.38)
@@ -553,7 +521,7 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/vue@4.0.9(@babel/core@7.24.3)(astro@4.5.8)(vite@5.2.2)(vue@3.4.21):
+  /@astrojs/vue@4.0.9(@babel/core@7.24.3)(astro@4.5.9)(vite@5.2.2)(vue@3.4.21):
     resolution: {integrity: sha512-go+dRsDQpZYbwvMTJygw9i9W7apsI36STm/Ic4NTcTnlMGjQZlFi3GyQiPB8rstX+FpuTaCDxFSzDhqfD89tig==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -564,7 +532,7 @@ packages:
       '@vitejs/plugin-vue-jsx': 3.1.0(vite@5.2.2)(vue@3.4.21)
       '@vue/babel-plugin-jsx': 1.2.2(@babel/core@7.24.3)
       '@vue/compiler-sfc': 3.4.21
-      astro: 4.5.8(@types/node@20.11.30)(typescript@5.4.3)
+      astro: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       vue: 3.4.21(typescript@5.4.3)
     transitivePeerDependencies:
       - '@babel/core'
@@ -3511,19 +3479,6 @@ packages:
       pretty-format: 29.7.0
     dev: true
 
-  /@volar/kit@2.1.3(typescript@5.4.3):
-    resolution: {integrity: sha512-E4gsBkYZnoQ/T1GorDCs2ndYV+3rv/SPxPbG0um1RU47sH6qX1I7Kk+1wjwTVD78TLCA8NSTq+dMapAL5mGw3Q==}
-    peerDependencies:
-      typescript: '*'
-    dependencies:
-      '@volar/language-service': 2.1.3
-      '@volar/typescript': 2.1.3
-      typesafe-path: 0.2.2
-      typescript: 5.4.3
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
-    dev: true
-
   /@volar/kit@2.1.5(typescript@5.4.3):
     resolution: {integrity: sha512-L4bHJ1TsKNjsmxSGBuzkUvii4EQoQAT9JoHy8aL4Y17qU/z0JWI1BzUDGpMl4oDlsc+WpWIVGo6KZAnclrUx/w==}
     peerDependencies:
@@ -3537,32 +3492,10 @@ packages:
       vscode-uri: 3.0.8
     dev: true
 
-  /@volar/language-core@2.1.3:
-    resolution: {integrity: sha512-F93KYZYqcYltG7NihfnLt/omMZOtrQtsh2+wj+cgx3xolopU+TZvmwlZWOjw3ObZGFj3SKBb4jJn6VSfSch6RA==}
-    dependencies:
-      '@volar/source-map': 2.1.3
-    dev: true
-
   /@volar/language-core@2.1.5:
     resolution: {integrity: sha512-u1OHmVkCFsJqNdaM2GKuMhE67TxcEnOqJNF+VtYv2Ji8DnrUaF4FAFSNxY+MRGICl+873CsSJVKas9TQtW14LA==}
     dependencies:
       '@volar/source-map': 2.1.5
-    dev: true
-
-  /@volar/language-server@2.1.3:
-    resolution: {integrity: sha512-dUet7VeDWhsHWSd8wRcE19kkIDT3rq/FC6CzTDH+y0sjnGrKwRH9ANX6KbR1HzEh71ajRL1XemK2X6N7x5VEWQ==}
-    dependencies:
-      '@volar/language-core': 2.1.3
-      '@volar/language-service': 2.1.3
-      '@volar/snapshot-document': 2.1.3
-      '@volar/typescript': 2.1.3
-      '@vscode/l10n': 0.0.16
-      path-browserify: 1.0.1
-      request-light: 0.7.0
-      vscode-languageserver: 9.0.1
-      vscode-languageserver-protocol: 3.17.5
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
     dev: true
 
   /@volar/language-server@2.1.5:
@@ -3581,15 +3514,6 @@ packages:
       vscode-uri: 3.0.8
     dev: true
 
-  /@volar/language-service@2.1.3:
-    resolution: {integrity: sha512-0wsPSvfIP1IAP0Bskp5aCjYvLge9PTzIAiHDFK9PYmMOJqO+vgPih9IIBSded1SCxaRauSvqwGoXKdeFieoYbg==}
-    dependencies:
-      '@volar/language-core': 2.1.3
-      vscode-languageserver-protocol: 3.17.5
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
-    dev: true
-
   /@volar/language-service@2.1.5:
     resolution: {integrity: sha512-WuvEv6x/fBe3e4akhblK1E2GgpnAZNnm7sKsRPrQPTE3ED5PIfiMrWgzKB5gNZToD+d6LPxfKAaGWQCpxmSJiw==}
     dependencies:
@@ -3599,13 +3523,6 @@ packages:
       vscode-uri: 3.0.8
     dev: true
 
-  /@volar/snapshot-document@2.1.3:
-    resolution: {integrity: sha512-sXcat0I1YmmohMuq1q/tcbcYIeI9vkZwx14LEpsX/wk9DcxrEILx+d1gjRxg9EgRjQRacDZIVevnKZf6p3Fi8A==}
-    dependencies:
-      vscode-languageserver-protocol: 3.17.5
-      vscode-languageserver-textdocument: 1.0.11
-    dev: true
-
   /@volar/snapshot-document@2.1.5:
     resolution: {integrity: sha512-UbHM95HxlLNAQ4hTSzIiMj2m19zmwrympviItbx6iPRhbd0FSPGsHdrfL8nsBa9q2cIvwSEtrmA5Sg3tHy4mrg==}
     dependencies:
@@ -3613,23 +3530,10 @@ packages:
       vscode-languageserver-textdocument: 1.0.11
     dev: true
 
-  /@volar/source-map@2.1.3:
-    resolution: {integrity: sha512-j+R+NG/OlDgdNMttADxNuSM9Z26StT/Bjw0NgSydI05Vihngn9zvaP/xXwfWs5qQrRzbKVFxJebS2ks5m/URuA==}
-    dependencies:
-      muggle-string: 0.4.1
-    dev: true
-
   /@volar/source-map@2.1.5:
     resolution: {integrity: sha512-GIkAM6fHgDcTXcdH4i10fAiAZzO0HLIer8/pt3oZ9A0n7n4R5d1b2F8Xxzh/pgmgNoL+SrHX3MFxs35CKgfmtA==}
     dependencies:
       muggle-string: 0.4.1
-    dev: true
-
-  /@volar/typescript@2.1.3:
-    resolution: {integrity: sha512-ZZqLMih4mvu2eJAW3UCFm84OM/ojYMoA/BU/W1TctT5F2nVzNJmW4jxMWmP3wQzxCbATfTa5gLb1+BSI9NBMBg==}
-    dependencies:
-      '@volar/language-core': 2.1.3
-      path-browserify: 1.0.1
     dev: true
 
   /@volar/typescript@2.1.5:
@@ -3934,93 +3838,12 @@ packages:
     peerDependencies:
       astro: ^4.0.0-beta || ^3.3.0
     dependencies:
-      astro: 4.5.9(typescript@5.4.3)
+      astro: 4.5.9(@types/node@20.11.30)(typescript@5.4.3)
       hast-util-to-html: 8.0.4
       remark-expressive-code: 0.33.5
     dev: false
 
-  /astro@4.5.8(@types/node@20.11.30)(typescript@5.4.3):
-    resolution: {integrity: sha512-bhKsoZQWT6LW8aYMvTGglZTPa3rYRbcdc2buiJyFPCvSWOOyZmxqpp6vtQ+x6fXxD8P1NecM/c4g5GaPi+MokQ==}
-    engines: {node: '>=18.14.1', npm: '>=6.14.0'}
-    hasBin: true
-    dependencies:
-      '@astrojs/compiler': 2.7.0
-      '@astrojs/internal-helpers': 0.3.0
-      '@astrojs/markdown-remark': 4.3.1
-      '@astrojs/telemetry': 3.0.4
-      '@babel/core': 7.24.3
-      '@babel/generator': 7.24.1
-      '@babel/parser': 7.24.1
-      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.3)
-      '@babel/traverse': 7.24.1
-      '@babel/types': 7.24.0
-      '@types/babel__core': 7.20.5
-      acorn: 8.11.3
-      aria-query: 5.3.0
-      axobject-query: 4.0.0
-      boxen: 7.1.1
-      chokidar: 3.6.0
-      ci-info: 4.0.0
-      clsx: 2.1.0
-      common-ancestor-path: 1.0.1
-      cookie: 0.6.0
-      cssesc: 3.0.0
-      debug: 4.3.4
-      deterministic-object-hash: 2.0.2
-      devalue: 4.3.2
-      diff: 5.2.0
-      dlv: 1.1.3
-      dset: 3.1.3
-      es-module-lexer: 1.4.2
-      esbuild: 0.19.12
-      estree-walker: 3.0.3
-      execa: 8.0.1
-      fast-glob: 3.3.2
-      flattie: 1.1.1
-      github-slugger: 2.0.0
-      gray-matter: 4.0.3
-      html-escaper: 3.0.3
-      http-cache-semantics: 4.1.1
-      js-yaml: 4.1.0
-      kleur: 4.1.5
-      magic-string: 0.30.8
-      mime: 3.0.0
-      ora: 7.0.1
-      p-limit: 5.0.0
-      p-queue: 8.0.1
-      path-to-regexp: 6.2.1
-      preferred-pm: 3.1.3
-      prompts: 2.4.2
-      rehype: 13.0.1
-      resolve: 1.22.8
-      semver: 7.6.0
-      shiki: 1.2.0
-      string-width: 7.1.0
-      strip-ansi: 7.1.0
-      tsconfck: 3.0.3(typescript@5.4.3)
-      unist-util-visit: 5.0.0
-      vfile: 6.0.1
-      vite: 5.2.2(@types/node@20.11.30)
-      vitefu: 0.2.5(vite@5.2.2)
-      which-pm: 2.1.1
-      yargs-parser: 21.1.1
-      zod: 3.22.4
-      zod-to-json-schema: 3.22.4(zod@3.22.4)
-    optionalDependencies:
-      sharp: 0.32.6
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - typescript
-    dev: false
-
-  /astro@4.5.9(typescript@5.4.3):
+  /astro@4.5.9(@types/node@20.11.30)(typescript@5.4.3):
     resolution: {integrity: sha512-GheU72Goz7dYQNKaqTxB2H49cNvHfahGSbNkTvMXk+gyHf/g633qadqlO2ZQbTUacoUWmDzvS5fhMZt2/w4naQ==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
@@ -9888,20 +9711,6 @@ packages:
       - terser
     dev: true
 
-  /volar-service-css@0.0.34(@volar/language-service@2.1.3):
-    resolution: {integrity: sha512-C7ua0j80ZD7bsgALAz/cA1bykPehoIa5n+3+Ccr+YLpj0fypqw9iLUmGLX11CqzqNCO2XFGe/1eXB/c+SWrF/g==}
-    peerDependencies:
-      '@volar/language-service': ~2.1.0
-    peerDependenciesMeta:
-      '@volar/language-service':
-        optional: true
-    dependencies:
-      '@volar/language-service': 2.1.3
-      vscode-css-languageservice: 6.2.12
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
-    dev: true
-
   /volar-service-css@0.0.34(@volar/language-service@2.1.5):
     resolution: {integrity: sha512-C7ua0j80ZD7bsgALAz/cA1bykPehoIa5n+3+Ccr+YLpj0fypqw9iLUmGLX11CqzqNCO2XFGe/1eXB/c+SWrF/g==}
     peerDependencies:
@@ -9914,19 +9723,6 @@ packages:
       vscode-css-languageservice: 6.2.12
       vscode-languageserver-textdocument: 1.0.11
       vscode-uri: 3.0.8
-    dev: true
-
-  /volar-service-emmet@0.0.34(@volar/language-service@2.1.3):
-    resolution: {integrity: sha512-ubQvMCmHPp8Ic82LMPkgrp9ot+u2p/RDd0RyT0EykRkZpWsagHUF5HWkVheLfiMyx2rFuWx/+7qZPOgypx6h6g==}
-    peerDependencies:
-      '@volar/language-service': ~2.1.0
-    peerDependenciesMeta:
-      '@volar/language-service':
-        optional: true
-    dependencies:
-      '@volar/language-service': 2.1.3
-      '@vscode/emmet-helper': 2.9.2
-      vscode-html-languageservice: 5.1.2
     dev: true
 
   /volar-service-emmet@0.0.34(@volar/language-service@2.1.5):
@@ -9942,20 +9738,6 @@ packages:
       vscode-html-languageservice: 5.1.2
     dev: true
 
-  /volar-service-html@0.0.34(@volar/language-service@2.1.3):
-    resolution: {integrity: sha512-kMEneea1tQbiRcyKavqdrSVt8zV06t+0/3pGkjO3gV6sikXTNShIDkdtB4Tq9vE2cQdM50TuS7utVV7iysUxHw==}
-    peerDependencies:
-      '@volar/language-service': ~2.1.0
-    peerDependenciesMeta:
-      '@volar/language-service':
-        optional: true
-    dependencies:
-      '@volar/language-service': 2.1.3
-      vscode-html-languageservice: 5.1.2
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
-    dev: true
-
   /volar-service-html@0.0.34(@volar/language-service@2.1.5):
     resolution: {integrity: sha512-kMEneea1tQbiRcyKavqdrSVt8zV06t+0/3pGkjO3gV6sikXTNShIDkdtB4Tq9vE2cQdM50TuS7utVV7iysUxHw==}
     peerDependencies:
@@ -9967,21 +9749,6 @@ packages:
       '@volar/language-service': 2.1.5
       vscode-html-languageservice: 5.1.2
       vscode-languageserver-textdocument: 1.0.11
-      vscode-uri: 3.0.8
-    dev: true
-
-  /volar-service-prettier@0.0.34(@volar/language-service@2.1.3):
-    resolution: {integrity: sha512-BNfJ8FwfPi1Wm/JkuzNjraOLdtKieGksNT/bDyquygVawv1QUzO2HB1hiMKfZGdcSFG5ZL9R0j7bBfRTfXA2gg==}
-    peerDependencies:
-      '@volar/language-service': ~2.1.0
-      prettier: ^2.2 || ^3.0
-    peerDependenciesMeta:
-      '@volar/language-service':
-        optional: true
-      prettier:
-        optional: true
-    dependencies:
-      '@volar/language-service': 2.1.3
       vscode-uri: 3.0.8
     dev: true
 
@@ -10000,17 +9767,6 @@ packages:
       vscode-uri: 3.0.8
     dev: true
 
-  /volar-service-typescript-twoslash-queries@0.0.34(@volar/language-service@2.1.3):
-    resolution: {integrity: sha512-XAY2YtWKUp6ht89gxt3L5Dr46LU45d/VlBkj1KXUwNlinpoWiGN4Nm3B6DRF3VoBThAnQgm4c7WD0S+5yTzh+w==}
-    peerDependencies:
-      '@volar/language-service': ~2.1.0
-    peerDependenciesMeta:
-      '@volar/language-service':
-        optional: true
-    dependencies:
-      '@volar/language-service': 2.1.3
-    dev: true
-
   /volar-service-typescript-twoslash-queries@0.0.34(@volar/language-service@2.1.5):
     resolution: {integrity: sha512-XAY2YtWKUp6ht89gxt3L5Dr46LU45d/VlBkj1KXUwNlinpoWiGN4Nm3B6DRF3VoBThAnQgm4c7WD0S+5yTzh+w==}
     peerDependencies:
@@ -10020,22 +9776,6 @@ packages:
         optional: true
     dependencies:
       '@volar/language-service': 2.1.5
-    dev: true
-
-  /volar-service-typescript@0.0.34(@volar/language-service@2.1.3):
-    resolution: {integrity: sha512-NbAry0w8ZXFgGsflvMwmPDCzgJGx3C+eYxFEbldaumkpTAJiywECWiUbPIOfmEHgpOllUKSnhwtLlWFK4YnfQg==}
-    peerDependencies:
-      '@volar/language-service': ~2.1.0
-    peerDependenciesMeta:
-      '@volar/language-service':
-        optional: true
-    dependencies:
-      '@volar/language-service': 2.1.3
-      path-browserify: 1.0.1
-      semver: 7.6.0
-      typescript-auto-import-cache: 0.3.2
-      vscode-languageserver-textdocument: 1.0.11
-      vscode-nls: 5.2.0
     dev: true
 
   /volar-service-typescript@0.0.34(@volar/language-service@2.1.5):

@@ -3,6 +3,11 @@ import { AstroError } from "astro/errors";
 import { z } from "astro/zod";
 import { errorMap } from "../internal/error-map.js";
 
+type AstroIntegrationSetupFn<Options extends z.ZodTypeAny> = (params: {
+	name: string;
+	options: z.output<Options>;
+}) => Omit<AstroIntegration, "name">;
+
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows integration authors to handle user options and global logic easily.
  *
@@ -25,6 +30,8 @@ import { errorMap } from "../internal/error-map.js";
  */
 export const defineIntegration = <
 	TOptionsSchema extends z.ZodTypeAny = z.ZodNever,
+	TSetup extends
+		AstroIntegrationSetupFn<TOptionsSchema> = AstroIntegrationSetupFn<TOptionsSchema>,
 >({
 	name,
 	optionsSchema,
@@ -32,18 +39,15 @@ export const defineIntegration = <
 }: {
 	name: string;
 	optionsSchema?: TOptionsSchema;
-	setup: (params: {
-		name: string;
-		options: z.output<TOptionsSchema>;
-	}) => AstroIntegration["hooks"];
+	setup: TSetup;
 }): ((
 	...args: [z.input<TOptionsSchema>] extends [never]
 		? []
 		: undefined extends z.input<TOptionsSchema>
-		  ? [options?: z.input<TOptionsSchema>]
-		  : [options: z.input<TOptionsSchema>]
-) => AstroIntegration) => {
-	return (...args) => {
+			? [options?: z.input<TOptionsSchema>]
+			: [options: z.input<TOptionsSchema>]
+) => AstroIntegration & ReturnType<TSetup>) => {
+	return (...args): AstroIntegration & ReturnType<TSetup> => {
 		const parsedOptions = (optionsSchema ?? z.never().optional()).safeParse(
 			args[0],
 			{
@@ -60,11 +64,11 @@ export const defineIntegration = <
 
 		const options = parsedOptions.data as z.output<TOptionsSchema>;
 
-		const hooks = setup({ name, options });
+		const integration = setup({ name, options }) as ReturnType<TSetup>;
 
 		return {
 			name,
-			hooks,
+			...integration,
 		};
 	};
 };
