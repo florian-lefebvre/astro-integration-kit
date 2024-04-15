@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createResolver } from "../../../src/core/create-resolver.ts";
+import { createResolver } from "../../../src/core/create-resolver.js";
 
 const createFixture = () => {
 	let path: string;
@@ -13,12 +13,12 @@ const createFixture = () => {
 			resolvedPath = createResolver(path).resolve(..._path);
 		},
 		thenResolvedPathShouldBe(expected: string) {
-			expect(resolvedPath).toBe(expected);
+			expect(resolvedPath).toEqual(expected);
 		},
 	};
 };
 
-describe("createResolver", () => {
+describe("core: createResolver", () => {
 	let fixture: ReturnType<typeof createFixture>;
 
 	beforeEach(() => {

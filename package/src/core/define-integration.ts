@@ -38,7 +38,7 @@ export const defineIntegration = <
 	setup,
 }: {
 	name: string;
-	optionsSchema?: TOptionsSchema;
+	optionsSchema?: TOptionsSchema | undefined;
 	setup: TSetup;
 }): ((
 	...args: [z.input<TOptionsSchema>] extends [never]
