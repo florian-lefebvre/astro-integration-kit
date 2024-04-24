@@ -152,6 +152,24 @@ const testIntegration = defineIntegration({
 							throw new Error("Should fail");
 						}
 					}
+					{
+						let error = false;
+						try {
+							addVirtualImports(params, {
+								name,
+								imports: {
+									"astro:temp": "export {}",
+								},
+								__enableCorePowerDoNotUserOrYouWillBeFired: true,
+							});
+						} catch (err) {
+							console.log((err as Error).message);
+							error = true;
+						}
+						if (error) {
+							throw new Error("Should not fail");
+						}
+					}
 
 					if (hasIntegration(params, { name: "@astrojs/tailwind" })) {
 						console.log("Tailwind is installed");

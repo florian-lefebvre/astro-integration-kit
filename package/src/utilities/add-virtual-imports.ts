@@ -24,7 +24,11 @@ const resolveVirtualModuleId = <T extends string>(id: T): `\0${T}` => {
 	return `\0${id}`;
 };
 
-const createVirtualModule = (name: string, _imports: Imports): Plugin => {
+const createVirtualModule = (
+	name: string,
+	_imports: Imports,
+	bypassCoreValidation: boolean,
+): Plugin => {
 	// We normalize the imports into an array
 	const imports: Array<VirtualImport> = Array.isArray(_imports)
 		? _imports
@@ -53,7 +57,7 @@ const createVirtualModule = (name: string, _imports: Imports): Plugin => {
 
 	const resolutionMap = Object.fromEntries(
 		imports.map(({ id }) => {
-			if (id.startsWith("astro:")) {
+			if (!bypassCoreValidation && id.startsWith("astro:")) {
 				throw new AstroError(
 					`Virtual import name prefix can't be "astro:" (for "${id}") because it's reserved for Astro core.`,
 				);
@@ -129,9 +133,11 @@ export const addVirtualImports = defineUtility("astro:config:setup")(
 		{
 			name,
 			imports,
+			__enableCorePowerDoNotUserOrYouWillBeFired = false,
 		}: {
 			name: string;
 			imports: Imports;
+			__enableCorePowerDoNotUserOrYouWillBeFired?: boolean;
 		},
 	) => {
 		let pluginName = `vite-plugin-${name}`;
@@ -141,7 +147,11 @@ export const addVirtualImports = defineUtility("astro:config:setup")(
 
 		addVitePlugin(params, {
 			warnDuplicated: false,
-			plugin: createVirtualModule(pluginName, imports),
+			plugin: createVirtualModule(
+				pluginName,
+				imports,
+				__enableCorePowerDoNotUserOrYouWillBeFired,
+			),
 		});
 	},
 );
