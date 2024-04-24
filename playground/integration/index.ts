@@ -160,7 +160,7 @@ const testIntegration = defineIntegration({
 								imports: {
 									"astro:temp": "export {}",
 								},
-								__enableCorePowerDoNotUserOrYouWillBeFired: true,
+								__enableCorePowerDoNotUseOrYouWillBeFired: true,
 							});
 						} catch (err) {
 							console.log((err as Error).message);

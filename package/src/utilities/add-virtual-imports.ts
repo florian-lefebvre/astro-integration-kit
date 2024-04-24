@@ -133,11 +133,11 @@ export const addVirtualImports = defineUtility("astro:config:setup")(
 		{
 			name,
 			imports,
-			__enableCorePowerDoNotUserOrYouWillBeFired = false,
+			__enableCorePowerDoNotUseOrYouWillBeFired = false,
 		}: {
 			name: string;
 			imports: Imports;
-			__enableCorePowerDoNotUserOrYouWillBeFired?: boolean;
+			__enableCorePowerDoNotUseOrYouWillBeFired?: boolean;
 		},
 	) => {
 		let pluginName = `vite-plugin-${name}`;
@@ -150,7 +150,7 @@ export const addVirtualImports = defineUtility("astro:config:setup")(
 			plugin: createVirtualModule(
 				pluginName,
 				imports,
-				__enableCorePowerDoNotUserOrYouWillBeFired,
+				__enableCorePowerDoNotUseOrYouWillBeFired,
 			),
 		});
 	},
