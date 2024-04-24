@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.11.1
+
+### Patch Changes
+
+- 5228a57: Adds core bypass flag to `addVirtualImports`
+
 ## 0.11.0
 
 ### Minor Changes
