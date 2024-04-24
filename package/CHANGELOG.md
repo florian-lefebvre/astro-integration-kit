@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.11.2
+
+### Patch Changes
+
+- 647c1ba: Fixes a typo
+
 ## 0.11.1
 
 ### Patch Changes
