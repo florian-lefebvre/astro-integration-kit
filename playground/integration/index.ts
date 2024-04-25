@@ -240,7 +240,7 @@ const testIntegration = defineIntegration({
 							include: ["**/*.solid.jsx"],
 						}),
 					});
-
+					/*
 					addDevToolbarFrameworkApp(params, {
 						framework: "react",
 						name: "Test React Plugin 1 ",
@@ -361,6 +361,7 @@ const testIntegration = defineIntegration({
 					`,
 						src: resolve("./devToolbarApps/Test.solid.jsx"),
 					});
+					*/
 
 					console.log(
 						"VITE PLUGINS",
@@ -369,6 +370,27 @@ const testIntegration = defineIntegration({
 
 					// Test addVirtualImports disallowed list
 					// addVirtualImports({ "astro:test": "export default {}" });
+
+					addVirtualImports(params, {
+						name: "whatever",
+						imports: [
+							{
+								id: "whatever-a",
+								content: "export const foo = 'bar'",
+								context: "server",
+							},
+							{
+								id: "whatever-b",
+								content: "export const abc = 'def'",
+								context: "server",
+							},
+							{
+								id: "whatever-b",
+								content: "export const abc = 'def'",
+								context: "client",
+							},
+						],
+					});
 				},
 			},
 		});

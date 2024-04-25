@@ -8,6 +8,12 @@ import arraySimple from "virtual:playground/array-simple"
 import arrayComplex from "virtual:playground/array-complex"
 
 import Layout from "../layouts/Layout.astro";
+
+// @ts-ignore
+import * as whateverA from "whatever-a"
+// @ts-ignore
+import * as whateverB from "whatever-b"
+console.log({ whateverA, whateverB })
 ---
 
 <Layout title="Testing Virtual Module">

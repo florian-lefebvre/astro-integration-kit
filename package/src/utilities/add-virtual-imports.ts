@@ -79,10 +79,12 @@ const createVirtualModule = (
 			const resolution = resolutionMap[id];
 			if (resolution) {
 				const context = options?.ssr ? "server" : "client";
-				const data = imports.find((_import) =>
-					_import.id === resolution && _import.context === undefined
-						? true
-						: _import.context === context,
+				const data = imports.find(
+					(_import) =>
+						_import.id === resolution &&
+						(_import.context === undefined
+							? true
+							: _import.context === context),
 				);
 
 				if (data) {
