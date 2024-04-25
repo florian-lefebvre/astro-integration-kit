@@ -133,6 +133,9 @@ export default defineConfig({
 							label: "addDevToolbarFrameworkApp",
 							link: "/utilities/add-devtoolbar-framework-app/",
 							badge: badge("removed"),
+							attrs: {
+								style: "opacity:0.5",
+							},
 						},
 						{
 							label: "addDts",

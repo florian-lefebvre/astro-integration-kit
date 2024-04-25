@@ -2,4 +2,4 @@
 "astro-integration-kit": minor
 ---
 
-Removes addDevtoolbarFrameworkApp utility
+Removes the `addDevtoolbarFrameworkApp` utility in favor of `defineToolbarApp` added in Astro 4.7.0
