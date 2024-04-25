@@ -13,7 +13,7 @@ export default defineConfig((options) => {
 		clean: true,
 		splitting: false,
 		minify: !dev,
-		external: [...Object.keys(peerDependencies), "@@COMPONENT_SRC@@"],
+		external: [...Object.keys(peerDependencies)],
 		tsconfig: "tsconfig.build.json",
 	};
 });

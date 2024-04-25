@@ -5,5 +5,4 @@ export { hasIntegration } from "./has-integration.js";
 export { hasVitePlugin } from "./has-vite-plugin.js";
 export { injectDevRoute } from "./inject-dev-route.js";
 export { watchDirectory } from "./watch-directory.js";
-export { addDevToolbarFrameworkApp } from "./add-devtoolbar-framework-app.js";
 export { addIntegration } from "./add-integration.js";
