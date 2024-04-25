@@ -1,6 +1,5 @@
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
-import TestVueApp from "test-vue-app";
 import testIntegration from "./integration";
 
 const { createResolver } = await import("astro-integration-kit");
@@ -15,7 +14,6 @@ export default defineConfig({
 		}),
 		{ name: "integration-a", hooks: {} },
 		{ name: "integration-b", hooks: {} },
-		TestVueApp(),
 		hmrIntegration({
 			directory: createResolver(import.meta.url).resolve("../package/dist"),
 		}),
