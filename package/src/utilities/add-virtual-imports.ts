@@ -82,9 +82,7 @@ const createVirtualModule = (
 				const data = imports.find(
 					(_import) =>
 						_import.id === resolution &&
-						(_import.context === undefined
-							? true
-							: _import.context === context),
+						(_import.context === undefined || _import.context === context),
 				);
 
 				if (data) {
