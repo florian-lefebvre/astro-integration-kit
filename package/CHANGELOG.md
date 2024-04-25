@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.11.3
+
+### Patch Changes
+
+- cc1e92b: Fixes a case where the wrong content was passed when using `addVirtualImports` with `imports` as an array
+
 ## 0.11.2
 
 ### Patch Changes
