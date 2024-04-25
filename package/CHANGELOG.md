@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.12.0
+
+### Minor Changes
+
+- 76e7343: Removes the `addDevtoolbarFrameworkApp` utility in favor of `defineToolbarApp` added in Astro 4.7.0
+
 ## 0.11.3
 
 ### Patch Changes
