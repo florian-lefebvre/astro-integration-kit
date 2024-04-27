@@ -1,5 +1,5 @@
 import type { AstroIntegration } from "astro";
-import type { NonEmptyArray } from "../internal/types.js";
+import type { NonEmptyArray, Prettify } from "../internal/types.js";
 import type {
 	AddedParam,
 	AnyPlugin,
@@ -14,12 +14,7 @@ type WithPluginsParams<TPlugins extends NonEmptyArray<AnyPlugin>> = {
 	hooks: ExtendedHooks<TPlugins>;
 };
 
-type WithPluginsReturn<Extensions> = Omit<
-	Extensions,
-	"name" | "plugins" | "hooks"
-> & {
-	hooks: AstroIntegration["hooks"];
-};
+export type WithPluginsReturn<Extensions> = Extensions & Omit<AstroIntegration, 'name'>;
 
 /**
  * Allows to extend hooks with custom parameters. Only used for advanced use-cases.
@@ -34,7 +29,7 @@ export const withPlugins = <
 	Extensions extends Record<any, unknown>,
 >(
 	options: WithPluginsParams<TPlugins> & Extensions,
-): WithPluginsReturn<Extensions> => {
+): WithPluginsReturn<Prettify<Omit<Extensions, keyof WithPluginsParams<any>>>> => {
 	const {
 		name,
 		plugins,
