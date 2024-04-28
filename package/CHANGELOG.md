@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.13.1
+
+### Patch Changes
+
+- d25f27e: Fixes autocomplete and intellisense for non-core hooks
+
 ## 0.13.0
 
 ### Minor Changes
