@@ -3,11 +3,15 @@ import { AstroError } from "astro/errors";
 import { z } from "astro/zod";
 import { errorMap } from "../internal/error-map.js";
 import type { Prettify } from "../internal/types.ts";
+import type { Hooks } from "./types.js";
 
 type AstroIntegrationSetupFn<Options extends z.ZodTypeAny> = (params: {
 	name: string;
 	options: z.output<Options>;
-}) => Omit<AstroIntegration, "name">;
+}) => Omit<AstroIntegration, "name" | "hooks"> & {
+	// Enable autocomplete and intellisense for non-core hooks
+	hooks: Partial<Hooks>,
+};
 
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows integration authors to handle user options and global logic easily.
