@@ -2,4 +2,4 @@
 "astro-integration-kit": patch
 ---
 
-Expand typing support for Astro DB 0.10
+Expands typing support for Astro DB 0.10
