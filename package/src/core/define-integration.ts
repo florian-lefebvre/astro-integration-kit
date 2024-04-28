@@ -47,7 +47,8 @@ export const defineIntegration = <
 		: undefined extends z.input<TOptionsSchema>
 		  ? [options?: z.input<TOptionsSchema>]
 		  : [options: z.input<TOptionsSchema>]
-) => AstroIntegration & Prettify<Omit<ReturnType<TSetup>, keyof AstroIntegration>>) => {
+) => AstroIntegration &
+	Prettify<Omit<ReturnType<TSetup>, keyof AstroIntegration>>) => {
 	return (...args): AstroIntegration & ReturnType<TSetup> => {
 		const parsedOptions = (optionsSchema ?? z.never().optional()).safeParse(
 			args[0],

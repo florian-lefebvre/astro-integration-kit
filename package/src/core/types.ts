@@ -6,7 +6,9 @@ export type PluginHooksConstraint = {
 };
 
 type PluginPerHookSetup<THooks extends PluginHooksConstraint> = {
-	[Hook in keyof THooks & keyof Hooks]: (...params: Parameters<Hooks[Hook]>) => THooks[Hook];
+	[Hook in keyof THooks & keyof Hooks]: (
+		...params: Parameters<Hooks[Hook]>
+	) => THooks[Hook];
 };
 
 export type Plugin<
@@ -44,8 +46,8 @@ type AnyFunction = (...args: Array<any>) => any;
 type SimplifyPlugin<TPlugin extends AnyPlugin = AnyPlugin> = {
 	name: TPlugin["name"];
 	hooks: TPlugin extends Plugin<any, infer THooks>
-	  ? THooks
-	  : Record<string, never>,
+		? THooks
+		: Record<string, never>;
 };
 
 /**

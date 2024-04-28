@@ -14,7 +14,8 @@ type WithPluginsParams<TPlugins extends NonEmptyArray<AnyPlugin>> = {
 	hooks: ExtendedHooks<TPlugins>;
 };
 
-export type WithPluginsReturn<Extensions> = Extensions & Omit<AstroIntegration, 'name'>;
+export type WithPluginsReturn<Extensions> = Extensions &
+	Omit<AstroIntegration, "name">;
 
 /**
  * Allows to extend hooks with custom parameters. Only used for advanced use-cases.
@@ -29,7 +30,9 @@ export const withPlugins = <
 	Extensions extends Record<any, unknown>,
 >(
 	options: WithPluginsParams<TPlugins> & Extensions,
-): WithPluginsReturn<Prettify<Omit<Extensions, keyof WithPluginsParams<any>>>> => {
+): WithPluginsReturn<
+	Prettify<Omit<Extensions, keyof WithPluginsParams<any>>>
+> => {
 	const {
 		name,
 		plugins,
