@@ -2,7 +2,7 @@
 "astro-integration-kit": patch
 ---
 
-Simplify emitted declarations for dependent integrations.
+Simplifies emitted declarations for dependent integrations.
 
 Previously an integration using Astro Integration Kit and publishing to NPM with their type declarations would generate a type like this:
 
