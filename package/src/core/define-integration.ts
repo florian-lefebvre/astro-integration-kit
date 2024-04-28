@@ -2,6 +2,7 @@ import type { AstroIntegration } from "astro";
 import { AstroError } from "astro/errors";
 import { z } from "astro/zod";
 import { errorMap } from "../internal/error-map.js";
+import type { Prettify } from "../internal/types.ts";
 
 type AstroIntegrationSetupFn<Options extends z.ZodTypeAny> = (params: {
 	name: string;
@@ -46,7 +47,7 @@ export const defineIntegration = <
 		: undefined extends z.input<TOptionsSchema>
 		  ? [options?: z.input<TOptionsSchema>]
 		  : [options: z.input<TOptionsSchema>]
-) => AstroIntegration & ReturnType<TSetup>) => {
+) => AstroIntegration & Prettify<Omit<ReturnType<TSetup>, keyof AstroIntegration>>) => {
 	return (...args): AstroIntegration & ReturnType<TSetup> => {
 		const parsedOptions = (optionsSchema ?? z.never().optional()).safeParse(
 			args[0],
