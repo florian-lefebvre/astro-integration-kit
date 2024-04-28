@@ -2,9 +2,11 @@ import type { DevToolbarApp } from "astro";
 import type { Prettify } from "../internal/types.js";
 
 export type PluginHooksConstraint = {
-	[Hook in keyof Hooks]?: (
-		...args: Parameters<Hooks[Hook]>
-	) => Record<string, unknown>;
+	[Hook in keyof Hooks]?: Record<string, unknown>;
+};
+
+type PluginPerHookSetup<THooks extends PluginHooksConstraint> = {
+	[Hook in keyof THooks & keyof Hooks]: (...params: Parameters<Hooks[Hook]>) => THooks[Hook];
 };
 
 export type Plugin<
@@ -12,11 +14,11 @@ export type Plugin<
 	THooks extends PluginHooksConstraint,
 > = {
 	name: TName;
-	setup: (params: { name: string }) => THooks;
+	setup: (params: { name: string }) => PluginPerHookSetup<THooks>;
 };
 
 // To avoid having to call this manually for every generic
-export type AnyPlugin = Plugin<string, Record<string, unknown>>;
+export type AnyPlugin = Plugin<string, Record<string, any>>;
 
 declare global {
 	namespace AstroIntegrationKit {
@@ -41,13 +43,9 @@ type AnyFunction = (...args: Array<any>) => any;
  */
 type SimplifyPlugin<TPlugin extends AnyPlugin = AnyPlugin> = {
 	name: TPlugin["name"];
-	hooks: {
-		[K in keyof ReturnType<TPlugin["setup"]>]: ReturnType<
-			TPlugin["setup"]
-		>[K] extends AnyFunction
-			? ReturnType<ReturnType<TPlugin["setup"]>[K]>
-			: never;
-	};
+	hooks: TPlugin extends Plugin<any, infer THooks>
+	  ? THooks
+	  : Record<string, never>,
 };
 
 /**

@@ -97,7 +97,6 @@ export default defineConfig({
 						{
 							label: "hmrIntegration",
 							link: "/dev/hmr-integration/",
-							badge: badge("new"),
 						},
 					],
 				},
@@ -168,7 +167,6 @@ export default defineConfig({
 						{
 							label: "watchDirectory",
 							link: "/utilities/watch-directory/",
-							badge: badge("new"),
 						},
 						{
 							label: "watchIntegration",
