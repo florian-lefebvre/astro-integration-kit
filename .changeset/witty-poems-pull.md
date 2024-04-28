@@ -38,4 +38,4 @@ declare const hookProviderPlugin: astro_integration_kit.Plugin<"hook-provider", 
 };
 ```
 
-As shown above, this simplification also removes the unneded re-reclaration of the plugin hook input, which is a breaking change if you are declaring your generic explicitly.
+As shown above, this simplification also removes the unneeded re-declaration of the plugin hook input, which is a breaking change if you are declaring your generic explicitly.
