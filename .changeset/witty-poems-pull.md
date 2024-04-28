@@ -2,7 +2,7 @@
 "astro-integration-kit": minor
 ---
 
-Simplify emitted declarations for plugins.
+Simplifies emitted declarations for plugins.
 
 This avoids problems with too complex or non-portable types for published libraries offering plugins. Previously a simple plugin would result in a declaration like this:
 
