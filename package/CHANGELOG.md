@@ -1,5 +1,98 @@
 # astro-integration-kit
 
+## 0.13.0
+
+### Minor Changes
+
+- 1c8a6f5: Simplifies emitted declarations for plugins.
+
+  This avoids problems with too complex or non-portable types for published libraries offering plugins. Previously a simple plugin would result in a declaration like this:
+
+  ```ts
+  declare const hookProviderPlugin: astro_integration_kit.Plugin<"hook-provider", {
+      'astro:config:setup': ({ config }: {
+          config: astro.AstroConfig;
+          command: "dev" | "build" | "preview";
+          isRestart: boolean;
+          updateConfig: (newConfig: DeepPartial<astro.AstroConfig>) => astro.AstroConfig;
+          addRenderer: (renderer: astro.AstroRenderer) => void;
+          addWatchFile: (path: string | URL) => void;
+          injectScript: (stage: astro.InjectedScriptStage, content: string) => void;
+          injectRoute: (injectRoute: astro.InjectedRoute) => void;
+          addClientDirective: (directive: astro.ClientDirectiveConfig) => void;
+          addDevOverlayPlugin: (entrypoint: string) => void;
+          addDevToolbarApp: (entrypoint: string | astro.DevToolbarAppEntry) => void;
+          addMiddleware: (mid: astro.AstroIntegrationMiddleware) => void;
+          logger: astro.AstroIntegrationLogger;
+      }) => {
+          doThing: (thing: string) => void;
+      };
+  };
+  ```
+
+  Now, the same plugin will emit the following simplified declaration, without inlining any of the AstroHooks types:
+
+  ```ts
+  declare const hookProviderPlugin: astro_integration_kit.Plugin<"hook-provider", {
+      'astro:config:setup': {
+          doThing: (thing: string) => void;
+      };
+  };
+  ```
+
+  As shown above, this simplification also removes the unneeded re-declaration of the plugin hook input, which is a breaking change if you are declaring your generic explicitly.
+
+### Patch Changes
+
+- d04a410: Expands typing support for Astro DB 0.10
+- 0fb9b47: Simplifies emitted declarations for dependent integrations.
+
+  Previously an integration using Astro Integration Kit and publishing to NPM with their type declarations would generate a type like this:
+
+  ```ts
+  declare const _default: (options?: undefined) => astro.AstroIntegration & {
+    hooks: {
+      "astro:config:setup": (params: {
+        config: astro.AstroConfig;
+        command: "dev" | "build" | "preview";
+        isRestart: boolean;
+        updateConfig: (
+          newConfig: DeepPartial<astro.AstroConfig>
+        ) => astro.AstroConfig;
+        addRenderer: (renderer: astro.AstroRenderer) => void;
+        addWatchFile: (path: string | URL) => void;
+        injectScript: (
+          stage: astro.InjectedScriptStage,
+          content: string
+        ) => void;
+        injectRoute: (injectRoute: astro.InjectedRoute) => void;
+        addClientDirective: (directive: astro.ClientDirectiveConfig) => void;
+        addDevOverlayPlugin: (entrypoint: string) => void;
+        addDevToolbarApp: (
+          entrypoint: string | astro.DevToolbarAppEntry
+        ) => void;
+        addMiddleware: (mid: astro.AstroIntegrationMiddleware) => void;
+        logger: astro.AstroIntegrationLogger;
+      }) => void;
+    };
+    addExtraPage: (page: string) => void;
+  };
+  ```
+
+  Such inlining of the Astro hook parameter types not only makes your published package include unnecessary code, but can also make it fail to compile if you use a hook that inlines a reference to a transitive dependency:
+
+  ```
+  error TS2742: The inferred type of 'default' cannot be named without a reference to '.pnpm/vite@5.2.10_@types+node@20.12.7/node_modules/vite'. This is likely not portable. A type annotation is necessary.
+  ```
+
+  Now, the same integration will emit the following simplified declaration, without inlining any of the AstroHooks types:
+
+  ```ts
+  declare const _default: (options?: undefined) => astro.AstroIntegration & {
+    addExtraPage: (page: string) => void;
+  };
+  ```
+
 ## 0.12.0
 
 ### Minor Changes
