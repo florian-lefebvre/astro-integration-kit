@@ -4,7 +4,7 @@
 
 Simplify emitted declarations for dependent integrations.
 
-Previoysly an integration using AIK and publishing to NPM with their type declarations would generate a type like this:
+Previously an integration using Astro Integration Kit and publishing to NPM with their type declarations would generate a type like this:
 
 ```ts
 declare const _default: (options?: undefined) => astro.AstroIntegration & {
