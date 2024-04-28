@@ -7,6 +7,30 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Features get added and removed, and breaking changes are introduced! This documents how to migrate.
 
+## `0.13.0`
+
+---
+
+### `Plugin` type simplified
+
+The new Plugin signature added back on [`0.9.0`](#new-plugin-signature-and-defineplugin) returned the need for emitted declarations to include the full type for hook parameters from Astro (which was removed on [`0.7.0`](#plugins-types)).
+This was added along with support for a plugin to define new utilities for multiple hooks at once.
+
+Now, the Plugin generics have been simplified again to allow such support without requiring to replicate Astro's hook parameters types. Just like in `0.7.0`, this should be non-breaking for any plugin relying on type inference but plugins with explicitly declared signatures need to update the following:
+
+```ts del={5} ins={6}
+type SomePlugin = Plugin<
+    "utilityName",
+    "astro:config:setup",
+    {
+        "astro:config:setup": (HookParameters<"astro:config:setup">) => {
+        "astro:config:setup": {
+            utilityName: (params: UtilityParams) => UtilityOutput
+        }
+    }
+>;
+```
+
 ## `0.12.0`
 
 ---
