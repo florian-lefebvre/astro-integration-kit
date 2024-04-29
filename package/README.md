@@ -44,3 +44,7 @@ You can now edit files in `package`. Please note that making changes to those fi
 ## Licensing
 
 [MIT Licensed](https://github.com/florian-lefebvre/astro-integration-kit/blob/main/LICENSE). Made with ❤️ by [Florian Lefebvre](https://github.com/florian-lefebvre).
+
+## Acknowledgements
+
+- [Nuxt Kit](https://nuxt.com/docs/guide/going-further/kit)
