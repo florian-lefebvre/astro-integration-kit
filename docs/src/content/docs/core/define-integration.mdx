@@ -123,7 +123,7 @@ If you want to use those hooks on your integration or plugin, you can import tha
 
 ```ts title="my-integration/index.ts" ins={2,9-11}
 import { defineIntegration } from "astro-integration-kit";
-import "astro-integration-kit/extras/db";
+import "astro-integration-kit/types/db";
 
 export default defineIntegration({
   // ...
