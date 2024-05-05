@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.13.2
+
+### Patch Changes
+
+- f213bf6: Expands typing support for Astro DB 0.11
+
 ## 0.13.1
 
 ### Patch Changes
