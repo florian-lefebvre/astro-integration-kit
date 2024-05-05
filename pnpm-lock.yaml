@@ -40,7 +40,7 @@ importers:
   package:
     dependencies:
       '@astrojs/db':
-        specifier: ^0.9 || ^0.10
+        specifier: ^0.9 || ^0.10 || ^0.11
         version: 0.10.6
       astro:
         specifier: ^4.4.1
