@@ -1,7 +1,7 @@
 {
 	"name": "root",
 	"private": true,
-	"packageManager": "pnpm@9.0.6",
+	"packageManager": "pnpm@9.1.1",
 	"engines": {
 		"node": ">=18.19.0"
 	},
@@ -16,7 +16,7 @@
 		"test": "pnpm --filter astro-integration-kit test"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.5.2",
-		"@changesets/cli": "^2.27.1"
+		"@biomejs/biome": "1.7.3",
+		"@changesets/cli": "^2.27.2"
 	}
 }

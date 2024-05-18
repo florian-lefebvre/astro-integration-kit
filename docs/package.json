@@ -11,13 +11,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.21.2",
-    "@expressive-code/plugin-line-numbers": "^0.33.5",
-    "astro": "^4.5.9",
-    "sharp": "^0.33.3"
+    "@astrojs/starlight": "^0.22.4",
+    "@expressive-code/plugin-line-numbers": "^0.35.3",
+    "astro": "^4.8.6",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.5.10",
-    "typescript": "^5.4.3"
+    "@astrojs/check": "^0.7.0",
+    "typescript": "^5.4.5"
   }
 }
