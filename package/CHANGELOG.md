@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.13.3
+
+### Patch Changes
+
+- 7f434df: Upgrades dependencies
+
 ## 0.13.2
 
 ### Patch Changes
