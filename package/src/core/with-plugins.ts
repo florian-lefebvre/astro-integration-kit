@@ -56,7 +56,12 @@ export const withPlugins = <
 			> => plugin.setup({ name }),
 		);
 
-	const definedHooks = Object.keys(providedHooks) as Array<keyof Hooks>;
+	const definedHooks = ([
+		...Object.keys(providedHooks),
+		...resolvedPlugins.flatMap(Object.keys),
+	] as Array<keyof Hooks>)
+		// Deduplicate the hook names
+		.filter((hookName, index, list) => list.indexOf(hookName) === index);
 
 	const hooks: AstroIntegration["hooks"] = Object.fromEntries(
 		definedHooks.map((hookName) => [
