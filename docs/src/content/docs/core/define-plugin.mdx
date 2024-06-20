@@ -113,6 +113,27 @@ export default defineIntegration({
     })
     ```
 
+## `defineAllHooksPlugin`
+
+`defineAllHooksPlugin` is a variation of `definePlugin` for when you want to provide the same API for every hook defined in the consumer integration.
+
+Using this function has an advantange because it allows your plugin to provide an API even for hooks it doesn't know about, like any Astro hook added after the plugin release or hooks added by integrations like `@astrojs/db`.
+
+Instead of providing a `setup` function returning a map of your API factory for each hook, you provide a function that receives a hook name and returns the API factory for that hook.
+
+```ts
+defineAllHooksPlugin({
+    name: "my-plugin",
+    setup({ name }) {
+        return (hookName) => (hookParameters) => ({
+            doSomething: () => {
+                // ...
+            }
+        });
+    }
+})
+```
+
 ## Limitations
 
 1. Plugins support overrides. That means that if 2 plugins declare the same `name`, the latest will be kept.
