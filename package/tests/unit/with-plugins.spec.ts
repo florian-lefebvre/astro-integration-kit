@@ -22,8 +22,11 @@ describe('withPlugins', () => {
             },
           };
         },
-        'astro:server:done': () => ({
-          getState: () => innerState,
+        'astro:server:done': ({ logger }) => ({
+          getState: () => {
+            logger.info('Reading state');
+            return innerState;
+          },
         }),
       };
     },
@@ -86,6 +89,7 @@ describe('withPlugins', () => {
     expect(logger.log).toStrictEqual([
       'Called from plugin "foo" on integration "my-integration".',
       'Calling "foo" with msg: from integration',
+      'Reading state',
     ]);
   });
 
@@ -150,6 +154,7 @@ describe('withPlugins', () => {
 
     expect(logger.log).toStrictEqual([
       'Called from plugin "foo" on integration "my-integration".',
+      'Reading state'
     ]);
   });
 });
