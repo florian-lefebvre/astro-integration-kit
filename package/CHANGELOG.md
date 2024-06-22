@@ -1,5 +1,15 @@
 # astro-integration-kit
 
+## 0.14.0
+
+### Minor Changes
+
+- 25c72f6: Adds a new `defineAllHooksPlugin` helper for plugins that provide APIs for any hook, including third-party hooks.
+
+### Patch Changes
+
+- 676438b: Fixes initialization of plugins when necessary hooks are not used by consumer integrations
+
 ## 0.13.3
 
 ### Patch Changes
