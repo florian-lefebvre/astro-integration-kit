@@ -28,8 +28,8 @@ export const errorMap: ZodErrorMap = (baseError, ctx) => {
 				const flattenedErrorPath = flattenErrorPath(unionError.path);
 				if (typeOrLiteralErrByPath.has(flattenedErrorPath)) {
 					typeOrLiteralErrByPath
-						.get(flattenedErrorPath)!
-						.expected.push(unionError.expected);
+						.get(flattenedErrorPath)
+						?.expected.push(unionError.expected);
 				} else {
 					typeOrLiteralErrByPath.set(flattenedErrorPath, {
 						code: unionError.code,

@@ -1,23 +1,23 @@
 {
-  "name": "docs",
-  "type": "module",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/starlight": "^0.25.1",
-    "@expressive-code/plugin-line-numbers": "^0.35.3",
-    "astro": "^4.12.1",
-    "sharp": "^0.33.4"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.8.2",
-    "typescript": "^5.4.5"
-  }
+	"name": "docs",
+	"type": "module",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro check && astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@astrojs/starlight": "^0.25.1",
+		"@expressive-code/plugin-line-numbers": "^0.35.3",
+		"astro": "^4.12.1",
+		"sharp": "^0.33.4"
+	},
+	"devDependencies": {
+		"@astrojs/check": "^0.8.2",
+		"typescript": "^5.4.5"
+	}
 }
