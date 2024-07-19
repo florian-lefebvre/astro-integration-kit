@@ -60,7 +60,7 @@ export const errorMap: ZodErrorMap = (baseError, ctx) => {
 						.map(([key, error]) =>
 							key === baseErrorPath
 								? // Avoid printing the key again if it's a base error
-								  `> ${getTypeOrLiteralMsg(error)}`
+									`> ${getTypeOrLiteralMsg(error)}`
 								: `> ${prefix(key, getTypeOrLiteralMsg(error))}`,
 						),
 				)
@@ -81,11 +81,11 @@ export const errorMap: ZodErrorMap = (baseError, ctx) => {
 				}),
 			),
 		};
-	} else if (baseError.message) {
-		return { message: prefix(baseErrorPath, baseError.message) };
-	} else {
-		return { message: prefix(baseErrorPath, ctx.defaultError) };
 	}
+	if (baseError.message) {
+		return { message: prefix(baseErrorPath, baseError.message) };
+	}
+	return { message: prefix(baseErrorPath, ctx.defaultError) };
 };
 
 const getTypeOrLiteralMsg = (error: TypeOrLiteralErrByPathEntry): string => {

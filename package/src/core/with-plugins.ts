@@ -1,12 +1,6 @@
-import type { AstroIntegration } from "astro";
+import type { AstroIntegration, HookParameters } from "astro";
 import type { NonEmptyArray, Prettify } from "../internal/types.js";
-import type {
-	AddedParam,
-	AnyPlugin,
-	ExtendedHooks,
-	HookParameters,
-	Hooks,
-} from "./types.js";
+import type { AddedParam, AnyPlugin, ExtendedHooks, Hooks } from "./types.js";
 
 type WithPluginsParams<TPlugins extends NonEmptyArray<AnyPlugin>> = {
 	name: string;
@@ -56,10 +50,12 @@ export const withPlugins = <
 			> => plugin.setup({ name }),
 		);
 
-	const definedHooks = ([
-		...Object.keys(providedHooks),
-		...resolvedPlugins.flatMap(Object.keys),
-	] as Array<keyof Hooks>)
+	const definedHooks = (
+		[
+			...Object.keys(providedHooks),
+			...resolvedPlugins.flatMap(Object.keys),
+		] as Array<keyof Hooks>
+	)
 		// Deduplicate the hook names
 		.filter((hookName, index, list) => list.indexOf(hookName) === index);
 

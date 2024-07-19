@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import type { HookParameters } from "astro";
 import { dirname, normalize } from "pathe";
 import type { Plugin } from "vite";
 import {
@@ -11,7 +12,6 @@ import {
 	vi,
 } from "vitest";
 import { createResolver } from "../../src/core/create-resolver.ts";
-import type { HookParameters } from "../../src/core/types.ts";
 import { watchDirectory } from "../../src/utilities/watch-directory.ts";
 
 const tempFolderName = ".TMP_WATCHDIRECTORY";

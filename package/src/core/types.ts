@@ -22,19 +22,7 @@ export type Plugin<
 // To avoid having to call this manually for every generic
 export type AnyPlugin = Plugin<string, Record<string, any>>;
 
-declare global {
-	namespace AstroIntegrationKit {
-		// biome-ignore lint/suspicious/noEmptyInterface: Requires for interface merging
-		export interface ExtraHooks {}
-	}
-}
-
-export type Hooks = Prettify<
-	Required<NonNullable<import("astro").AstroIntegration["hooks"]>> &
-		AstroIntegrationKit.ExtraHooks
->;
-
-export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
+export type Hooks = Required<Astro.IntegrationHooks>;
 
 type AnyFunction = (...args: Array<any>) => any;
 
@@ -65,7 +53,7 @@ type FilterPluginsByHook<
 		? Tail extends Array<AnyPlugin>
 			? undefined extends SimplifyPlugin<Head>["hooks"][THook]
 				? // Drop plugin if the hook is not defined.
-				  FilterPluginsByHook<THook, Tail>
+					FilterPluginsByHook<THook, Tail>
 				: [SimplifyPlugin<Head>, ...FilterPluginsByHook<THook, Tail>]
 			: []
 		: []
@@ -94,7 +82,7 @@ type OverridePluginParamsForHook<
 			? Omit<
 					OverridePluginParamsForHook<THook, Head>,
 					keyof Tail["hooks"][THook]
-			  > &
+				> &
 					Tail["hooks"][THook]
 			: never
 		: never
@@ -126,8 +114,8 @@ export type AddedParam<
 type AddParam<Func, Param = never> = [Param] extends [never]
 	? Func
 	: Func extends (params: infer Params) => infer ReturnType
-	  ? (params: Params & Param) => ReturnType
-	  : never;
+		? (params: Params & Param) => ReturnType
+		: never;
 
 export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
 	[Hook in keyof Hooks]?: Hooks[Hook] extends AnyFunction
