@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import type { HookParameters } from "astro";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import { createResolver } from "../../src/core/create-resolver.js";

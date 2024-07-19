@@ -15,7 +15,7 @@ type Imports = Record<string, string> | Array<VirtualImport>;
 const incrementPluginName = (name: string) => {
 	let count = 1;
 	return `${name.replace(/-(\d+)$/, (_, c) => {
-		count = Number.parseInt(c) + 1;
+		count = parseInt(c) + 1;
 		return "";
 	})}-${count}`;
 };
@@ -36,7 +36,7 @@ const createVirtualModule = (
 				id,
 				content,
 				context: undefined,
-			}));
+		  }));
 
 	// We check for virtual imports with overlapping contexts, eg. several imports
 	// with the same id and context server

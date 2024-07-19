@@ -10,7 +10,7 @@ type AstroIntegrationSetupFn<Options extends z.ZodTypeAny> = (params: {
 	options: z.output<Options>;
 }) => Omit<AstroIntegration, "name" | "hooks"> & {
 	// Enable autocomplete and intellisense for non-core hooks
-	hooks: Partial<Hooks>;
+	hooks: Partial<Hooks>,
 };
 
 /**
@@ -49,8 +49,8 @@ export const defineIntegration = <
 	...args: [z.input<TOptionsSchema>] extends [never]
 		? []
 		: undefined extends z.input<TOptionsSchema>
-			? [options?: z.input<TOptionsSchema>]
-			: [options: z.input<TOptionsSchema>]
+		  ? [options?: z.input<TOptionsSchema>]
+		  : [options: z.input<TOptionsSchema>]
 ) => AstroIntegration &
 	Prettify<Omit<ReturnType<TSetup>, keyof AstroIntegration>>) => {
 	return (...args): AstroIntegration & ReturnType<TSetup> => {

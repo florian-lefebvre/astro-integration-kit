@@ -50,12 +50,10 @@ export const withPlugins = <
 			> => plugin.setup({ name }),
 		);
 
-	const definedHooks = (
-		[
-			...Object.keys(providedHooks),
-			...resolvedPlugins.flatMap(Object.keys),
-		] as Array<keyof Hooks>
-	)
+	const definedHooks = ([
+		...Object.keys(providedHooks),
+		...resolvedPlugins.flatMap(Object.keys),
+	] as Array<keyof Hooks>)
 		// Deduplicate the hook names
 		.filter((hookName, index, list) => list.indexOf(hookName) === index);
 
