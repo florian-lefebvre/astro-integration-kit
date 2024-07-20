@@ -1,12 +1,6 @@
-import type { AstroIntegration } from "astro";
+import type { AstroIntegration, HookParameters } from "astro";
 import type { NonEmptyArray, Prettify } from "../internal/types.js";
-import type {
-	AddedParam,
-	AnyPlugin,
-	ExtendedHooks,
-	HookParameters,
-	Hooks,
-} from "./types.js";
+import type { AddedParam, AnyPlugin, ExtendedHooks, Hooks } from "./types.js";
 
 type WithPluginsParams<TPlugins extends NonEmptyArray<AnyPlugin>> = {
 	name: string;

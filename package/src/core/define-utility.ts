@@ -1,4 +1,5 @@
-import type { HookParameters, Hooks } from "./types.js";
+import type { HookParameters } from "astro";
+import type { Hooks } from "./types.js";
 
 /**
  * Allows defining a type-safe function requiring all the params of a given hook.
@@ -21,7 +22,7 @@ export const defineUtility =
 	 * The function itself
 	 * @param {Function} fn;
 	 */
-	<TFn extends (params: HookParameters<THook>, ...args: Array<any>) => any>(
-		fn: TFn,
+	<TArgs extends Array<any>, T>(
+		fn: (params: HookParameters<THook>, ...args: TArgs) => T,
 	) =>
 		fn;

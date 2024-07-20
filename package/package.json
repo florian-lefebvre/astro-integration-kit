@@ -28,10 +28,6 @@
 			"types": "./dist/plugins/index.d.ts",
 			"default": "./dist/plugins/index.js"
 		},
-		"./types/db": {
-			"types": "./types/db.d.ts",
-			"default": "./types/noop.js"
-		},
 		"./dev": {
 			"types": "./dist/dev/index.d.ts",
 			"default": "./dist/dev/index.js"
@@ -48,13 +44,7 @@
 	},
 	"type": "module",
 	"peerDependencies": {
-		"@astrojs/db": "^0.9 || ^0.10 || ^0.11",
-		"astro": "^4.4.1"
-	},
-	"peerDependenciesMeta": {
-		"@astrojs/db": {
-			"optional": true
-		}
+		"astro": "^4.12.0"
 	},
 	"devDependencies": {
 		"@types/node": "^20.12.12",

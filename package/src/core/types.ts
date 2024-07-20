@@ -22,19 +22,7 @@ export type Plugin<
 // To avoid having to call this manually for every generic
 export type AnyPlugin = Plugin<string, Record<string, any>>;
 
-declare global {
-	namespace AstroIntegrationKit {
-		// biome-ignore lint/suspicious/noEmptyInterface: Requires for interface merging
-		export interface ExtraHooks {}
-	}
-}
-
-export type Hooks = Prettify<
-	Required<NonNullable<import("astro").AstroIntegration["hooks"]>> &
-		AstroIntegrationKit.ExtraHooks
->;
-
-export type HookParameters<T extends keyof Hooks> = Parameters<Hooks[T]>[0];
+export type Hooks = Required<Astro.IntegrationHooks>;
 
 type AnyFunction = (...args: Array<any>) => any;
 
