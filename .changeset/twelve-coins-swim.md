@@ -2,12 +2,12 @@
 "astro-integration-kit": minor
 ---
 
-Bump the minimal version of Astro to 4.12
+Bumps the minimal version of Astro to 4.12
 
-- Removed the `AstroIntergation.ExtraHooks` workaround for extending hooks in favor of the native `Astro.IntegrationHooks` extendable interface.
+- Removes the `AstroIntegration.ExtraHooks` workaround for extending hooks in favor of the native `Astro.IntegrationHooks` extendable interface:
 
   ```diff
-  -namespace AstroIntergationKit {
+  -namespace AstroIntegrationKit {
   -  interface ExtraHooks {
   +namespace Astro {
   +  interface IntegrationHooks {
@@ -16,7 +16,7 @@ Bump the minimal version of Astro to 4.12
   }
   ```
 
-- Removed the `HookParameters` type that combined the native types and the workaround above. The native `HookParameters` should be used now:
+- Removes the `HookParameters` type that combined the native types and the workaround above. The native `HookParameters` should be used now:
 
   ```diff
   - import type { HookParameters } from 'astro-integration-kit';
