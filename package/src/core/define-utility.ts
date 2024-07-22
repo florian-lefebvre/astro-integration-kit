@@ -2,6 +2,17 @@ import type { HookParameters } from "astro";
 import type { Hooks } from "./types.js";
 
 /**
+ * A utility to be used on an Astro hook.
+ *
+ * @see defineUtility
+ */
+export type HookUtility<
+	THook extends keyof Hooks,
+	TArgs extends Array<any>,
+	TReturn,
+> = (params: HookParameters<THook>, ...args: TArgs) => TReturn;
+
+/**
  * Allows defining a type-safe function requiring all the params of a given hook.
  * It uses currying to make TypeScript happy.
  *
@@ -23,6 +34,6 @@ export const defineUtility =
 	 * @param {Function} fn;
 	 */
 	<TArgs extends Array<any>, T>(
-		fn: (params: HookParameters<THook>, ...args: TArgs) => T,
-	) =>
+		fn: HookUtility<THook, TArgs, T>,
+	): HookUtility<THook, TArgs, T> =>
 		fn;

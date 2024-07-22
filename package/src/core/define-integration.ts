@@ -2,13 +2,13 @@ import type { AstroIntegration } from "astro";
 import { AstroError } from "astro/errors";
 import { z } from "astro/zod";
 import { errorMap } from "../internal/error-map.js";
-import type { Prettify } from "../internal/types.ts";
+import type { ExtendedPrettify } from "../internal/types.ts";
 import type { Hooks } from "./types.js";
 
-type AstroIntegrationSetupFn<Options extends z.ZodTypeAny> = (params: {
+type AstroIntegrationSetupFn<Options extends z.ZodTypeAny, TApi> = (params: {
 	name: string;
 	options: z.output<Options>;
-}) => Omit<AstroIntegration, "name" | "hooks"> & {
+}) => Omit<AstroIntegration, "name" | "hooks"> & TApi & {
 	// Enable autocomplete and intellisense for non-core hooks
 	hooks: Partial<Hooks>,
 };
@@ -34,9 +34,12 @@ type AstroIntegrationSetupFn<Options extends z.ZodTypeAny> = (params: {
  * ```
  */
 export const defineIntegration = <
+  TApiBase,
+	// Apply Prettify on a generic type parameter so it goes through
+	// the type expansion and beta reduction to form a minimal type
+	// for the emitted declarations on libraries.
+  TApi extends ExtendedPrettify<Omit<TApiBase, keyof AstroIntegration>>,
 	TOptionsSchema extends z.ZodTypeAny = z.ZodNever,
-	TSetup extends
-		AstroIntegrationSetupFn<TOptionsSchema> = AstroIntegrationSetupFn<TOptionsSchema>,
 >({
 	name,
 	optionsSchema,
@@ -44,16 +47,15 @@ export const defineIntegration = <
 }: {
 	name: string;
 	optionsSchema?: TOptionsSchema;
-	setup: TSetup;
+	setup: AstroIntegrationSetupFn<TOptionsSchema, TApiBase>;
 }): ((
 	...args: [z.input<TOptionsSchema>] extends [never]
 		? []
 		: undefined extends z.input<TOptionsSchema>
 		  ? [options?: z.input<TOptionsSchema>]
 		  : [options: z.input<TOptionsSchema>]
-) => AstroIntegration &
-	Prettify<Omit<ReturnType<TSetup>, keyof AstroIntegration>>) => {
-	return (...args): AstroIntegration & ReturnType<TSetup> => {
+) => AstroIntegration & TApi) => {
+	return (...args): AstroIntegration & TApi => {
 		const parsedOptions = (optionsSchema ?? z.never().optional()).safeParse(
 			args[0],
 			{
@@ -70,11 +72,12 @@ export const defineIntegration = <
 
 		const options = parsedOptions.data as z.output<TOptionsSchema>;
 
-		const integration = setup({ name, options }) as ReturnType<TSetup>;
+		const {hooks, ...extra} = setup({ name, options });
 
 		return {
+			...extra as unknown as TApi,
+			hooks,
 			name,
-			...integration,
 		};
 	};
 };

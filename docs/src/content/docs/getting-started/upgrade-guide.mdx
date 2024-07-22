@@ -3,9 +3,172 @@ title: Upgrade guide
 description: Features get added and removed, and breaking changes are introduced! This documents how to migrate.
 ---
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 
 Features get added and removed, and breaking changes are introduced! This documents how to migrate.
+
+## `0.16.0`
+
+---
+
+### Improved type inference for `defineUtility`
+
+Previously the `defineUtility` signature would emit a type that required naming internal Astro types in some cases, which caused error [TS2742](https://typescript.tv/errors/#ts2742) about non-portable types. This type was improved to emit small and portable types through a new public `HookUtility` type exported from `astro-integration-kit`.
+
+The generic arguments of `defineUtility` haven't changed, no action is necessary for you code to benefit from this change.
+
+As an example, an utility defined with the following code:
+
+```ts
+export const utility = defineUtility("astro:config:setup")(
+  (params: HookParameters<"astro:config:setup">, options: { name: string }) => {
+    // do something
+  }
+);
+```
+
+Was previously emitted as:
+
+```ts
+import * as astro from "astro";
+import { AstroIntegrationLogger } from "astro";
+
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[]
+    ? DeepPartial<U>[]
+    : T[P] extends object | undefined
+    ? DeepPartial<T[P]>
+    : T[P];
+};
+
+export const utility: (
+  params: {
+    config: astro.AstroConfig;
+    command: "dev" | "build" | "preview";
+    isRestart: boolean;
+    updateConfig: (
+      newConfig: DeepPartial<astro.AstroConfig>
+    ) => astro.AstroConfig;
+    addRenderer: (renderer: astro.AstroRenderer) => void;
+    addWatchFile: (path: URL | string) => void;
+    injectScript: (stage: astro.InjectedScriptStage, content: string) => void;
+    injectRoute: (injectRoute: astro.InjectedRoute) => void;
+    addClientDirective: (directive: astro.ClientDirectiveConfig) => void;
+    addDevOverlayPlugin: (entrypoint: string) => void;
+    addDevToolbarApp: (entrypoint: astro.DevToolbarAppEntry | string) => void;
+    addMiddleware: (mid: astro.AstroIntegrationMiddleware) => void;
+    logger: AstroIntegrationLogger;
+  },
+  options: {
+    name: string;
+  }
+) => void;
+```
+
+Now it is emitted as:
+
+```ts
+import * as astro_integration_kit from "astro-integration-kit";
+
+export const utility: astro_integration_kit.HookUtility<
+  "astro:config:setup",
+  [
+    options: {
+      name: string;
+    }
+  ],
+  void
+>;
+```
+
+### Improved emitted types for `defineIntegration`
+
+Previously the `defineUtility` signature would emit a type that required naming internal Astro types in some cases, which caused error [TS2742](https://typescript.tv/errors/#ts2742) about non-portable types. This type was improved to not emit the portion of the type that would be discarded by its own construction.
+
+To achieve this with newer versions of TS (>=5.5), the generic parameters had to be updated. If you were passing type parameters explicitly instead of relying on type inference you should either remove the parameters or adapt your types to the new parameter requirements.
+
+As an example, an integration defined with the following code:
+
+```ts
+export const integration defineIntegration({
+	name: 'some-integration',
+	setup: () => ({
+		hooks: {
+			'astro:config:setup': (params) => {
+				// do something
+			},
+		},
+		something: (it: string): string => it,
+	}),
+});
+```
+
+Was previously emitted as:
+
+```ts
+import * as astro from "astro";
+import { AstroIntegrationLogger } from "astro";
+
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & {};
+
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[]
+    ? DeepPartial<U>[]
+    : T[P] extends object | undefined
+    ? DeepPartial<T[P]>
+    : T[P];
+};
+
+export const integration: () => astro.AstroIntegration &
+  Prettify<
+    Omit<
+      ReturnType<
+        () => {
+          hooks: {
+            "astro:config:setup": (params: {
+              config: astro.AstroConfig;
+              command: "dev" | "build" | "preview";
+              isRestart: boolean;
+              updateConfig: (
+                newConfig: DeepPartial<astro.AstroConfig>
+              ) => astro.AstroConfig;
+              addRenderer: (renderer: astro.AstroRenderer) => void;
+              addWatchFile: (path: URL | string) => void;
+              injectScript: (
+                stage: astro.InjectedScriptStage,
+                content: string
+              ) => void;
+              injectRoute: (injectRoute: astro.InjectedRoute) => void;
+              addClientDirective: (
+                directive: astro.ClientDirectiveConfig
+              ) => void;
+              addDevOverlayPlugin: (entrypoint: string) => void;
+              addDevToolbarApp: (
+                entrypoint: astro.DevToolbarAppEntry | string
+              ) => void;
+              addMiddleware: (mid: astro.AstroIntegrationMiddleware) => void;
+              logger: AstroIntegrationLogger;
+            }) => void;
+          };
+          something: (it: string) => string;
+        }
+      >,
+      keyof astro.AstroIntegration
+    >
+  >;
+```
+
+Now it is emitted as:
+
+```ts
+import * as astro from "astro";
+
+export const integration: () => astro.AstroIntegration & {
+  something: (it: string) => string;
+};
+```
 
 ## `0.15.0`
 
@@ -122,10 +285,10 @@ Since `watchIntegration` is not recommended for dev HMR anymore, it has been ren
 really does, watching a directory:
 
 ```ts del={1-2} ins={3-4}
-import { watchIntegration } from "astro-integration-kit"
-watchIntegration(params, resolve())
-import { watchDirectory } from "astro-integration-kit"
-watchDirectory(params, resolve())
+import { watchIntegration } from "astro-integration-kit";
+watchIntegration(params, resolve());
+import { watchDirectory } from "astro-integration-kit";
+watchDirectory(params, resolve());
 ```
 
 ## `0.9.0`
@@ -137,28 +300,25 @@ watchDirectory(params, resolve())
 Plugins are no longer passed to `defineIntegration`. Instead, there's a new `withPlugins` utility.
 
 ```ts title="my-integration/index.ts" del={9,11-13} ins={3,14-20}
-import {
-    defineIntegration,
-    withPlugins
-} from "astro-integration-kit";
+import { defineIntegration, withPlugins } from "astro-integration-kit";
 import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
 
 export default defineIntegration({
-    name: "my-integration",
-    plugins: [hasVitePluginPlugin],
-    setup({ name }) {
-        return {
-            "astro:config:setup": ({ hasVitePlugin }) => {}
-        }
-        return withPlugins({
-            name,
-            plugins: [hasVitePluginPlugin],
-            hooks: {
-                "astro:config:setup": ({ hasVitePlugin }) => {}
-            }
-        })
-    }
-})
+  name: "my-integration",
+  plugins: [hasVitePluginPlugin],
+  setup({ name }) {
+    return {
+      "astro:config:setup": ({ hasVitePlugin }) => {},
+    };
+    return withPlugins({
+      name,
+      plugins: [hasVitePluginPlugin],
+      hooks: {
+        "astro:config:setup": ({ hasVitePlugin }) => {},
+      },
+    });
+  },
+});
 ```
 
 ### New `Plugin` signature (and `definePlugin`)
@@ -187,19 +347,18 @@ import { definePlugin } from "astro-integration-kit";
 import { hasVitePlugin } from "../utilities/has-vite-plugin.js";
 
 export const hasVitePluginPlugin = definePlugin({
-    name: "hasVitePlugin",
-    hook: "astro:config:setup",
-    implementation: (params) =>
-        (plugin: string | PluginOption) =>
-            hasVitePlugin(params, { plugin }),
-    setup() {
-        return {
-            "astro:config:setup": (params) => ({
-                hasVitePlugin: (plugin: string | PluginOption) =>
-                    hasVitePlugin(params, { plugin }),
-            }),
-        };
-    },
+  name: "hasVitePlugin",
+  hook: "astro:config:setup",
+  implementation: (params) => (plugin: string | PluginOption) =>
+    hasVitePlugin(params, { plugin }),
+  setup() {
+    return {
+      "astro:config:setup": (params) => ({
+        hasVitePlugin: (plugin: string | PluginOption) =>
+          hasVitePlugin(params, { plugin }),
+      }),
+    };
+  },
 });
 ```
 
@@ -227,17 +386,17 @@ Only `hasVitePluginPlugin` remains.
 `corePlugins` is no longer exported from `astro-integration-kit`. Import the plugin you want directly:
 
 ```ts del={3,9} ins={4,10}
-import { defineIntegration } from "astro-integration-kit"
+import { defineIntegration } from "astro-integration-kit";
 import {
-    corePlugins,
-    hasVitePluginPlugin
-} from "astro-integration-kit/plugins"
+  corePlugins,
+  hasVitePluginPlugin,
+} from "astro-integration-kit/plugins";
 
 export default defineIntegration({
-    // ...
-    plugins: [...corePlugins],
-    plugins: [hasVitePluginPlugin]
-})
+  // ...
+  plugins: [...corePlugins],
+  plugins: [hasVitePluginPlugin],
+});
 ```
 
 ### Updated utilities
@@ -245,160 +404,164 @@ export default defineIntegration({
 #### `addDevToolbarFrameworkApp`
 
 ```ts del={3-18} ins={19-30}
-const { resolve } = createResolver(import.meta.url)
+const { resolve } = createResolver(import.meta.url);
 
 addDevToolbarFrameworkApp({
-    framework: "vue",
-    name: "Test Vue Plugin",
-    id: "my-vue-plugin",
-    icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
-    src: resolve("./my-plugin.vue"),
-    style: `
+  framework: "vue",
+  name: "Test Vue Plugin",
+  id: "my-vue-plugin",
+  icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+  src: resolve("./my-plugin.vue"),
+  style: `
         h1 {
             font-family: Inter;
         }
     `,
-    config,
-    updateConfig,
-    addDevToolbarApp,
-    injectScript,
-})
+  config,
+  updateConfig,
+  addDevToolbarApp,
+  injectScript,
+});
 addDevToolbarFrameworkApp(params, {
-    framework: "vue",
-    name: "Test Vue Plugin",
-    id: "my-vue-plugin",
-    icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
-    src: resolve("./my-plugin.vue"),
-    style: `
+  framework: "vue",
+  name: "Test Vue Plugin",
+  id: "my-vue-plugin",
+  icon: `<svg version="1.1" viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(1.3333 0 0 -1.3333 -76.311 313.34)"><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-75.491l98.16-170.02 98.16 170.02z" fill="#41b883"/></g><g transform="translate(178.06 235.01)"><path d="m0 0-22.669-39.264-22.669 39.264h-36.227l58.896-102.01 58.896 102.01z" fill="#34495e"/></g></g></svg>`,
+  src: resolve("./my-plugin.vue"),
+  style: `
         h1 {
             font-family: Inter;
         }
     `,
-})
+});
 ```
 
 #### `addDts`
 
 ```ts del={1-7} ins={8-11}
 addDts({
-    name: "my-integration",
-    content: `declare module "virtual:my-integration" {}`,
-    root: config.root,
-    srcDir: config.srcDir,
-    logger,
-})
+  name: "my-integration",
+  content: `declare module "virtual:my-integration" {}`,
+  root: config.root,
+  srcDir: config.srcDir,
+  logger,
+});
 addDts(params, {
-    name: "my-integration",
-    content: `declare module "virtual:my-integration" {}`,
-})
+  name: "my-integration",
+  content: `declare module "virtual:my-integration" {}`,
+});
 ```
 
 #### `addIntegration`
 
 ```ts del={1-6} ins={7-9}
 addIntegration({
-    integration: Vue(),
-    updateConfig,
-    config,
-    logger,
-})
-addIntegration(params,{
-    integration: Vue(),
-})
+  integration: Vue(),
+  updateConfig,
+  config,
+  logger,
+});
+addIntegration(params, {
+  integration: Vue(),
+});
 ```
 
 #### `addVirtualImports`
 
 ```ts del={1-8} ins={9-14}
 addVirtualImports({
-    name: 'my-integration',
-    imports: {
-        'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
-    },
-    updateConfig,
-    config,
-})
+  name: "my-integration",
+  imports: {
+    "virtual:my-integration/config": `export default ${JSON.stringify({
+      foo: "bar",
+    })}`,
+  },
+  updateConfig,
+  config,
+});
 addVirtualImports(params, {
-    name: 'my-integration',
-    imports: {
-        'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
-    },
-})
+  name: "my-integration",
+  imports: {
+    "virtual:my-integration/config": `export default ${JSON.stringify({
+      foo: "bar",
+    })}`,
+  },
+});
 ```
 
 #### `addVitePlugin`
 
 ```ts del={1-6} ins={7-9}
 addVitePlugin({
-    plugin: VitePWA({ registerType: 'autoUpdate' }),
-    config,
-    logger,
-    updateConfig
-})
+  plugin: VitePWA({ registerType: "autoUpdate" }),
+  config,
+  logger,
+  updateConfig,
+});
 addVitePlugin(params, {
-    plugin: VitePWA({ registerType: 'autoUpdate' }),
-})
+  plugin: VitePWA({ registerType: "autoUpdate" }),
+});
 ```
 
 #### `hasVitePlugin`
 
 ```ts del={1-4} ins={5-7}
 hasVitePlugin({
-    plugin: "vite-plugin-my-integration",
-    config,
-})
+  plugin: "vite-plugin-my-integration",
+  config,
+});
 hasVitePlugin(params, {
-    plugin: "vite-plugin-my-integration",
-})
+  plugin: "vite-plugin-my-integration",
+});
 ```
 
 #### `hasIntegration`
 
 ```ts del={1-6} ins={7-11}
 hasIntegration({
-    name: "@astrojs/tailwind",
-    position: "before",
-    relativeTo: "my-integration",
-    config,
-})
+  name: "@astrojs/tailwind",
+  position: "before",
+  relativeTo: "my-integration",
+  config,
+});
 hasIntegration(params, {
-    name: "@astrojs/tailwind",
-    position: "before",
-    relativeTo: "my-integration",
-})
+  name: "@astrojs/tailwind",
+  position: "before",
+  relativeTo: "my-integration",
+});
 ```
 
 #### `injectDevRoute`
 
 ```ts del={3-10} ins={11-14}
-const { resolve } = createResolver(import.meta.url)
+const { resolve } = createResolver(import.meta.url);
 
 injectDevRoute({
-    command,
-    injectRoute,
-    injectedRoute: {
-        pattern: "/foo",
-        entrypoint: resolve("./pages/foo.astro")
-    },
-})
-injectDevRoute(params, {
+  command,
+  injectRoute,
+  injectedRoute: {
     pattern: "/foo",
-    entrypoint: resolve("./pages/foo.astro")
-})
+    entrypoint: resolve("./pages/foo.astro"),
+  },
+});
+injectDevRoute(params, {
+  pattern: "/foo",
+  entrypoint: resolve("./pages/foo.astro"),
+});
 ```
 
 #### `watchIntegration`
 
 ```ts del={3-8} ins={9}
-const { resolve } = createResolver(import.meta.url)
+const { resolve } = createResolver(import.meta.url);
 
 watchIntegration({
-    addWatchFile,
-    command,
-    dir: resolve(),
-    updateConfig,
+  addWatchFile,
+  command,
+  dir: resolve(),
+  updateConfig,
 });
-watchIntegration(params, resolve())
+watchIntegration(params, resolve());
 ```
 
 ## `0.7.0`
@@ -412,10 +575,10 @@ If it's optional, users can still pass nothing or `undefined`.
 
 ```ts del={3} ins={4}
 defineIntegration({
-    // ...
-    optionsSchema: z.object({ foo: z.string() }),
-    optionsSchema: z.object({ foo: z.string() }).optional(),
-})
+  // ...
+  optionsSchema: z.object({ foo: z.string() }),
+  optionsSchema: z.object({ foo: z.string() }).optional(),
+});
 ```
 
 ### Plugins types
@@ -457,10 +620,10 @@ Or you can turn off warnings for duplicate plugins using `warnDuplicate: false`
 
 ```ts ins={2}
 addVitePlugin({
-    warnDuplicate: false,
-    plugin,
-    updateConfig
-})
+  warnDuplicate: false,
+  plugin,
+  updateConfig,
+});
 ```
 
 ### Updated `addVirtualImports`
@@ -581,8 +744,8 @@ The `addDevToolbarFrameworkApp` utility now requires a `config` parameter
     }
     ```
     </TabItem>
-</Tabs>
 
+</Tabs>
 
 ## `0.2.0`
 
@@ -598,24 +761,24 @@ import { defineIntegration } from "astro-integration-kit";
 import { z } from "astro/zod";
 
 type Options = {
+  /**
+   * A comment
+   *
+   * @default `"bar"`
+   */
+  foo?: string | undefined;
+};
+
+export default defineIntegration({
+  // ...
+  options: defineOptions<Options>({ foo: "bar" }),
+  optionsSchema: z.object({
     /**
      * A comment
      *
      * @default `"bar"`
      */
-    foo?: string | undefined;
-}
-
-export default defineIntegration({
-    // ...
-    options: defineOptions<Options>({ foo: "bar" }),
-    optionsSchema: z.object({
-        /**
-         * A comment
-         *
-         * @default `"bar"`
-         */
-        foo: z.string().optional().default("bar"),
-    }),
-})
+    foo: z.string().optional().default("bar"),
+  }),
+});
 ```
