@@ -28,4 +28,6 @@ export type Prettify<T> = {
 	[K in keyof T]: T[K];
 } & {};
 
+export type ExtendedPrettify<T> = T extends infer U ? Prettify<U> : never;
+
 export type NonEmptyArray<T> = [T, ...Array<T>];
