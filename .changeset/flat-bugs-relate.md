@@ -15,7 +15,7 @@ export const utility = defineUtility('astro:config:setup')((
 });
 
 export const integration defineIntegration({
-	name: 'some-utility',
+	name: 'some-integration',
 	setup: () => ({
 		hooks: {
 			'astro:config:setup': (params) => {
