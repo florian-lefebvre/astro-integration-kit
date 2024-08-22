@@ -2,7 +2,7 @@
 "astro-integration-kit": patch
 ---
 
-Deprecates the `addDts` utility, it will be removed in a future minor release. Bump your Astro peer dependency to ^4.14.0 and use [injectTypes](https://docs.astro.build/en/reference/integrations-reference/#injecttypes-options):
+Deprecates the `addDts` utility, it will be removed in a future minor release. You can anticipate this change by bumping your Astro peer dependency to ^4.14.0 and using [injectTypes](https://docs.astro.build/en/reference/integrations-reference/#injecttypes-options):
 
 ```diff
 "astro:config:setup": (params) => {
