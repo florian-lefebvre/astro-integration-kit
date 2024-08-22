@@ -3,18 +3,22 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { defineConfig } from "astro/config";
 import { version } from "../package/package.json";
 
-const badge = (type: "new" | "updated" | "soon" | "removed") => ({
+const badge = (
+	type: "new" | "updated" | "soon" | "removed" | "deprecated",
+) => ({
 	variant: {
 		new: "success" as const,
 		updated: "caution" as const,
 		soon: "tip" as const,
 		removed: "danger" as const,
+		deprecated: "caution" as const,
 	}[type],
 	text: {
 		new: "New",
 		updated: "Updated",
 		soon: "Soon",
 		removed: "Removed",
+		deprecated: "Deprecated",
 	}[type],
 });
 
@@ -139,6 +143,7 @@ export default defineConfig({
 						{
 							label: "addDts",
 							link: "/utilities/add-dts/",
+							badge: badge("deprecated"),
 						},
 						{
 							label: "addIntegration",

@@ -25,22 +25,45 @@ const injectEnvDTS = ({
 
 	const envDTsContents = readFileSync(envDTsPath, "utf8");
 
-	if (envDTsContents.includes(`/// <reference types='${specifier}' />`)) {
-		return;
-	}
-	if (envDTsContents.includes(`/// <reference types="${specifier}" />`)) {
+	if (
+		envDTsContents.includes(`/// <reference types='${specifier}' />`) ||
+		envDTsContents.includes(`/// <reference types="${specifier}" />`)
+	) {
 		return;
 	}
 
-	const newEnvDTsContents = envDTsContents
-		.replace(
-			`/// <reference types='astro/client' />`,
-			`/// <reference types='astro/client' />\n/// <reference types='${specifier}' />`,
-		)
-		.replace(
-			`/// <reference types="astro/client" />`,
-			`/// <reference types="astro/client" />\n/// <reference types="${specifier}" />`,
-		);
+	const data: { singleQuotes: boolean; hasClient: boolean } =
+		envDTsContents.includes(`/// <reference types='astro/client' />`)
+			? {
+					singleQuotes: true,
+					hasClient: true,
+				}
+			: envDTsContents.includes(`/// <reference types="astro/client" />`)
+				? { singleQuotes: false, hasClient: true }
+				: envDTsContents.includes(
+							`/// <reference path="../.astro/types.d.ts" />`,
+						)
+					? {
+							singleQuotes: false,
+							hasClient: false,
+						}
+					: {
+							singleQuotes: true,
+							hasClient: false,
+						};
+
+	const referenceToReplace = `/// <reference ${
+		data.hasClient ? "types" : "path"
+	}=${data.singleQuotes ? `'` : `"`}${
+		data.hasClient ? "astro/client" : "../.astro/types.d.ts"
+	}${data.singleQuotes ? `'` : `"`} />`;
+
+	const newEnvDTsContents = envDTsContents.replace(
+		referenceToReplace,
+		`${referenceToReplace}\n/// <reference types=${
+			data.singleQuotes ? `'` : `"`
+		}${specifier}${data.singleQuotes ? `'` : `"`} />`,
+	);
 
 	// the odd case where the user changed the reference to astro/client
 	if (newEnvDTsContents === envDTsContents) {
@@ -52,6 +75,11 @@ const injectEnvDTS = ({
 };
 
 /**
+ * @deprecated
+ * This utility will be removed in a future minor release. Bump your Astro peer dependency to ^4.14.0
+ * and use [injectTypes](https://docs.astro.build/en/reference/integrations-reference/#injecttypes-options).
+ *
+ * @description
  * Allows to inject .d.ts file in users project. It will create a file inside `.astro`
  * and reference it from `src/env.d.ts`.
  *
@@ -93,6 +121,7 @@ export const addDts = defineUtility("astro:config:setup")(
 		mkdirSync(dirname(filePath), { recursive: true });
 		writeFileSync(
 			filePath,
+			// TODO: extract to helper to use with core injectTypes
 			prettyPrint(
 				parse(content, {
 					parser: typescriptParser,
