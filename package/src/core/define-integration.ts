@@ -21,7 +21,7 @@ type AstroIntegrationSetupFn<Options extends z.ZodTypeAny, TApi> = (params: {
  * @param {import("astro/zod").AnyZodObject} params.optionsSchema - An optional zod schema to handle your integration options
  * @param {function} params.setup - This will be called from your `astro:config:setup` call with the user options
  *
- * @see https://astro-integration-kit.netlify.app/utilities/define-integration/
+ * @see https://astro-integration-kit.netlify.app/core/define-integration/
  *
  * @example
  * ```ts
