@@ -23,7 +23,7 @@ export type AllHooksPlugin<TName extends string, TApi extends Record<string, unk
  * called dynamically for each hook. This allows plugins to support any hook
  * even those added by new versions of astro or hooks added by other integrations.
  *
- * @see https://astro-integration-kit.netlify.app/utilities/define-plugin/
+ * @see https://astro-integration-kit.netlify.app/core/define-plugin/
  */
 export const defineAllHooksPlugin = <TName extends string, TApi extends Record<string, unknown>>(
   plugin: AllHooksPluginDefinition<TName, TApi>

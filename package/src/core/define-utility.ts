@@ -18,7 +18,7 @@ export type HookUtility<
  *
  * @param {string} _hook
  *
- * @see https://astro-integration-kit.netlify.app/utilities/define-utility/
+ * @see https://astro-integration-kit.netlify.app/core/define-utility/
  *
  * @example
  * ```ts

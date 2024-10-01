@@ -6,7 +6,7 @@ import { dirname, resolve } from "pathe";
  *
  * @param {string} _base - The location you want to create relative references from. `import.meta.url` is usually what you'll want.
  *
- * @see https://astro-integration-kit.netlify.app/utilities/create-resolver/
+ * @see https://astro-integration-kit.netlify.app/core/create-resolver/
  *
  * @example
  * ```ts

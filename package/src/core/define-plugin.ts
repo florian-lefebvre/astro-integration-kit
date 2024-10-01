@@ -8,7 +8,7 @@ import type { Plugin, PluginHooksConstraint } from "./types.js";
  * @param {string} plugin.hook - The name of the hook where this plugin should be available
  * @param {Function} plugin.implementation - The actual function definition. Refer to docs for usage
  *
- * @see https://astro-integration-kit.netlify.app/utilities/define-plugin/
+ * @see https://astro-integration-kit.netlify.app/core/define-plugin/
  *
  * ```ts
  * import { definePlugin } from "../core/define-plugin.js";
