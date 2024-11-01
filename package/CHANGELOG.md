@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.17.0
+
+### Minor Changes
+
+- 6a23951: Adds support for Astro 5.0 beta
+
 ## 0.16.1
 
 ### Patch Changes
