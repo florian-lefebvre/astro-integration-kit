@@ -2,4 +2,4 @@
 "astro-integration-kit": minor
 ---
 
-bump astro version in peerDependencies
+Adds support for Astro 5.0 beta
