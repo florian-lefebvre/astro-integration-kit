@@ -2,4 +2,4 @@
 "astro-integration-kit": minor
 ---
 
-Support Astro 5.0.x
+Adds support for Astro 5.0
