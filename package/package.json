@@ -44,7 +44,7 @@
 	},
 	"type": "module",
 	"peerDependencies": {
-		"astro": "^4.12.0 || ^5.0.0-beta"
+		"astro": "^4.12.0 || ^5.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "^20.12.12",
