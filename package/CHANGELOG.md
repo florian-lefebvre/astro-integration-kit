@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.18.0
+
+### Minor Changes
+
+- 1ea0542: Adds support for Astro 5.0
+
 ## 0.17.0
 
 ### Minor Changes
