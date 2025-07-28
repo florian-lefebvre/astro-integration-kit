@@ -2,4 +2,4 @@
 "astro-integration-kit": minor
 ---
 
-remove `addDts`
+Remove the `addDts()` utility. [`injectTypes()`](https://docs.astro.build/en/reference/integrations-reference/#injecttypes-option) should be used instead
