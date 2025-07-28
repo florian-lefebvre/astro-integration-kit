@@ -143,7 +143,10 @@ export default defineConfig({
 						{
 							label: "addDts",
 							link: "/utilities/add-dts/",
-							badge: badge("deprecated"),
+							badge: badge("removed"),
+							attrs: {
+								style: "opacity:0.5",
+							},
 						},
 						{
 							label: "addIntegration",
