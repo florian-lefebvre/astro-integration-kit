@@ -27,6 +27,7 @@ export const errorMap: ZodErrorMap = (baseError, ctx) => {
 			) {
 				const flattenedErrorPath = flattenErrorPath(unionError.path);
 				if (typeOrLiteralErrByPath.has(flattenedErrorPath)) {
+					// biome-ignore lint/style/noNonNullAssertion: code copied directly from Astro
 					typeOrLiteralErrByPath
 						.get(flattenedErrorPath)!
 						.expected.push(unionError.expected);
@@ -60,7 +61,7 @@ export const errorMap: ZodErrorMap = (baseError, ctx) => {
 						.map(([key, error]) =>
 							key === baseErrorPath
 								? // Avoid printing the key again if it's a base error
-								  `> ${getTypeOrLiteralMsg(error)}`
+									`> ${getTypeOrLiteralMsg(error)}`
 								: `> ${prefix(key, getTypeOrLiteralMsg(error))}`,
 						),
 				)
@@ -81,8 +82,10 @@ export const errorMap: ZodErrorMap = (baseError, ctx) => {
 				}),
 			),
 		};
+		// biome-ignore lint/style/noUselessElse: code copied directly from Astro
 	} else if (baseError.message) {
 		return { message: prefix(baseErrorPath, baseError.message) };
+		// biome-ignore lint/style/noUselessElse: code copied directly from Astro
 	} else {
 		return { message: prefix(baseErrorPath, ctx.defaultError) };
 	}

@@ -53,7 +53,7 @@ type FilterPluginsByHook<
 		? Tail extends Array<AnyPlugin>
 			? undefined extends SimplifyPlugin<Head>["hooks"][THook]
 				? // Drop plugin if the hook is not defined.
-				  FilterPluginsByHook<THook, Tail>
+					FilterPluginsByHook<THook, Tail>
 				: [SimplifyPlugin<Head>, ...FilterPluginsByHook<THook, Tail>]
 			: []
 		: []
@@ -72,7 +72,6 @@ type OmitKeysByValue<T, ValueType> = {
 // type Output = OverridePluginParamsForHook<Input>
 // 			^? {foo: () => boolean, bar: () => number}
 //
-// biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
 type OverridePluginParamsForHook<
 	THook extends keyof Hooks,
 	TPlugins extends Array<SimplifyPlugin>,
@@ -82,7 +81,7 @@ type OverridePluginParamsForHook<
 			? Omit<
 					OverridePluginParamsForHook<THook, Head>,
 					keyof Tail["hooks"][THook]
-			  > &
+				> &
 					Tail["hooks"][THook]
 			: never
 		: never
@@ -114,8 +113,8 @@ export type AddedParam<
 type AddParam<Func, Param = never> = [Param] extends [never]
 	? Func
 	: Func extends (params: infer Params) => infer ReturnType
-	  ? (params: Params & Param) => ReturnType
-	  : never;
+		? (params: Params & Param) => ReturnType
+		: never;
 
 export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
 	[Hook in keyof Hooks]?: Hooks[Hook] extends AnyFunction

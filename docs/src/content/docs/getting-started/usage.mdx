@@ -1,37 +1,71 @@
 ---
-title: Usage
-description: Learn how to use astro-integration-kit in your project.
+title: Installation & Usage
+description: Learn how to install and use astro-integration-kit in your project.
 ---
-import Disabled from "~/components/Disabled.astro"
-import { LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 
-Astro Integration Kit provides a suite of useful utilities to help you build your integrations. Some of them
-are "global" (eg. `defineIntegration`), others are meant to be used in hooks (eg. `addDts`) and
-plugins are available for more advanced usecases (eg. `hasVitePluginPlugin`).
-Each utility is fully documented with examples and options!
+import Disabled from "~/components/Disabled.astro";
+import { LinkCard, Tabs, TabItem } from "@astrojs/starlight/components";
+
+Astro Integration Kit provides a suite of useful utilities to help you build your integrations. Some of them are global, others are meant to be used in hooks and plugins are available for more advanced use cases. Each utility is fully documented with examples and options!
+
+## Installation
+
+Add `astro-integration-kit` using your favorite package manager:
+
+<Tabs>
+    <TabItem label="pnpm" icon="pnpm">
+    ```bash
+    pnpm add astro-integration-kit
+    ```
+    </TabItem>
+    <TabItem label="npm" icon="seti:npm">
+    ```bash
+    npm install astro-integration-kit
+    ```
+    </TabItem>
+    <TabItem label="yarn" icon="seti:yarn">
+    ```bash
+    yarn add astro-integration-kit
+    ```
+    </TabItem>
+</Tabs>
+
+:::tip
+For the easiest way to start creating an integration with Astro Integration Kit, we recommend using this template: [`astro-integration-template`](https://github.com/florian-lefebvre/astro-integration-template)!
+:::
+
+You can now start using our powerful utilities:
+
+```ts showLineNumbers=false
+import { defineIntegration } from "astro-integration-kit"
+```
+
+## Example 
 
 Here we are using the [addDts](/utilities/add-dts/) utility to add a TypeScript declaration file to the user's project! This is useful for typing things like Virtual Modules!
 
 ```ts title="my-integration/index.ts"
-import { defineIntegration, addDts } from "astro-integration-kit"
-import { z } from "astro/zod"
+import { defineIntegration, addDts } from "astro-integration-kit";
+import { z } from "astro/zod";
 
 export default defineIntegration({
-    name: "my-integration",
-    optionsSchema: z.object({
-        virtualModuleId: z.string()
-    }),
-    setup({ options, name }) {
-        return {
-            hooks: {
-                "astro:config:setup": (params) => {
-                    addDts(params, {
-                        name,
-                        content: `declare module ${JSON.stringify(options.virtualModuleId)} {}`
-                    })
-                }
-            }
-        }
-    }
-})
+  name: "my-integration",
+  optionsSchema: z.object({
+    virtualModuleId: z.string(),
+  }),
+  setup({ options, name }) {
+    return {
+      hooks: {
+        "astro:config:setup": (params) => {
+          addDts(params, {
+            name,
+            content: `declare module ${JSON.stringify(
+              options.virtualModuleId
+            )} {}`,
+          });
+        },
+      },
+    };
+  },
+});
 ```

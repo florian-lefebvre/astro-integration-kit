@@ -1,4 +1,4 @@
-import { type AstroIntegration } from "astro";
+import type { AstroIntegration } from "astro";
 import { defineUtility } from "../core/define-utility.js";
 import { hasIntegration } from "./has-integration.js";
 

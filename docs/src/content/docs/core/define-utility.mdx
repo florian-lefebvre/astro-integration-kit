@@ -5,7 +5,11 @@ description: Allows defining a type-safe function requiring all the params of a 
 
 import { Steps } from '@astrojs/starlight/components';
 
-Allows defining a type-safe function requiring all the params of a given hook.
+`defineUtility` allows you to create type-safe utility functions that work with specific Astro integration hooks. It uses currying to provide proper TypeScript types based on the hook you're targeting.
+
+## How it works
+
+`defineUtility` uses a [curried function pattern](https://javascript.info/currying-partials):
 
 ```ts title="package/src/utilities/inject-dev-route.ts"
 import type { InjectedRoute } from "astro";
@@ -19,6 +23,20 @@ export const injectDevRoute = defineUtility("astro:config:setup")(
 	},
 );
 ```
+
+- **First call**: Takes the hook name (e.g., `"astro:config:setup"`) to establish TypeScript types
+- **Second call**: Takes your implementation function that receives:
+  - Hook parameters as the first argument (fully typed based on the hook)
+  - Any additional custom parameters you define
+- **Result**: A type-safe utility function ready to use in integrations
+
+## When to use it
+
+Use `defineUtility` when you want to:
+
+- **Ensure type safety**: Get proper TypeScript types for Astro hook parameters without manual typing
+- **Abstract common patterns**: Simplify repetitive integration tasks into easy-to-use functions
+- **Create focused utilities**: Build specific utility functions for your integration's needs
 
 ## Usage
 

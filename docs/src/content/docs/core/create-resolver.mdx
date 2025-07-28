@@ -3,71 +3,48 @@ title: createResolver
 description: Allows resolving paths relatively to the integration folder easily.
 ---
 
-`createResolver` allows you to resolve paths relative to the integration folder easily.
+import { Steps } from '@astrojs/starlight/components';
 
-```ts title="integration/index.ts" "createResolver" "resolve"
-import type { AstroIntegration } from "astro";
-import { createResolver } from "astro-integration-kit";
+`createResolver` allows you to resolve paths relative to your integration's location, eliminating the need to manage complex `package.json` exports for file references. It takes a base URL (typically [`import.meta.url`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta#url)) and returns a `resolve` function that can create absolute paths relative to that location:
 
-export default function myIntegration(): AstroIntegration {
-    const { resolve } = createResolver(import.meta.url);
-
-    return {
-        name: "my-integration",
-        hooks: {
-            "astro:config:setup": ({ addDevToolbarApp }) => {
-                addDevToolbarApp(resolve("./plugin.ts"));
-            }
-        }
-    }
-}
-```
-
-## Why should you use it?
-
-We think it provides a better DX. Instead of having to do some back and forth between
-your code and your `package.json` `exports` fields, you can just use some intuitive
-relative paths!
-
-```json title="package.json" del={4,5}
-{
-    "name": "package-name",
-    "exports": {
-        "pages/my-route.astro": "./src/pages/my-route.astro",
-        "plugin.ts": "./src/plugin.ts"
-    }
-}
-```
-
-```ts title="integration/index.ts" del={12,16} ins={5,13,17}
-import type { AstroIntegration } from "astro";
-import { createResolver } from "astro-integration-kit";
-
-export default function myIntegration(): AstroIntegration {
-    const { resolve } = createResolver(import.meta.url);
-    return {
-        name: "my-integration",
-        hooks: {
-            "astro:config:setup": ({ injectRoute, addDevToolbarApp }) => {
-                injectRoute({
-                    pattern: "/my-route",
-                    entrypoint: "package-name/pages/my-route.astro"
-                    entrypoint: resolve("./pages/my-route.astro")
-                })
-                addDevToolbarApp(
-                    "package-name/plugin.ts"
-                    resolve("./plugin.ts")
-                )
-            }
-        }
-    }
-}
-```
 
 ## Usage
 
-Always pass `import.meta.url` to `createResolver`! That's the equivalent of the
-old `__filename`. This way, `resolve` will always create a valid path relatively,
-no matter its location in `node_modules`, package managers madness etc
+We recommend calling `createResolver` in your integration's `setup` function to easily access `resolve` in any hook.
 
-We recommend calling it in `setup` to easily access `resolve` in any hook.
+<Steps>
+
+1. **Create the resolver**
+
+   Always pass [`import.meta.url`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta#url) to `createResolver` - this is the equivalent of the old `__filename` and ensures paths work correctly regardless of installation location:
+
+   ```ts
+   const { resolve } = createResolver(import.meta.url);
+   ```
+
+2. **Use the resolve function**
+
+   Use `resolve()` with relative paths to reference files in your integration:
+
+    ```ts title="integration/index.ts"
+    import type { AstroIntegration } from "astro";
+    import { createResolver } from "astro-integration-kit";
+
+    export default function myIntegration(): AstroIntegration {
+        const { resolve } = createResolver(import.meta.url);
+
+        return {
+            name: "my-integration",
+            hooks: {
+                "astro:config:setup": ({ injectRoute }) => {
+                    injectRoute({
+                        pattern: "/my-route",
+                        entrypoint: resolve("./pages/my-route.astro")
+                    });
+                }
+            }
+        }
+    }
+    ```
+
+</Steps>

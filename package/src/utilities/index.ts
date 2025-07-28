@@ -1,4 +1,3 @@
-export { addDts } from "./add-dts.js";
 export { addVirtualImports } from "./add-virtual-imports.js";
 export { addVitePlugin } from "./add-vite-plugin.js";
 export { hasIntegration } from "./has-integration.js";
