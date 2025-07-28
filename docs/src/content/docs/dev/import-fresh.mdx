@@ -10,12 +10,10 @@ import { Steps } from '@astrojs/starlight/components';
 ## When to use it
 
 **Use `importFresh` for:**
-- Package names in `astro.config.mjs` only (e.g., `"my-integration"`)
-- In the playground of your integration
+- All [bare specifiers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) of your package throughout your entire playground environment (e.g., `"my-integration"`, `"my-integration/sub-package"`)
 
 **Don't use `importFresh` for:**
-- Relative imports - Vite handles these properly
-- Anywhere other than `astro.config.*` 
+- Situations where are you 100% sure the import will go into vite module graph and not node module cache, but you can just apply this liberally in your playground because it can be quite painful to determine when it is needed and when it is not.
 - In production builds - it is only for playground development 
 
 ## How it works

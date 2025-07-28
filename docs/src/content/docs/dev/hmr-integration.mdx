@@ -37,14 +37,22 @@ import { Steps } from '@astrojs/starlight/components';
 
 3. **Add hmrIntegration to your config**
 
-   Configure `hmrIntegration` to watch your integration's build output directory:
+   Configure `hmrIntegration` to watch your integration's build output directory. You can watch a single directory or multiple directories:
 
    ```ts title="playground/astro.config.mjs"
    export default defineConfig({
        integrations: [
            myIntegration(),
+           // Watch a single directory
            hmrIntegration({
-               directory: createResolver(import.meta.url).resolve("../package/dist")
+                directory: createResolver(import.meta.url).resolve("../package/dist")
+           })
+           // Or watch multiple directories
+            hmrIntegration({
+                directories: [
+                    createResolver(import.meta.url).resolve("../package/dist"),
+                    createResolver(import.meta.url).resolve("../other-package/dist")
+                ]
            })
        ],
    });
@@ -74,4 +82,7 @@ export default defineConfig({
 
 ## Options
 
-- **`directory`** (required): The directory to watch for file changes, typically your integration's build output directory
+Choose one of the following options:
+
+- **`directory`**: A single directory to watch for file changes, typically your integration's build output directory
+- **`directories`**: An array of directories to watch for file changes when you need to monitor multiple locations

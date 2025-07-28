@@ -12,6 +12,8 @@
 
 - **Added `importFresh` function**: New development utility for cache-busting imports in Astro 5+. Use this in your `astro.config.mjs` to ensure fresh imports of your integration during development when using bare specifiers.
 
+- **Changed** `hmrIntegration` to accept `directory` or `directories` for watching multiple directories, not a breaking change 
+
 - **Enhanced documentation**: Completely restructured and improved documentation for better clarity and consistency
 
   - Merged installation and usage pages for streamlined getting started experience
