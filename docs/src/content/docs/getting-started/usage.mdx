@@ -34,34 +34,27 @@ Add `astro-integration-kit` using your favorite package manager:
 For the easiest way to start creating an integration with Astro Integration Kit, we recommend using this template: [`astro-integration-template`](https://github.com/florian-lefebvre/astro-integration-template)!
 :::
 
-You can now start using our powerful utilities:
-
-```ts showLineNumbers=false
-import { defineIntegration } from "astro-integration-kit"
-```
 
 ## Example 
 
-Here we are using the [addDts](/utilities/add-dts/) utility to add a TypeScript declaration file to the user's project! This is useful for typing things like Virtual Modules!
+Here we are using the [addVitePlugin](/utilities/add-vite-plugin/) utility to add a TypeScript declaration file to the user's project! This is useful for typing things like Virtual Modules!
 
 ```ts title="my-integration/index.ts"
-import { defineIntegration, addDts } from "astro-integration-kit";
 import { z } from "astro/zod";
+import { defineIntegration, addVitePlugin } from "astro-integration-kit";
+import vitePlugin from "vite-plugin";
 
 export default defineIntegration({
   name: "my-integration",
   optionsSchema: z.object({
-    virtualModuleId: z.string(),
+    pluginOptions: z.object({}).optional(),
   }),
-  setup({ options, name }) {
+  setup({ options }) {
     return {
       hooks: {
         "astro:config:setup": (params) => {
-          addDts(params, {
-            name,
-            content: `declare module ${JSON.stringify(
-              options.virtualModuleId
-            )} {}`,
+          addVitePlugin(params, {
+            plugin: vitePlugin(options.pluginOptions),
           });
         },
       },

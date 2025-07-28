@@ -21,8 +21,8 @@ importers:
         specifier: ^0.35.1
         version: 0.35.1(astro@5.12.4(@types/node@20.19.9)(jiti@1.21.7)(rollup@4.46.1)(terser@5.43.1)(typescript@5.8.3)(yaml@2.8.0))
       '@expressive-code/plugin-line-numbers':
-        specifier: ^0.35.3
-        version: 0.35.6
+        specifier: ^0.41.3
+        version: 0.41.3
       astro:
         specifier: ^5.12.4
         version: 5.12.4(@types/node@20.19.9)(jiti@1.21.7)(rollup@4.46.1)(terser@5.43.1)(typescript@5.8.3)(yaml@2.8.0)
@@ -1127,17 +1127,14 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@expressive-code/core@0.35.6':
-    resolution: {integrity: sha512-xGqCkmfkgT7lr/rvmfnYdDSeTdCSp1otAHgoFS6wNEeO7wGDPpxdosVqYiIcQ8CfWUABh/pGqWG90q+MV3824A==}
-
   '@expressive-code/core@0.41.3':
     resolution: {integrity: sha512-9qzohqU7O0+JwMEEgQhnBPOw5DtsQRBXhW++5fvEywsuX44vCGGof1SL5OvPElvNgaWZ4pFZAFSlkNOkGyLwSQ==}
 
   '@expressive-code/plugin-frames@0.41.3':
     resolution: {integrity: sha512-rFQtmf/3N2CK3Cq/uERweMTYZnBu+CwxBdHuOftEmfA9iBE7gTVvwpbh82P9ZxkPLvc40UMhYt7uNuAZexycRQ==}
 
-  '@expressive-code/plugin-line-numbers@0.35.6':
-    resolution: {integrity: sha512-WVPk1ghCP1i1CfW4xDVQptlY1Py1X7u5tWhFZnLAvcuPtSo6iYP3DPOGtQpmrucnmvYIwWTdruiNFUlDUUIAcQ==}
+  '@expressive-code/plugin-line-numbers@0.41.3':
+    resolution: {integrity: sha512-eig82a4CRC3XgVPQ2S/TMDcLiHJokOCD/mAdNVImpD3segVewxfjGgtj5DXQRo0E0q6f0R0EH34YzTFl5CEPqg==}
 
   '@expressive-code/plugin-shiki@0.41.3':
     resolution: {integrity: sha512-RlTARoopzhFJIOVHLGvuXJ8DCEme/hjV+ZnRJBIxzxsKVpGPW4Oshqg9xGhWTYdHstTsxO663s0cdBLzZj9TQA==}
@@ -5915,18 +5912,6 @@ snapshots:
   '@esbuild/win32-x64@0.25.8':
     optional: true
 
-  '@expressive-code/core@0.35.6':
-    dependencies:
-      '@ctrl/tinycolor': 4.1.0
-      hast-util-select: 6.0.4
-      hast-util-to-html: 9.0.5
-      hast-util-to-text: 4.0.2
-      hastscript: 9.0.1
-      postcss: 8.5.6
-      postcss-nested: 6.2.0(postcss@8.5.6)
-      unist-util-visit: 5.0.0
-      unist-util-visit-parents: 6.0.1
-
   '@expressive-code/core@0.41.3':
     dependencies:
       '@ctrl/tinycolor': 4.1.0
@@ -5943,9 +5928,9 @@ snapshots:
     dependencies:
       '@expressive-code/core': 0.41.3
 
-  '@expressive-code/plugin-line-numbers@0.35.6':
+  '@expressive-code/plugin-line-numbers@0.41.3':
     dependencies:
-      '@expressive-code/core': 0.35.6
+      '@expressive-code/core': 0.41.3
 
   '@expressive-code/plugin-shiki@0.41.3':
     dependencies:
