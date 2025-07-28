@@ -16,7 +16,7 @@ export const hmrIntegration = defineIntegration({
 		return {
 			hooks: {
 				"astro:config:setup": (params) => {
-					if ('directories' in options) {
+					if ("directories" in options) {
 						for (const directory of options.directories) {
 							watchDirectory(params, directory);
 						}
