@@ -4,7 +4,7 @@ import { z } from "astro/zod";
 import { VitePWA } from "vite-plugin-pwa";
 
 const {
-	addDts,
+	// addDts,
 	addVirtualImports,
 	addVitePlugin,
 	createResolver,
@@ -50,20 +50,20 @@ const testIntegration = defineIntegration({
 					const { config, updateConfig, hasVitePlugin } = params;
 					watchDirectory(params, resolve());
 
-					addDts(params, {
-						name: "test-integration",
-						content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
-					});
+				// 	addDts(params, {
+				// 		name: "test-integration",
+				// 		content: readFileSync(resolve("./virtual.d.ts"), "utf-8"),
+				// 	});
 
-					addDts(params, {
-						name: "test-format",
-						content: `declare module "test:whatever" {
-						interface A {
-									foo: bar;
-							}
-				export const a: A;
-					}`,
-					});
+				// 	addDts(params, {
+				// 		name: "test-format",
+				// 		content: `declare module "test:whatever" {
+				// 		interface A {
+				// 					foo: bar;
+				// 			}
+				// export const a: A;
+				// 	}`,
+				// 	});
 
 					console.log(
 						"Test hasViteplugin: ",
