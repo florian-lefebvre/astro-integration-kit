@@ -31,11 +31,18 @@ export default defineConfig({
 			logo: {
 				src: "./src/assets/houston.webp",
 			},
-			social: {
-				github: "https://github.com/florian-lefebvre/astro-integration-kit",
-				discord:
-					"https://discord.com/channels/830184174198718474/1197638002764152843",
-			},
+			social: [
+				{
+					icon: "github",
+					label: "GitHub",
+					href: "https://github.com/florian-lefebvre/astro-integration-kit",
+				},
+				{
+					icon: "discord",
+					label: "Discord",
+					href: "https://discord.com/channels/830184174198718474/1197638002764152843",
+				},
+			],
 			editLink: {
 				baseUrl:
 					"https://github.com/florian-lefebvre/astro-integration-kit/edit/main/docs/",
@@ -57,27 +64,12 @@ export default defineConfig({
 					},
 				},
 			],
-			expressiveCode: {
-				themes: ["one-dark-pro", "starlight-light"],
-				plugins: [pluginLineNumbers()],
-				defaultProps: {
-					overridesByLang: {
-						bash: {
-							showLineNumbers: false,
-						},
-					},
-				},
-			},
 			sidebar: [
 				{
 					label: "Getting started",
 					items: [
 						{
-							label: "Installation",
-							link: "/getting-started/installation/",
-						},
-						{
-							label: "Usage",
+							label: "Installation & Usage",
 							link: "/getting-started/usage/",
 						},
 						{
@@ -91,7 +83,6 @@ export default defineConfig({
 						{
 							label: "Upgrade guide",
 							link: "/getting-started/upgrade-guide/",
-							badge: badge("updated"),
 						},
 					],
 				},
@@ -133,22 +124,6 @@ export default defineConfig({
 					label: "Utilities",
 					items: [
 						{
-							label: "addDevToolbarFrameworkApp",
-							link: "/utilities/add-devtoolbar-framework-app/",
-							badge: badge("removed"),
-							attrs: {
-								style: "opacity:0.5",
-							},
-						},
-						{
-							label: "addDts",
-							link: "/utilities/add-dts/",
-							badge: badge("removed"),
-							attrs: {
-								style: "opacity:0.5",
-							},
-						},
-						{
 							label: "addIntegration",
 							link: "/utilities/add-integration/",
 						},
@@ -184,6 +159,28 @@ export default defineConfig({
 								style: "opacity:0.5",
 							},
 						},
+						{
+							label: "addDevToolbarFrameworkApp",
+							link: "/utilities/add-devtoolbar-framework-app/",
+							badge: badge("removed"),
+							attrs: {
+								style: "opacity:0.5",
+							},
+						},
+						{
+							label: "addDts",
+							link: "/utilities/add-dts/",
+							badge: badge("removed"),
+							attrs: {
+								style: "opacity:0.5",
+							},
+						},
+					],
+				},
+				{
+					label: "Plugins",
+					items: [
+						{ label: "hasVitePlugin", link: "/plugins/has-vite-plugin/" },
 					],
 				},
 				// {
@@ -217,5 +214,6 @@ export default defineConfig({
 	],
 	redirects: {
 		"/getting-started/breaking-changes/": "/getting-started/upgrade-guide/",
+		"/getting-started/installation/": "/getting-started/usage/",
 	},
 });
