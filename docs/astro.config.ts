@@ -1,5 +1,4 @@
 import starlight from "@astrojs/starlight";
-import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { defineConfig } from "astro/config";
 import { version } from "../package/package.json";
 
