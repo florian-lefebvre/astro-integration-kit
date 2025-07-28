@@ -1,5 +1,5 @@
 import { defineConfig } from "tsup";
-import { peerDependencies } from "./package.json";
+import packageJson from "./package.json";
 
 export default defineConfig((options) => {
 	const dev = !!options.watch;
@@ -13,7 +13,7 @@ export default defineConfig((options) => {
 		clean: true,
 		splitting: false,
 		minify: !dev,
-		external: [...Object.keys(peerDependencies)],
+		external: [...Object.keys(packageJson.peerDependencies)],
 		tsconfig: "tsconfig.build.json",
 	};
 });
