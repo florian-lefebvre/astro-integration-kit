@@ -22,30 +22,32 @@ import { hasVitePlugin } from "./has-vite-plugin.js";
  * ```
  */
 export const addVitePlugin = defineUtility("astro:config:setup")(
-	(
-		params,
-		{
-			plugin,
-			warnDuplicated = true,
-		}: {
-			plugin: PluginOption;
-			warnDuplicated?: boolean;
-		},
-	) => {
-		const { updateConfig, logger } = params;
+  (
+    params,
+    {
+      plugin,
+      warnDuplicated = true,
+    }: {
+      plugin: PluginOption;
+      warnDuplicated?: boolean;
+    }
+  ) => {
+    const { updateConfig, logger } = params;
 
-		if (warnDuplicated && hasVitePlugin(params, { plugin })) {
-			logger.warn(
-				`The Vite plugin "${
-					(plugin as Plugin).name
-				}" is already present in your Vite configuration, this plugin may not behave correctly.`,
-			);
-		}
+    if (warnDuplicated && hasVitePlugin(params, { plugin })) {
+      logger.warn(
+        `The Vite plugin "${
+          (plugin as Plugin).name
+        }" is already present in your Vite configuration, this plugin may not behave correctly.`
+      );
+    }
 
-		updateConfig({
-			vite: {
-				plugins: [plugin],
-			},
-		});
-	},
+    updateConfig({
+      vite: {
+        // casting as any to avoid type errors with Vite plugins
+        // these errors happen now because we have astro 5 in the playground
+        plugins: [plugin as any],
+      },
+    });
+  }
 );
