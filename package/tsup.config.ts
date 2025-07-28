@@ -16,12 +16,11 @@ export default defineConfig((options) => {
 			bundle: true,
 			dts: true,
 			sourcemap: true,
-			clean: true,
+			clean: false,
 			splitting: false,
 			minify: !dev,
 			external: [
 				...Object.keys(packageJson.peerDependencies),
-				"./import-fresh.js",
 			],
 			tsconfig: "tsconfig.build.json",
 		},

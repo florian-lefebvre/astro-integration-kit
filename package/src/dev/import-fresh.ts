@@ -25,11 +25,11 @@ const require = createRequire(import.meta.url);
  * });
  * ```
  */
-export async function importFresh(packageName: string) {
-	const resolvedPath = require.resolve(packageName);
-	const newSpecifier = new URL(pathToFileURL(resolvedPath).href);
-	newSpecifier.searchParams.set("t", Date.now().toString());
+export async function importFresh<T = any>(packageName: string): Promise<T> {
+  const resolvedPath = require.resolve(packageName);
+  const newSpecifier = new URL(pathToFileURL(resolvedPath).href);
+  newSpecifier.searchParams.set("t", Date.now().toString());
 
-	const module = await import(/* @vite-ignore */ newSpecifier.href);
-	return module.default ?? module;
+  const module = await import(/* @vite-ignore */ newSpecifier.href);
+  return (module.default ?? module) as T;
 }
