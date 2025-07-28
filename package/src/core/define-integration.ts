@@ -8,10 +8,11 @@ import type { Hooks } from "./types.js";
 type AstroIntegrationSetupFn<Options extends z.ZodTypeAny, TApi> = (params: {
 	name: string;
 	options: z.output<Options>;
-}) => Omit<AstroIntegration, "name" | "hooks"> & TApi & {
-	// Enable autocomplete and intellisense for non-core hooks
-	hooks: Partial<Hooks>,
-};
+}) => Omit<AstroIntegration, "name" | "hooks"> &
+	TApi & {
+		// Enable autocomplete and intellisense for non-core hooks
+		hooks: Partial<Hooks>;
+	};
 
 /**
  * A powerful wrapper around the standard Astro Integrations API. It allows integration authors to handle user options and global logic easily.
@@ -34,11 +35,11 @@ type AstroIntegrationSetupFn<Options extends z.ZodTypeAny, TApi> = (params: {
  * ```
  */
 export const defineIntegration = <
-  TApiBase,
+	TApiBase,
 	// Apply Prettify on a generic type parameter so it goes through
 	// the type expansion and beta reduction to form a minimal type
 	// for the emitted declarations on libraries.
-  TApi extends ExtendedPrettify<Omit<TApiBase, keyof AstroIntegration>>,
+	TApi extends ExtendedPrettify<Omit<TApiBase, keyof AstroIntegration>>,
 	TOptionsSchema extends z.ZodTypeAny = z.ZodNever,
 >({
 	name,
@@ -52,8 +53,8 @@ export const defineIntegration = <
 	...args: [z.input<TOptionsSchema>] extends [never]
 		? []
 		: undefined extends z.input<TOptionsSchema>
-		  ? [options?: z.input<TOptionsSchema>]
-		  : [options: z.input<TOptionsSchema>]
+			? [options?: z.input<TOptionsSchema>]
+			: [options: z.input<TOptionsSchema>]
 ) => AstroIntegration & TApi) => {
 	return (...args): AstroIntegration & TApi => {
 		const parsedOptions = (optionsSchema ?? z.never().optional()).safeParse(
@@ -72,10 +73,10 @@ export const defineIntegration = <
 
 		const options = parsedOptions.data as z.output<TOptionsSchema>;
 
-		const {hooks, ...extra} = setup({ name, options });
+		const { hooks, ...extra } = setup({ name, options });
 
 		return {
-			...extra as unknown as TApi,
+			...(extra as unknown as TApi),
 			hooks,
 			name,
 		};
