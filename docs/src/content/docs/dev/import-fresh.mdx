@@ -3,67 +3,38 @@ title: importFresh
 description: Import packages with cache busting for proper HMR during development.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
 
-`importFresh` imports packages with cache busting for proper HMR during development. Since [This PR in Astro v5](https://github.com/withastro/astro/pull/11819), bare specifiers are loaded through Node instead of Vite, so they don't refresh when the dev server restarts.
+`importFresh` imports packages with cache-busting so they reload properly during development. Since [this Astro v5 change](https://github.com/withastro/astro/pull/11819), linked packages are loaded through Node instead of Vite, so they don't automatically refresh when the dev server restarts. `importFresh` fixes that by forcing a fresh import.
 
 ## When to use it
 
 **Use `importFresh` for:**
-- All [bare specifiers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) of your package throughout your entire playground environment (e.g., `"my-integration"`, `"my-integration/sub-package"`)
+- All [bare specifiers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) of your package across the playground (e.g., `"my-integration"`, `"my-integration/sub-package"`).
 
 **Don't use `importFresh` for:**
-- Situations where are you 100% sure the import will go into vite module graph and not node module cache, but you can just apply this liberally in your playground because it can be quite painful to determine when it is needed and when it is not.
-- In production builds - it is only for playground development 
+- Scenarios where you're certain your package will be loaded through Vite.
+- **Production builds** — it's for local development only.
 
 ## How it works
 
-`importFresh` resolves the package path, adds a timestamp query parameter to bust the Node.js module cache, and imports the fresh module.
+`importFresh` resolves the package path, appends a timestamp query (`?t=<ms>`) to bust Node's module cache, and dynamically imports the module. It returns the module's default export if present, otherwise the module namespace.
 
-## Usage
-
-<Steps>
-
-1. **Import the function**
-
-   Import `importFresh` from `astro-integration-kit/dev` in your Astro config:
-
-   ```ts title="playground/astro.config.mjs"
-   import { defineConfig } from "astro/config";
-   import { importFresh } from "astro-integration-kit/dev";
-   ```
-
-2. **Use it for package imports**
-
-   Replace regular imports with `importFresh` for your integration packages:
-
-   ```ts title="playground/astro.config.mjs"
-   // Use importFresh for bare specifiers
-   const myIntegration = await importFresh("my-integration");
-   
-   export default defineConfig({
-       integrations: [myIntegration()]
-   });
-   ```
-
-</Steps>
-
-## Complete example
+## Example
 
 ```ts title="playground/astro.config.mjs"
 import { defineConfig } from "astro/config";
 import { createResolver } from "astro-integration-kit";
-import { importFresh, hmrIntegration } from "astro-integration-kit/dev";
+import { importFresh } from "astro-integration-kit/dev";
 
-// Use importFresh for package names to ensure fresh imports
-const myIntegration = await importFresh("my-integration");
+const { default: myIntegrationModule } = await importFresh<
+  typeof import("my-integration")
+>("my-integration");
+
 
 export default defineConfig({
-    integrations: [
-        myIntegration(),
-        hmrIntegration({
-            directory: createResolver(import.meta.url).resolve("../package/dist")
-        })
-    ],
+  integrations: [
+    myIntegration(),
+    hmrIntegration({ directory: "../package/dist" })
+  ],
 });
 ```

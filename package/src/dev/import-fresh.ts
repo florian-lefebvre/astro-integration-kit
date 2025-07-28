@@ -15,10 +15,9 @@ const require = createRequire(import.meta.url);
  *
  * @example
  * ```ts
- * // In astro.config.mjs
  * import { importFresh } from "astro-integration-kit/dev";
  *
- * const myIntegration = await importFresh("my-integration");
+ * const { default : myIntegration } = await importFresh<typeof import("my-integration")>("my-integration");
  *
  * export default defineConfig({
  *   integrations: [myIntegration()]
@@ -30,6 +29,5 @@ export async function importFresh<T = any>(packageName: string): Promise<T> {
   const newSpecifier = new URL(pathToFileURL(resolvedPath).href);
   newSpecifier.searchParams.set("t", Date.now().toString());
 
-  const module = await import(/* @vite-ignore */ newSpecifier.href);
-  return (module.default ?? module) as T;
+  return (await import(/* @vite-ignore */ newSpecifier.href)) as T;
 }
