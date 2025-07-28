@@ -25,9 +25,9 @@ const require = createRequire(import.meta.url);
  * ```
  */
 export async function importFresh<T = any>(packageName: string): Promise<T> {
-  const resolvedPath = require.resolve(packageName);
-  const newSpecifier = new URL(pathToFileURL(resolvedPath).href);
-  newSpecifier.searchParams.set("t", Date.now().toString());
+	const resolvedPath = require.resolve(packageName);
+	const newSpecifier = new URL(pathToFileURL(resolvedPath).href);
+	newSpecifier.searchParams.set("t", Date.now().toString());
 
-  return (await import(/* @vite-ignore */ newSpecifier.href)) as T;
+	return (await import(/* @vite-ignore */ newSpecifier.href)) as T;
 }

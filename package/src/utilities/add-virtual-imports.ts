@@ -141,7 +141,6 @@ export const addVirtualImports = defineUtility("astro:config:setup")(
 		},
 	) => {
 		let pluginName = `vite-plugin-${name}`;
-
 		while (hasVitePlugin(params, { plugin: pluginName }))
 			pluginName = incrementPluginName(pluginName);
 
