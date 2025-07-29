@@ -1,3 +1,3 @@
-declare module "virtual:astro-integration-kit-playground/config" {
-	export default { foo: string };
+declare module "virtual:astro-integration-kit-playground" {
+	export const foo: string;
 }
