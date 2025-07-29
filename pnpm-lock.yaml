@@ -37,6 +37,37 @@ importers:
         specifier: ^5.4.5
         version: 5.8.3
 
+  examples/withPlugins:
+    dependencies:
+      '@astrojs/tailwind':
+        specifier: ^5.1.0
+        version: 5.1.5(astro@4.16.18(@types/node@20.19.9)(rollup@2.79.2)(terser@5.43.1)(typescript@5.8.3))(tailwindcss@3.4.17)
+      astro:
+        specifier: ^4.12.1
+        version: 4.16.18(@types/node@20.19.9)(rollup@2.79.2)(terser@5.43.1)(typescript@5.8.3)
+      astro-integration-kit:
+        specifier: workspace:*
+        version: link:../../package
+      tailwindcss:
+        specifier: ^3.4.3
+        version: 3.4.17
+    devDependencies:
+      '@astrojs/check':
+        specifier: ^0.8.2
+        version: 0.8.3(typescript@5.8.3)
+      '@types/node':
+        specifier: ^20.12.12
+        version: 20.19.9
+      typescript:
+        specifier: ^5.4.5
+        version: 5.8.3
+      vite:
+        specifier: ^5.4.19
+        version: 5.4.19(@types/node@20.19.9)(terser@5.43.1)
+      vite-plugin-pwa:
+        specifier: ^0.19.8
+        version: 0.19.8(vite@5.4.19(@types/node@20.19.9)(terser@5.43.1))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
+
   package:
     dependencies:
       astro:
@@ -67,31 +98,12 @@ importers:
 
   playground:
     dependencies:
-      '@astrojs/tailwind':
-        specifier: ^5.1.0
-        version: 5.1.5(astro@4.16.18(@types/node@20.19.9)(rollup@2.79.2)(terser@5.43.1)(typescript@5.8.3))(tailwindcss@3.4.17)
       astro:
-        specifier: ^4.12.1
-        version: 4.16.18(@types/node@20.19.9)(rollup@2.79.2)(terser@5.43.1)(typescript@5.8.3)
+        specifier: ^5.12.4
+        version: 5.12.4(@types/node@20.19.9)(jiti@1.21.7)(rollup@4.46.1)(terser@5.43.1)(typescript@5.8.3)(yaml@2.8.0)
       astro-integration-kit:
         specifier: workspace:*
         version: link:../package
-      tailwindcss:
-        specifier: ^3.4.3
-        version: 3.4.17
-    devDependencies:
-      '@astrojs/check':
-        specifier: ^0.8.2
-        version: 0.8.3(typescript@5.8.3)
-      '@types/node':
-        specifier: ^20.12.12
-        version: 20.19.9
-      typescript:
-        specifier: ^5.4.5
-        version: 5.8.3
-      vite-plugin-pwa:
-        specifier: ^0.19.8
-        version: 0.19.8(vite@6.3.5(@types/node@20.19.9)(jiti@1.21.7)(terser@5.43.1)(yaml@2.8.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0)
 
 packages:
 
@@ -9991,12 +10003,12 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-pwa@0.19.8(vite@6.3.5(@types/node@20.19.9)(jiti@1.21.7)(terser@5.43.1)(yaml@2.8.0))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0):
+  vite-plugin-pwa@0.19.8(vite@5.4.19(@types/node@20.19.9)(terser@5.43.1))(workbox-build@7.3.0(@types/babel__core@7.20.5))(workbox-window@7.3.0):
     dependencies:
       debug: 4.4.1
       fast-glob: 3.3.3
       pretty-bytes: 6.1.1
-      vite: 6.3.5(@types/node@20.19.9)(jiti@1.21.7)(terser@5.43.1)(yaml@2.8.0)
+      vite: 5.4.19(@types/node@20.19.9)(terser@5.43.1)
       workbox-build: 7.3.0(@types/babel__core@7.20.5)
       workbox-window: 7.3.0
     transitivePeerDependencies:

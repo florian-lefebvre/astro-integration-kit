@@ -15,7 +15,7 @@ export default defineConfig({
 		{ name: "integration-a", hooks: {} },
 		{ name: "integration-b", hooks: {} },
 		hmrIntegration({
-			directory: createResolver(import.meta.url).resolve("../package/dist"),
+			directory: createResolver(import.meta.url).resolve("../../package/dist"),
 		}),
 	],
 });

@@ -1,4 +1,3 @@
-import type { DevToolbarApp } from "astro";
 import type { Prettify } from "../internal/types.js";
 
 export type PluginHooksConstraint = {
@@ -72,7 +71,6 @@ type OmitKeysByValue<T, ValueType> = {
 // type Output = OverridePluginParamsForHook<Input>
 // 			^? {foo: () => boolean, bar: () => number}
 //
-// biome-ignore lint/complexity/noBannedTypes: it doesn't work with anything else
 type OverridePluginParamsForHook<
 	THook extends keyof Hooks,
 	TPlugins extends Array<SimplifyPlugin>,
@@ -122,9 +120,3 @@ export type ExtendedHooks<TPlugins extends Array<AnyPlugin>> = {
 		? AddParam<Hooks[Hook], AddedParam<TPlugins, Hook>>
 		: never;
 };
-
-export interface DevToolbarFrameworkAppProps {
-	canvas: Parameters<Required<DevToolbarApp>["init"]>[0];
-	eventTarget: Parameters<Required<DevToolbarApp>["init"]>[1];
-	renderWindow: HTMLElementTagNameMap["astro-dev-toolbar-window"];
-}
