@@ -3,123 +3,84 @@ title: definePlugin
 description: Allows defining a type-safe plugin that can be used in defineIntegration.
 ---
 import Disabled from "~/components/Disabled.astro"
-import { LinkCard } from '@astrojs/starlight/components';
+import { LinkCard, Steps } from '@astrojs/starlight/components';
 
-Allows defining a type-safe plugin that can be used in `defineIntegration`.
+`definePlugin` allows you to create custom type-safe plugins that can extend integration hooks with additional parameters and functionality. This is an advanced utility for creating reusable plugin components that can be shared across multiple integrations or distributed as third-party packages.
 
-:::caution
-This utility is for advanced use-cases. It's useful for developers that want to create
-3rd party plugins for Astro Integration Kit, or if you want to learn a little bit more
-about the internals.
-:::
+For more practical examples of how to create your own plugins, check out the [built-in plugins source code](https://github.com/florian-lefebvre/astro-integration-kit/tree/main/package/src/plugins) in the Astro Integration Kit repository.
 
-```ts title="package/plugins/has-vite-plugin.ts"
-import type { AstroConfig } from "astro";
-import type { Plugin, PluginOption } from "vite";
-import { definePlugin } from "astro-integration-kit";
-import { hasVitePlugin, getPlugins } from "../utilities/has-vite-plugin.js";
 
-export const hasVitePluginPlugin = definePlugin({
-	name: "hasVitePlugin",
-	setup() {
-		return {
-			"astro:config:setup": (params) => {
-				const currentPlugins = getPlugins(
-					new Set(),
-					params.config.vite?.plugins,
-				);
+## How it works
 
-				const { updateConfig, config } = params;
+When you use `definePlugin`, it:
 
-				params.updateConfig = (newConfig) => {
-					config.vite.plugins = Array.from(
-						getPlugins(currentPlugins, newConfig.vite?.plugins),
-					);
-					return updateConfig(newConfig);
-				};
+- **Defines a named plugin**: Creates a plugin with a specific name that can be used across multiple integrations
+- **Sets up hook extensions**: The `setup()` function defines which hooks the plugin extends and what additional parameters it provides
+- **Provides type safety**: Ensures that the additional parameters are properly typed and available in your integration hooks
+- **Enables reusability**: Allows the same plugin logic to be shared across different integrations
 
-				return {
-					hasVitePlugin: (plugin: string | PluginOption) =>
-						hasVitePlugin(params, {
-							plugin,
-						}),
-				};
-			},
-		};
-	},
-});
-```
+## Creating a plugin
 
-You can then use it in [`withPlugins`](/core/with-plugins/):
+<Steps>
 
-```ts title="my-integration/index.ts" "withPlugins" "hasVitePluginPlugin"
-import { defineIntegration, withPlugins } from "astro-integration-kit";
-import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
+1. **Define your plugin**
 
-export default defineIntegration({
-    name: "my-integration",
-    setup({ name }) {
-        return withPlugins({
-            name,
-            plugins: [hasVitePluginPlugin],
-            hooks: {
-                "astro:config:setup": ({ hasVitePlugin }) => {}
-            }
-        })
-    }
-})
-```
+   Create a plugin with a unique name and setup function:
 
-## Usage
+   ```ts
+   definePlugin({
+       name: "my-plugin",
+       setup({ name }) {
+           return {
+               "astro:config:setup": (hookParams) => ({
+                   // Additional parameters to provide to this hook
+                   myUtility: (value: string) => {
+                       // Plugin implementation
+                   }
+               })
+           }
+       }
+   })
+   ```
 
-- A plugin defines a `name` and a `setup` function.
+2. **Use it in your integration**
 
-    ```ts
-    definePlugin({
-        name: "my-plugin",
-        setup() {
-            // ...
-        }
-    })
-    ```
+   Add the plugin to your integration using [`withPlugins`](/core/with-plugins/):
 
-- The `setup` function accepts a name and must return an object
+   ```ts
+   export default defineIntegration({
+       name: "my-integration",
+       setup({ name }) {
+           return withPlugins({
+               name,
+               plugins: [myPlugin],
+               hooks: {
+                   "astro:config:setup": ({ myUtility }) => {
+                       // Use the plugin's functionality
+                       myUtility("some value");
+                   }
+               }
+           })
+       }
+   })
+   ```
 
-    ```ts "{ name }" "{}"
-    definePlugin({
-        name: "my-plugin",
-        setup({ name }) {
-            return {}
-        }
-    })
-    ```
-
-- The returned object is made of astro hooks and must returned an object of additional properties
-
-    ```ts {5-11}
-    definePlugin({
-        name: "my-plugin",
-        setup({ name }) {
-            return {
-                "astro:config:setup": ({ updateConfig }) => ({
-                    doSomething: (foo: string) => {
-                        updateConfig({
-                            // ...
-                        })
-                    }
-                })
-            }
-        }
-    })
-    ```
+</Steps>
 
 ## `defineAllHooksPlugin`
 
-`defineAllHooksPlugin` is a variation of `definePlugin` for when you want to provide the same API for every hook defined in the consumer integration.
+`defineAllHooksPlugin` is a variation of `definePlugin` that provides the same API across all Astro hooks. This is useful when you want to create a plugin that works with any hook, including future hooks or hooks added by other integrations.
 
-Using this function has an advantange because it allows your plugin to provide an API even for hooks it doesn't know about, like any Astro hook added after the plugin release or hooks added by integrations like `@astrojs/db`.
+### When to use it
 
-Instead of providing a `setup` function returning a map of your API factory for each hook, you provide a function that receives a hook name and returns the API factory for that hook.
+Use `defineAllHooksPlugin` when:
+- Your plugin should work with any Astro hook
+- You want to support hooks added by other integrations (like `@astrojs/db`)
+- You want your plugin to be forward-compatible with future Astro versions
+
+### Usage
+
+Instead of mapping specific hooks, you provide a factory function that receives the hook name:
 
 ```ts
 defineAllHooksPlugin({
@@ -127,18 +88,93 @@ defineAllHooksPlugin({
     setup({ name }) {
         return (hookName) => (hookParameters) => ({
             doSomething: () => {
-                // ...
+                console.log(`Called from ${hookName} hook`);
             }
         });
     }
 })
 ```
 
-## Limitations
+## Plugin deduplication
 
-1. Plugins support overrides. That means that if 2 plugins declare the same `name`, the latest will be kept.
+When multiple plugins with the same name are provided, `withPlugins` automatically deduplicates them by keeping only the last occurrence. This prevents conflicts and ensures predictable behavior.
 
-## Practical examples
+```ts
+return withPlugins({
+    name,
+    plugins: [pluginA, pluginB, pluginA], // Only the last pluginA is kept
+    hooks: { /* ... */ }
+})
+```
 
-Astro Integration Kit uses `definePlugin` for its core plugins under the hood,
-have a look at our source for practical examples!
+## Example
+
+Here's a complete example of the built-in `hasVitePlugin` plugin to demonstrate real-world usage:
+
+<Steps>
+
+1. **Define the plugin**
+
+   ```ts title="package/plugins/has-vite-plugin.ts"
+   import type { AstroConfig } from "astro";
+   import type { Plugin, PluginOption } from "vite";
+   import { definePlugin } from "astro-integration-kit";
+   import { hasVitePlugin, getPlugins } from "../utilities/has-vite-plugin.js";
+
+   export const hasVitePluginPlugin = definePlugin({
+   	name: "hasVitePlugin",
+   	setup() {
+   		return {
+   			"astro:config:setup": (params) => {
+   				const currentPlugins = getPlugins(
+   					new Set(),
+   					params.config.vite?.plugins,
+   				);
+
+   				const { updateConfig, config } = params;
+
+   				params.updateConfig = (newConfig) => {
+   					config.vite.plugins = Array.from(
+   						getPlugins(currentPlugins, newConfig.vite?.plugins),
+   					);
+   					return updateConfig(newConfig);
+   				};
+
+   				return {
+   					hasVitePlugin: (plugin: string | PluginOption) =>
+   						hasVitePlugin(params, {
+   							plugin,
+   						}),
+   				};
+   			},
+   		};
+   	},
+   });
+   ```
+
+2. **Use in integration**
+
+   ```ts title="my-integration/index.ts" "withPlugins" "hasVitePluginPlugin"
+   import { defineIntegration, withPlugins } from "astro-integration-kit";
+   import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
+
+   export default defineIntegration({
+       name: "my-integration",
+       setup({ name }) {
+           return withPlugins({
+               name,
+               plugins: [hasVitePluginPlugin],
+               hooks: {
+                   "astro:config:setup": ({ hasVitePlugin }) => {
+                       // hasVitePlugin is provided by the hasVitePluginPlugin
+                       if (hasVitePlugin("some-plugin-name")) {
+                           // Plugin already exists
+                       }
+                   }
+               }
+           })
+       }
+   })
+   ```
+
+</Steps>

@@ -1,0 +1,59 @@
+---
+title: hasVitePlugin
+description: Check if a Vite plugin is already present in the configuration
+---
+
+`hasVitePlugin` is a utility that checks if a Vite plugin with a specific name is already present in the configuration. This helps prevent duplicate plugin installations and provides better integration development experience.
+
+The `hasVitePlugin` utility allows you to:
+
+- **Check for existing plugins**: Detect if a Vite plugin is already installed before adding it
+- **Prevent duplicates**: Avoid adding the same plugin multiple times across different integrations
+- **Better error handling**: Make informed decisions about plugin installation in your integration
+
+Use `hasVitePlugin` when:
+
+- Your integration needs to conditionally add Vite plugins based on existing configuration
+- You want to prevent duplicate plugin installations
+- You need to check if another integration has already added a specific plugin
+- You want to provide warnings or different behavior when plugins already exist
+
+## Usage
+
+See [withPlugins](/utilities/with-plugins/) for more details on how to use plugins in your integration.
+
+## Limitations
+
+- **Current integration scope**: `hasVitePlugin` can only detect plugins added from previous integrations, not plugins added earlier in the current integration's setup
+- **Plugin order dependency**: When using `hasVitePlugin` within `defineIntegration`, the `hasVitePluginPlugin` must be the first item in the `plugins` array to properly detect Vite plugins within the current integration
+- **Name-based detection**: Plugin detection is based on the plugin's `name` property, so plugins without names or with dynamic names may not be detected reliably
+
+## Example
+
+```ts
+import { defineIntegration, withPlugins } from "astro-integration-kit";
+import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
+import someVitePlugin from "some-vite-plugin";
+
+export default defineIntegration({
+  name: "conditional-plugin-integration",
+  setup({ name }) {
+    return withPlugins({
+      name,
+      plugins: [hasVitePluginPlugin],
+      hooks: {
+        "astro:config:setup": ({ hasVitePlugin, addVitePlugin, logger }) => {
+          const pluginName = "some-vite-plugin";
+          
+          if (hasVitePlugin(pluginName)) {
+            logger.info(`${pluginName} is already installed, skipping...`);
+          } else {
+            logger.info(`Installing ${pluginName}...`);
+            addVitePlugin(someVitePlugin());
+          }
+        }
+      }
+    });
+  }
+});
+```

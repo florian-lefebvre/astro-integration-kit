@@ -8,8 +8,9 @@ import { LinkCard } from '@astrojs/starlight/components';
 `defineIntegration` is a powerful wrapper around the standard Astro Integrations API. It allows integration authors to handle user options and global logic easily.
 
 ```ts title="my-integration/index.ts" "defineIntegration"
-import { defineIntegration, addDts } from "astro-integration-kit"
 import { z } from "astro/zod"
+import { defineIntegration, addVitePlugin } from "astro-integration-kit"
+import vitePlugin from "vite-plugin"
 
 export default defineIntegration({
     name: "my-integration",
@@ -20,9 +21,8 @@ export default defineIntegration({
         return {
             hooks: {
                 "astro:config:setup": (params) => {
-                    addDts(params, {
-                        name,
-                        content: `declare module ${JSON.stringify(options.virtualModuleId)} {}`
+                    addVitePlugin(params, {
+                        plugin: vitePlugin()
                     })
                 }
             }

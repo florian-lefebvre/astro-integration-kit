@@ -1,13 +1,22 @@
 ---
 title: withPlugins
-description: Allows to extend hooks with custom parameters. Only used for advanced use-cases.
+description: Extends integration hooks with plugins that provide additional parameters and functionality.
 ---
 
-`withPlugins` allows to extend hooks with custom parameters. Useful for advanced use-cases.
+`withPlugins` allows you to extend integration hooks with plugins that provide additional parameters and functionality. This is the primary way to use plugins in your integrations.
+
+## How it works
+
+When you use `withPlugins`, it:
+
+1. **Resolves plugins**: Filters out duplicate plugins (keeping the latest occurrence of plugins with the same name)
+2. **Sets up plugins**: Calls each plugin's `setup()` function with the integration name
+3. **Merges hook parameters**: For each hook, it collects additional parameters from all applicable plugins and merges them with the original Astro hook parameters
+4. **Extends your hooks**: Your hook functions receive both the original Astro parameters and the additional parameters provided by plugins
 
 ```ts title="my-integration/index.ts" "withPlugins"
-import { defineIntegration, withPlugins } from "astro-integration-kit";
-import { hasVitePluginPlugin  } from "astro-integration-kit/plugins";
+import { defineIntegration, withPlugins, addVitePlugin } from "astro-integration-kit";
+import { hasVitePluginPlugin } from "astro-integration-kit/plugins";
 
 export default defineIntegration({
     name: "my-integration",
@@ -16,10 +25,39 @@ export default defineIntegration({
             name,
             plugins: [hasVitePluginPlugin],
             hooks: {
-                "astro:config:setup": ({ hasVitePlugin }) => {}
+                "astro:config:setup": ({ hasVitePlugin, logger }) => {
+                    // hasVitePlugin is provided by the hasVitePluginPlugin
+                    if (hasVitePlugin("some-plugin-name")) {
+                        logger.info("Plugin already exists");
+                    } else {
+                        addVitePlugin(somePlugin());
+                    }
+                }
             }
         })
     }
+})
+```
+
+In this example, the `hasVitePluginPlugin` adds the `hasVitePlugin` function to the `astro:config:setup` hook parameters, which you can then use alongside the original Astro parameters like `addVitePlugin` and `logger`.
+
+## Available plugins
+
+Astro Integration Kit provides several built-in plugins:
+
+- **[`hasVitePlugin`](/plugins/has-vite-plugin/)**: Check if a Vite plugin is already present in the configuration
+
+You can also create your own plugins using [`definePlugin`](/core/define-plugin/) for advanced use cases such as creating reusable plugin components or distributing third-party plugins.
+
+## Plugin deduplication
+
+When multiple plugins with the same name are provided, `withPlugins` automatically deduplicates them by keeping only the last occurrence. This prevents conflicts and ensures predictable behavior.
+
+```ts
+return withPlugins({
+    name,
+    plugins: [pluginA, pluginB, pluginA], // Only the last pluginA is kept
+    hooks: { /* ... */ }
 })
 ```
 
@@ -27,7 +65,7 @@ export default defineIntegration({
 
 Any extra property (not `name`, `plugins` or `hooks`) passed to `withPlugins` are returned unchanged.
 
-You can use this to define fields you might want to access from outside your integration while having access to it's internal state.
+You can use this to define fields you might want to access from outside your integration while having access to its internal state.
 
 ```ts title="my-integration.ts" "withPlugins"
 import { defineIntegration, withPlugins } from "astro-integration-kit";
