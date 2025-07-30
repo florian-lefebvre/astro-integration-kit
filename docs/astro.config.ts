@@ -92,6 +92,10 @@ export default defineConfig({
 							label: "hmrIntegration",
 							link: "/dev/hmr-integration/",
 						},
+						{
+							label: "importFresh",
+							link: "/dev/import-fresh/",
+						},
 					],
 				},
 				{
