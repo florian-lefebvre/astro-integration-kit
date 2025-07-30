@@ -7,22 +7,25 @@ description: A utility function that imports modules with cache-busting to ensur
 
 Because this wraps the import, you'll need to give it the types of the module you are importing. This means you will want to make your playground's config a .ts file.
 
+For relative paths, you must provide `import.meta.url` as the second parameter so paths are resolved from the caller's perspective rather than from the `importFresh` function's location.
+
 ## Example
 
 ```ts title="playground/astro.config.ts"
 import { defineConfig } from "astro/config";
-import { createResolver } from "astro-integration-kit";
 import { importFresh } from "astro-integration-kit/dev";
 
-const { default: myIntegrationModule } = await importFresh<
+// Bare specifier 
+const { default: myIntegration } = await importFresh<
   typeof import("my-integration")
 >("my-integration");
 
+// Relative paths need import.meta.url as second parameter
+const { default: localIntegration } = await importFresh<
+  typeof import("./integration")
+>("./integration", import.meta.url);
 
 export default defineConfig({
-  integrations: [
-    myIntegration(),
-    hmrIntegration({ directory: "../package/dist" })
-  ],
+  integrations: [myIntegration(), localIntegration()],
 });
 ```
