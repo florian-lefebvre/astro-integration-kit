@@ -1,7 +1,6 @@
-// @ts-check
 import { defineConfig } from "astro/config";
 import playgroundIntegration from "./integration";
-import { importFresh } from "./src/utils/importFresh";
+import { importFresh } from "./src/utils/importFresh"; // use local version so our package isn't cached
 
 const { hmrIntegration } = await importFresh<
 	typeof import("astro-integration-kit/dev")
