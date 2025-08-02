@@ -1,9 +1,11 @@
 import { readFileSync } from "node:fs";
 import { z } from "astro/zod";
+import { importFresh } from "../src/utils/importFresh";
 
-const { addVirtualImports, createResolver, defineIntegration } = await import(
-	"astro-integration-kit"
-);
+const { addVirtualImports, createResolver, defineIntegration } =
+	await importFresh<typeof import("astro-integration-kit")>(
+		"astro-integration-kit",
+	);
 
 const optionsSchema = z.object({}).optional();
 

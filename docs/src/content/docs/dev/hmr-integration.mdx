@@ -1,49 +1,38 @@
 ---
 title: hmrIntegration
+description: Enable hot module reloading for your integration during development.
 ---
 
-Until now, we recommended `watchIntegration` to enable HMR in development. However:
-- This can cause performance issues because your integration would be also watched when the integration is used by your users.
-- It doesn't work with a build step, which we highly recommend.
+import { Steps } from '@astrojs/starlight/components';
 
-From now on, we recommend that you use dynamic imports in your local playgrounds, alongside the new `hmrIntegration`
-integration exported from `astro-integration-kit/dev`.
+`hmrIntegration` enables hot module reloading (HMR) for your integration during development. This is meant to work with a monorepo setup where you have a `package/` and `playground/`. It watches a directory (or directories) and triggers Astro dev server reloads when files change, keeping feedback fast and automatic.
 
-```ts title="package/src/integration.ts" del={3-4,10,14}
-import {
-    defineIntegration,
-    createResolver,
-    watchIntegration
-} from "astro-integration-kit"
+## How it works
 
-export const integration = defineIntegration({
-    // ...
-    setup() {
-        const { resolve } = createResolver(import.meta.url)
-        return {
-            hooks: {
-                "astro:config:setup": (params) => {
-                    watchIntegration(params, resolve())
-                }
-            }
-        }
-    }
-})
-```
+`hmrIntegration` uses [`watchDirectory`](/utilities/watch-directory/) under the hood to monitor your integration’s build output directory. When a file changes, the Astro dev server reloads so you can immediately see the effect—no manual restarts needed.
 
-```ts title="playground/astro.config.mjs" del={2} ins={3-5,10-12}
+
+## Example
+
+```ts title="playground/astro.config.mjs"
 import { defineConfig } from "astro/config";
-import packageName from "package-name"
-import { createResolver } from "astro-integration-kit";
-import { hmrIntegration } from "astro-integration-kit/dev";
-const { default: packageName } = await import("package-name");
+import { importFresh, hmrIntegration } from "astro-integration-kit/dev";
+
+const { default: myIntegration } = await importFresh<typeof import("my-integration")>("my-integration");
 
 export default defineConfig({
-    integrations: [
-        packageName(),
-        hmrIntegration({
-            directory: createResolver(import.meta.url).resolve("../package/dist")
-        })
-    ],
+  integrations: [
+    myIntegration(),
+    hmrIntegration({ directory: "../package/dist" })
+  ],
 });
+```
+
+## Options
+
+Pass either directory or directories to specify what to watch for changes:
+
+```ts
+hmrIntegration({ directory: "../package/dist" })
+hmrIntegration({ directories: ["../package/dist", "../other-dir"] })
 ```
