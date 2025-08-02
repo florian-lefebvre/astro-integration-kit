@@ -79,8 +79,7 @@ export async function importFresh<T = any>(
 
 	const fileStats = statSync(resolvedPath);
 	const newSpecifier = new URL(pathToFileURL(resolvedPath).href);
-	newSpecifier.searchParams.set("t", fileStats.mtimeMs.toString());
-	console.log("hey");
+	newSpecifier.searchParams.set("t", Math.floor(fileStats.mtimeMs).toString());
 
 	return (await import(/* @vite-ignore */ newSpecifier.href)) as T;
 }
