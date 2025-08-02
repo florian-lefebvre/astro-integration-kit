@@ -1,3 +1,4 @@
+import { statSync } from "node:fs";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
 
@@ -49,12 +50,18 @@ export async function importFresh<T = any>(
 			// If the path doesn't resolve, try common extensions for directory/index imports
 			if (isRelativePath) {
 				const extensions = [
-					"/index.js",
-					"/index.ts",
-					"/index.mjs",
 					".js",
-					".ts",
 					".mjs",
+					".cjs",
+					".ts",
+					".mts",
+					".cts",
+					"/index.js",
+					"/index.mjs",
+					"/index.cjs",
+					"/index.ts",
+					"/index.mts",
+					"/index.cts",
 				];
 
 				for (const ext of extensions) {
@@ -70,8 +77,10 @@ export async function importFresh<T = any>(
 		}
 	})();
 
+	const fileStats = statSync(resolvedPath);
 	const newSpecifier = new URL(pathToFileURL(resolvedPath).href);
-	newSpecifier.searchParams.set("t", Date.now().toString());
+	newSpecifier.searchParams.set("t", fileStats.mtimeMs.toString());
+	console.log("hey");
 
 	return (await import(/* @vite-ignore */ newSpecifier.href)) as T;
 }
