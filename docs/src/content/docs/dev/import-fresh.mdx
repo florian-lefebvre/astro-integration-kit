@@ -7,7 +7,7 @@ description: A utility function that imports modules with cache-busting to ensur
 
 Because this wraps the import, you'll need to give it the types of the module you are importing. This means you will want to make your playground's config a .ts file.
 
-For relative paths, you must provide `import.meta.url` as the second parameter so paths are resolved from the caller's perspective rather than from the `importFresh` function's location.
+For relative paths, you must provide `import.meta.url` as the second parameter so paths are resolved from the caller's perspective rather than from the `importFresh` function's location. The function automatically tries common file extensions (.js, .ts, .mjs, .cjs) and /index.* suffixes when the exact path doesn't exist, similar to CommonJS module resolution.
 
 ## Example
 
