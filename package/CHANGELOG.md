@@ -1,5 +1,51 @@
 # astro-integration-kit
 
+## 0.19.0
+
+### Minor Changes
+
+- c10bfeb: Adds `importFresh()` utility for cache-busting module imports during development.
+
+  - **`importFresh()`**: Bypasses Node.js module cache by adding timestamp query parameters, essential for hot reloading without process restarts
+
+    ```ts
+    import { importFresh } from "astro-integration-kit/dev";
+    const { default: myIntegration } = await importFresh<
+      typeof import("my-integration")
+    >("my-integration");
+
+    // For relative paths, provide import.meta.url as second parameter
+    const { default: localIntegration } = await importFresh<
+      typeof import("./integration")
+    >("./integration", import.meta.url);
+    ```
+
+  - **Automatic resolution**: For relative paths, automatically tries common file extensions (.js, .ts, .mjs, .cjs) and /index.\* suffixes when the exact path doesn't exist
+
+- c10bfeb: Enhances `hmrIntegration` with multi-directory support.
+
+  - **`hmrIntegration` directories**: Now supports watching multiple directories with the `directories` array option, while still supporting the original single `directory` option
+    ```ts
+    hmrIntegration({ directories: ["./integration", "../package/dist/"] });
+    ```
+
+- c10bfeb: Remove the `addDts()` utility. [`injectTypes()`](https://docs.astro.build/en/reference/integrations-reference/#injecttypes-option) should be used instead.
+
+  ```diff
+  - "astro:config:setup": (params) => {
+  -     addDts(params, {
+  -         name: "my-integration",
+  -         content: `declare module "virtual:my-integration" {}`
+  -     })
+  - },
+  + "astro:config:done": (params) => {
+  +     params.injectTypes({
+  +         filename: "types.d.ts",
+  +         content: `declare module "virtual:my-integration" {}`
+  +     })
+  + }
+  ```
+
 ## 0.18.0
 
 ### Minor Changes
