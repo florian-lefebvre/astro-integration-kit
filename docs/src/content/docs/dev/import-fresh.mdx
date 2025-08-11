@@ -1,0 +1,31 @@
+---
+title: importFresh
+description: A utility function that imports modules with cache-busting to ensure fresh imports during development.
+---
+
+`importFresh` is a utility function that resolves a package name and imports it with a cache-busting query parameter to ensure a fresh import that bypasses Node.js's module cache. This is useful during development when you need to reload modules that may have changed without restarting the process.
+
+Because this wraps the import, you'll need to give it the types of the module you are importing. This means you will want to make your playground's config a .ts file.
+
+For relative paths, you must provide `import.meta.url` as the second parameter so paths are resolved from the caller's perspective rather than from the `importFresh` function's location. The function automatically tries common file extensions (.js, .ts, .mjs, .cjs) and /index.* suffixes when the exact path doesn't exist, similar to CommonJS module resolution.
+
+## Example
+
+```ts title="playground/astro.config.ts"
+import { defineConfig } from "astro/config";
+import { importFresh } from "astro-integration-kit/dev";
+
+// Bare specifier 
+const { default: myIntegration } = await importFresh<
+  typeof import("my-integration")
+>("my-integration");
+
+// Relative paths need import.meta.url as second parameter
+const { default: localIntegration } = await importFresh<
+  typeof import("./integration")
+>("./integration", import.meta.url);
+
+export default defineConfig({
+  integrations: [myIntegration(), localIntegration()],
+});
+```

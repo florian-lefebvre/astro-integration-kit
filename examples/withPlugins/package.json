@@ -1,5 +1,5 @@
 {
-	"name": "with-plugins",
+	"name": "example-with-plugins",
 	"type": "module",
 	"version": "0.0.1",
 	"private": true,
