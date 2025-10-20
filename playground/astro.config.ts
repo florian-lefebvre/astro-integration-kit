@@ -10,6 +10,6 @@ const { hmrIntegration } = await importFresh<
 export default defineConfig({
 	integrations: [
 		playgroundIntegration(),
-		hmrIntegration({ directories: ["./integration", "../package/dist/"] }),
+		hmrIntegration({ directories: ["./integration", "../packages/astro-integration-kit/dist/"] }),
 	],
 });

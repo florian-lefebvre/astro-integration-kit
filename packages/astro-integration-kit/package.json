@@ -2,22 +2,7 @@
 	"name": "astro-integration-kit",
 	"version": "0.19.0",
 	"description": "A package that contains utilities to help you build Astro integrations.",
-	"author": {
-		"email": "contact@florian-lefebvre.dev",
-		"name": "Florian Lefebvre",
-		"url": "https://florian-lefebvre.dev"
-	},
-	"license": "MIT",
-	"keywords": [
-		"withastro",
-		"astro",
-		"utils",
-		"utilities"
-	],
-	"homepage": "https://github.com/florian-lefebvre/astro-integration-kit",
-	"publishConfig": {
-		"access": "public"
-	},
+	"type": "module",
 	"sideEffects": false,
 	"exports": {
 		".": {
@@ -40,9 +25,23 @@
 	"scripts": {
 		"dev": "tsup --watch",
 		"build": "tsup",
-		"test": "vitest run"
+		"test": "vitest run",
+		"prepublishOnly": "pnpm build"
 	},
-	"type": "module",
+	"keywords": [
+		"withastro",
+		"astro",
+		"utils",
+		"utilities"
+	],
+	"author": "florian-lefebvre",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/florian-lefebvre/astro-integration-kit.git"
+	},
+	"bugs": "https://github.com/florian-lefebvre/astro-integration-kit/issues",
+	"homepage": "https://github.com/florian-lefebvre/astro-integration-kit#readme",
+	"license": "MIT",
 	"peerDependencies": {
 		"astro": "^4.14.0 || ^5.0.0"
 	},
