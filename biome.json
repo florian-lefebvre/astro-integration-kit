@@ -11,6 +11,6 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!playground", "!**/dist", "!**/.astro"]
+		"includes": ["**", "!playground", "!examples", "!**/dist", "!**/.astro"]
 	}
 }

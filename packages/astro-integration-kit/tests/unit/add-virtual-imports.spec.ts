@@ -1,6 +1,6 @@
 import type { HookParameters } from "astro";
 import { AstroError } from "astro/errors";
-import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, type Mock, test, vi } from "vitest";
 import { addVirtualImports } from "../../src/utilities/add-virtual-imports.js";
 import { addVitePlugin } from "../../src/utilities/add-vite-plugin.js";
 

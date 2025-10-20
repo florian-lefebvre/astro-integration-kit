@@ -82,10 +82,8 @@ export const errorMap: ZodErrorMap = (baseError, ctx) => {
 				}),
 			),
 		};
-		// biome-ignore lint/style/noUselessElse: This code is copied directly from Astro
 	} else if (baseError.message) {
 		return { message: prefix(baseErrorPath, baseError.message) };
-		// biome-ignore lint/style/noUselessElse: This code is copied directly from Astro
 	} else {
 		return { message: prefix(baseErrorPath, ctx.defaultError) };
 	}

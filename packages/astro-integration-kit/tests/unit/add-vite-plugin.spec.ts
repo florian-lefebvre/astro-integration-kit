@@ -52,7 +52,7 @@ describe("addVitePlugin", () => {
 			plugin: expectedPlugin,
 		});
 
-		// @ts-ignore
+		// @ts-expect-error
 		expect(plugin).toBeDefined();
 	});
 
@@ -73,7 +73,7 @@ describe("addVitePlugin", () => {
 			plugin: expectedPlugin,
 		});
 
-		// @ts-ignore
+		// @ts-expect-error
 		expect(plugin.name).toBe(pluginName);
 	});
 
@@ -95,7 +95,7 @@ describe("addVitePlugin", () => {
 			plugin,
 		});
 
-		// @ts-ignore
+		// @ts-expect-error
 		expect(logger.warn).toBeCalled();
 	});
 });

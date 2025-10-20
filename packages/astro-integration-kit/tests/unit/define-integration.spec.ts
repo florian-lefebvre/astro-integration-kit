@@ -1,4 +1,4 @@
-import { type Mock, afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, type Mock, test, vi } from "vitest";
 import { defineIntegration } from "../../src/core/define-integration.js";
 
 describe("defineIntegration", () => {
@@ -78,7 +78,7 @@ describe("defineIntegration", () => {
 			name,
 			// optionsSchema,
 			setup,
-			// @ts-ignore
+			// @ts-expect-error
 		})(expectedOptions);
 
 		// const callArgs = setup.mock.lastCall?.[0];
