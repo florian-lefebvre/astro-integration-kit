@@ -1,6 +1,6 @@
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
-import { version } from "../package/package.json";
+import { version } from "../packages/astro-integration-kit/package.json";
 
 const badge = (
 	type: "new" | "updated" | "soon" | "removed" | "deprecated",

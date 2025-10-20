@@ -2,7 +2,7 @@
 
 A package that contains utilities to help you build Astro integrations.
 
-To see how to get started, check out the [package README](./package/README.md)
+To see how to get started, check out the [package README](./packages/astro-integration-kit/README.md)
 
 ## Licensing
 

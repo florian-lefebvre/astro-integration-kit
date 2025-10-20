@@ -15,7 +15,7 @@ type Imports = Record<string, string> | Array<VirtualImport>;
 const incrementPluginName = (name: string) => {
 	let count = 1;
 	return `${name.replace(/-(\d+)$/, (_, c) => {
-		count = Number.parseInt(c) + 1;
+		count = Number.parseInt(c, 10) + 1;
 		return "";
 	})}-${count}`;
 };

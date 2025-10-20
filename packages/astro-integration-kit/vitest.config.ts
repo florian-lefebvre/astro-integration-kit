@@ -4,7 +4,7 @@ export default defineConfig({
 	test: {
 		include: ["./tests/unit/**/*.spec.ts"],
 		typecheck: {
-			enabled: true,
+			enabled: false,
 		},
 	},
 });

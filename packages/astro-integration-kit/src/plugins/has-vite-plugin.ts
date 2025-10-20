@@ -20,6 +20,7 @@ function getPlugins(
 				continue;
 			}
 
+			// @ts-expect-error vite types mismatch
 			store.add(plugin);
 		}
 	}
@@ -39,6 +40,7 @@ export const hasVitePluginPlugin = definePlugin({
 				const { updateConfig, config } = params;
 
 				params.updateConfig = (newConfig) => {
+					// @ts-expect-error vite types mismatch
 					config.vite.plugins = Array.from(
 						getPlugins(currentPlugins, newConfig.vite?.plugins),
 					);

@@ -3,11 +3,11 @@ import type { HookParameters } from "astro";
 import { dirname, normalize } from "pathe";
 import type { Plugin } from "vite";
 import {
-	type Mocked,
 	afterAll,
 	beforeAll,
 	describe,
 	expect,
+	type Mocked,
 	test,
 	vi,
 } from "vitest";
@@ -134,7 +134,7 @@ describe("watchDirectory", () => {
 
 		watchDirectory(params, resolve(tempFolderName));
 
-		// @ts-ignore - TS can't figure out that plugin _will_ actually be defined here
+		// @ts-expect-error - TS can't figure out that plugin _will_ actually be defined here
 		expect(plugin).toBeDefined();
 	});
 
@@ -149,7 +149,7 @@ describe("watchDirectory", () => {
 
 		watchDirectory(params, resolve(tempFolderName));
 
-		// @ts-ignore - TS can't figure out that plugin _will_ actually be defined here
+		// @ts-expect-error - TS can't figure out that plugin _will_ actually be defined here
 		expect(plugin.name).toBeDefined();
 	});
 });
