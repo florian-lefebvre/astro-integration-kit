@@ -95,7 +95,6 @@ describe("addVitePlugin", () => {
 			plugin,
 		});
 
-		// @ts-expect-error
 		expect(logger.warn).toBeCalled();
 	});
 });
