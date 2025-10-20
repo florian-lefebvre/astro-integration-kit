@@ -44,6 +44,7 @@ export const addVitePlugin = defineUtility("astro:config:setup")(
 
 		updateConfig({
 			vite: {
+				// @ts-expect-error vite types mismatch
 				plugins: [plugin],
 			},
 		});
