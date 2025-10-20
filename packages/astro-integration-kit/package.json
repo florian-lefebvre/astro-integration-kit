@@ -1,6 +1,6 @@
 {
 	"name": "astro-integration-kit",
-	"version": "0.19.0",
+	"version": "0.19.1",
 	"description": "A package that contains utilities to help you build Astro integrations.",
 	"type": "module",
 	"sideEffects": false,

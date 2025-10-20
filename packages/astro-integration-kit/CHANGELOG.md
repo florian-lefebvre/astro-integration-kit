@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.19.1
+
+### Patch Changes
+
+- [#133](https://github.com/florian-lefebvre/astro-integration-kit/pull/133) [`0b1d04e`](https://github.com/florian-lefebvre/astro-integration-kit/commit/0b1d04e59611695a08972ce455334a65c2f16191) Thanks [@florian-lefebvre](https://github.com/florian-lefebvre)! - Bumps version, no code change
+
 ## 0.19.0
 
 ### Minor Changes
