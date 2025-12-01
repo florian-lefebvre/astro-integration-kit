@@ -19,9 +19,10 @@ type PopUnion<U> = UnionToOvlds<U> extends (a: infer A) => void ? A : never;
 // Only B works here, but it's fine for our usage.
 type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true;
 
-export type UnionToArray<T> = IsUnion<T> extends true
-	? [...UnionToArray<Exclude<T, PopUnion<T>>>, PopUnion<T>]
-	: [T];
+export type UnionToArray<T> =
+	IsUnion<T> extends true
+		? [...UnionToArray<Exclude<T, PopUnion<T>>>, PopUnion<T>]
+		: [T];
 
 // Source: https://www.totaltypescript.com/concepts/the-prettify-helper
 export type Prettify<T> = {
