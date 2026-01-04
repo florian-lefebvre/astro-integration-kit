@@ -18,7 +18,7 @@
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.6",
-		"@types/node": "^20.19.26",
+		"@types/node": "^20.19.27",
 		"typescript": "^5.9.3",
 		"vite": "^5.4.21",
 		"vite-plugin-pwa": "^0.21.2"
