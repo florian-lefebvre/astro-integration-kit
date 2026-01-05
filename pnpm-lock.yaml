@@ -77,8 +77,8 @@ importers:
         specifier: ^4.14.0 || ^5.0.0
         version: 5.16.6(@types/node@20.19.27)(jiti@1.21.7)(rollup@4.46.1)(terser@5.43.1)(typescript@5.9.3)(yaml@2.8.0)
       pathe:
-        specifier: ^1.1.2
-        version: 1.1.2
+        specifier: ^2.0.3
+        version: 2.0.3
     devDependencies:
       '@types/node':
         specifier: ^20.19.27
