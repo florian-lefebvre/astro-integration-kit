@@ -53,6 +53,6 @@
 		"vitest": "^1.6.1"
 	},
 	"dependencies": {
-		"pathe": "^1.1.2"
+		"pathe": "^2.0.3"
 	}
 }
