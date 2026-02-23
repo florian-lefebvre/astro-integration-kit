@@ -3,7 +3,7 @@
 	"private": true,
 	"packageManager": "pnpm@10.29.3",
 	"engines": {
-		"node": ">=18.20.8"
+		"node": ">=24.13.1"
 	},
 	"scripts": {
 		"package:dev": "pnpm --filter astro-integration-kit dev",
