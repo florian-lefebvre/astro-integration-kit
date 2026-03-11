@@ -1,5 +1,11 @@
 # astro-integration-kit
 
+## 0.20.0
+
+### Minor Changes
+
+- [#168](https://github.com/florian-lefebvre/astro-integration-kit/pull/168) [`7349d54`](https://github.com/florian-lefebvre/astro-integration-kit/commit/7349d540787692112abd10e8d3fb100d6f1a9fbe) Thanks [@florian-lefebvre](https://github.com/florian-lefebvre)! - Adds support for Astro 6.0
+
 ## 0.19.1
 
 ### Patch Changes
@@ -11,14 +17,12 @@
 ### Minor Changes
 
 - c10bfeb: Adds `importFresh()` utility for cache-busting module imports during development.
-
   - **`importFresh()`**: Bypasses Node.js module cache by adding timestamp query parameters, essential for hot reloading without process restarts
 
     ```ts
     import { importFresh } from "astro-integration-kit/dev";
-    const { default: myIntegration } = await importFresh<
-      typeof import("my-integration")
-    >("my-integration");
+    const { default: myIntegration } =
+      await importFresh<typeof import("my-integration")>("my-integration");
 
     // For relative paths, provide import.meta.url as second parameter
     const { default: localIntegration } = await importFresh<
@@ -29,7 +33,6 @@
   - **Automatic resolution**: For relative paths, automatically tries common file extensions (.js, .ts, .mjs, .cjs) and /index.\* suffixes when the exact path doesn't exist
 
 - c10bfeb: Enhances `hmrIntegration` with multi-directory support.
-
   - **`hmrIntegration` directories**: Now supports watching multiple directories with the `directories` array option, while still supporting the original single `directory` option
     ```ts
     hmrIntegration({ directories: ["./integration", "../package/dist/"] });
@@ -130,8 +133,8 @@
     [P in keyof T]?: T[P] extends (infer U)[]
       ? DeepPartial<U>[]
       : T[P] extends object | undefined
-      ? DeepPartial<T[P]>
-      : T[P];
+        ? DeepPartial<T[P]>
+        : T[P];
   };
 
   export const utility: (
@@ -140,7 +143,7 @@
       command: "dev" | "build" | "preview";
       isRestart: boolean;
       updateConfig: (
-        newConfig: DeepPartial<astro.AstroConfig>
+        newConfig: DeepPartial<astro.AstroConfig>,
       ) => astro.AstroConfig;
       addRenderer: (renderer: astro.AstroRenderer) => void;
       addWatchFile: (path: URL | string) => void;
@@ -154,7 +157,7 @@
     },
     options: {
       name: string;
-    }
+    },
   ) => void;
   export const integration: () => astro.AstroIntegration &
     Prettify<
@@ -167,21 +170,21 @@
                 command: "dev" | "build" | "preview";
                 isRestart: boolean;
                 updateConfig: (
-                  newConfig: DeepPartial<astro.AstroConfig>
+                  newConfig: DeepPartial<astro.AstroConfig>,
                 ) => astro.AstroConfig;
                 addRenderer: (renderer: astro.AstroRenderer) => void;
                 addWatchFile: (path: URL | string) => void;
                 injectScript: (
                   stage: astro.InjectedScriptStage,
-                  content: string
+                  content: string,
                 ) => void;
                 injectRoute: (injectRoute: astro.InjectedRoute) => void;
                 addClientDirective: (
-                  directive: astro.ClientDirectiveConfig
+                  directive: astro.ClientDirectiveConfig,
                 ) => void;
                 addDevOverlayPlugin: (entrypoint: string) => void;
                 addDevToolbarApp: (
-                  entrypoint: astro.DevToolbarAppEntry | string
+                  entrypoint: astro.DevToolbarAppEntry | string,
                 ) => void;
                 addMiddleware: (mid: astro.AstroIntegrationMiddleware) => void;
                 logger: AstroIntegrationLogger;
@@ -206,7 +209,7 @@
     [
       options: {
         name: string;
-      }
+      },
     ],
     void
   >;
@@ -220,7 +223,6 @@
 ### Minor Changes
 
 - e035a87: Bumps the minimal version of Astro to 4.12
-
   - Removes the `AstroIntegration.ExtraHooks` workaround for extending hooks in favor of the native `Astro.IntegrationHooks` extendable interface:
 
     ```diff
@@ -327,19 +329,19 @@
         command: "dev" | "build" | "preview";
         isRestart: boolean;
         updateConfig: (
-          newConfig: DeepPartial<astro.AstroConfig>
+          newConfig: DeepPartial<astro.AstroConfig>,
         ) => astro.AstroConfig;
         addRenderer: (renderer: astro.AstroRenderer) => void;
         addWatchFile: (path: string | URL) => void;
         injectScript: (
           stage: astro.InjectedScriptStage,
-          content: string
+          content: string,
         ) => void;
         injectRoute: (injectRoute: astro.InjectedRoute) => void;
         addClientDirective: (directive: astro.ClientDirectiveConfig) => void;
         addDevOverlayPlugin: (entrypoint: string) => void;
         addDevToolbarApp: (
-          entrypoint: string | astro.DevToolbarAppEntry
+          entrypoint: string | astro.DevToolbarAppEntry,
         ) => void;
         addMiddleware: (mid: astro.AstroIntegrationMiddleware) => void;
         logger: astro.AstroIntegrationLogger;
@@ -586,7 +588,6 @@
   ```
 
   When using standalone utilities, the `hasIntegration` utility now accept two optional fields:
-
   - `position` to enable checking the relative position of the integration.
   - `relativeTo` the integration to compare agains when checking for relative position.
 
