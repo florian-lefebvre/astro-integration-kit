@@ -74,7 +74,7 @@ importers:
   packages/astro-integration-kit:
     dependencies:
       astro:
-        specifier: ^4.14.0 || ^5.0.0
+        specifier: ^4.14.0 || ^5.0.0 || ^6.0.0
         version: 5.18.0(@types/node@20.19.37)(jiti@1.21.7)(rollup@4.46.1)(terser@5.43.1)(typescript@5.9.3)(yaml@2.8.0)
       pathe:
         specifier: ^2.0.3
