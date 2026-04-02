@@ -10,7 +10,7 @@
 		"astro": "astro"
 	},
 	"dependencies": {
-		"astro": "^5.18.0",
+		"astro": "^5.18.1",
 		"astro-integration-kit": "workspace:*"
 	}
 }
