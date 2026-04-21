@@ -1,0 +1,395 @@
+---
+title: Migration guide
+---
+
+## `hmrIntegration`
+
+Remove any mention of `hmrIntegration`, there is no replacement provided:
+
+```js del={3,8}
+import { defineConfig } from "astro/config";
+import myIntegration from "my-integration";
+import { hmrIntegration } from "astro-integration-kit/dev";
+
+export default defineConfig({
+  integrations: [
+    myIntegration(),
+    hmrIntegration({ directory: "../package/dist" })
+  ],
+});
+```
+
+## `importFresh`
+
+Remove any mention of `importFresh`, there is no replacement provided:
+
+```ts del={2-3} ins={4}
+import { defineConfig } from "astro/config";
+import { importFresh } from "astro-integration-kit/dev";
+const { default: myIntegration } = await importFresh<typeof import("my-integration")>("my-integration");
+import myIntegration from "my-integration";
+
+export default defineConfig({
+  integrations: [
+    myIntegration(),
+  ],
+});
+```
+
+## `defineIntegration`
+
+### Simple integration
+
+Replace `defineIntegration` with a function:
+
+```ts del={1-12} ins={13-20}
+import { defineIntegration } from "astro-integration-kit";
+
+export default defineIntegration({
+    name: "my-integration",
+    setup() {
+        return {
+            hooks: {
+                // ...
+            }
+        }
+    }
+})
+import type { AstroIntegration } from "astro";
+
+export default function integration(): AstroIntegration {
+    return {
+        name: "my-integration",
+        hooks: {}
+    }
+}
+```
+
+### Options
+
+For simple cases, just use a type:
+
+```ts del={1-14} ins={15-26}
+import { defineIntegration } from "astro-integration-kit";
+import { z } from "astro/zod";
+
+export default defineIntegration({
+    name: "my-integration",
+    optionsSchema: z.object({ foo: z.string() }),
+    setup(options) {
+        return {
+            hooks: {
+                // ...
+            }
+        }
+    }
+})
+import type { AstroIntegration } from "astro";
+
+interface Options {
+    foo: string;
+}
+
+export default function integration(options: Options): AstroIntegration {
+    return {
+        name: "my-integration",
+        hooks: {}
+    }
+}
+```
+
+Otherwise use a zod schema:
+
+```ts del={5-17} ins={18-26}
+import { z } from "astro/zod";
+
+const OptionsSchema = z.object({ foo: z.string() })
+
+import { defineIntegration } from "astro-integration-kit";
+
+export default defineIntegration({
+    name: "my-integration",
+    optionsSchema: OptionsSchema,
+    setup(options) {
+        return {
+            hooks: {
+                // ...
+            }
+        }
+    }
+})
+import type { AstroIntegration } from "astro";
+
+export default function integration(rawOptions: z.input<typeof OptionsSchema>): AstroIntegration {
+    const options = OptionsSchema.parse(rawOptions);
+    return {
+        name: "my-integration",
+        hooks: {}
+    }
+}
+```
+
+### Extra fields
+
+Use TypeScript `satisfies` keyword:
+
+```ts del={1-23} ins={24-45}
+import { defineIntegration } from "astro-integration-kit";
+
+export default defineIntegration({
+    name: "my-integration",
+    setup() {
+        let counter = 0;
+        return {
+            hooks: {
+                "astro:config:setup": ({ logger }) => {
+                    logger.info(`Counter: ${counter++}`);
+                },
+            },
+            api: {
+                get counter() {
+                    return counter;
+                },
+                increment() {
+                    counter++;
+                },
+            },
+        };
+    },
+});
+import type { AstroIntegration } from "astro";
+
+export default function integration() {
+    let counter = 0;
+
+    return {
+        name: "my-integration",
+        hooks: {
+            "astro:config:setup": ({ logger }) => {
+                logger.info(`Counter: ${counter++}`);
+            },
+        },
+        api: {
+            get counter() {
+                return counter;
+            },
+            increment() {
+                counter++;
+            },
+        },
+    } satisfies AstroIntegration;
+}
+```
+
+## `createResolver`
+
+Use native `URL`s instead:
+
+```ts del={1-2,7} ins={8}
+import { createResolver } from "astro-integration-kit";
+const { resolve } = createResolver(import.meta.url);
+
+// ...
+injectRoute({
+    pattern: "/my-route",
+    entrypoint: resolve("./pages/my-route.astro"),
+    entrypoint: new URL("./pages/my-route.astro", import.meta.url),
+});
+```
+
+## `defineUtility`
+
+Replace it with a function requiring as few options as possible:
+
+```ts del={1-10} ins={11-20}
+import type { InjectedRoute } from "astro";
+import { defineUtility } from "astro-integration-kit";
+
+export const injectDevRoute = defineUtility("astro:config:setup")(
+    ({ command, injectRoute }, injectedRoute: InjectedRoute) => {
+        if (command === "dev") {
+            injectRoute(injectedRoute);
+        }
+    },
+);
+import type { HookParameters, InjectedRoute } from "astro";
+
+export function injectDevRoute(
+    params: Pick<HookParameters<"astro:config:setup">, "command" | "injectRoute">,
+    injectedRoute: InjectedRoute,
+) {
+    if (command === "dev") {
+        injectRoute(injectedRoute);
+    }
+}
+```
+
+## `withPlugins`
+
+Remove any mention of `hmrIntegration`, there is no replacement provided. Prefer simple functions.
+
+## `definePlugin`
+
+Remove any mention of `definePlugin`, there is no replacement provided. Prefer simple functions.
+
+## `addIntegration`
+
+Use `updateConfig()` instead:
+
+```ts del={1,7-9} ins={10}
+import { addIntegration } from "astro-integration-kit";
+import vue from "@astrojs/vue";
+
+// ...
+hooks: {
+    "astro:config:setup": (params) => {
+        addIntegration(params, {
+            integration: vue()
+        })
+        params.updateConfig({ integrations: [vue()] })
+    }
+}
+```
+
+## `addVirtualImports`
+
+Use a standard Vite plugin instead:
+
+```ts del={1,33-37} ins={2-27,38}
+import { addVirtualImports } from "astro-integration-kit";
+import type { Plugin } from "vite";
+
+const VIRTUAL_MODULE_ID = "virtual:my-integration/config"
+const RESOLVED_VIRTUAL_MODULE_ID = '\0' + VIRTUAL_MODULE_ID;
+
+function createPlugin(): Plugin {
+  return {
+    name: VIRTUAL_MODULE_ID,
+    resolveId: {
+      filter: {
+        id: new RegExp(`^${VIRTUAL_MODULE_ID}$`),
+      },
+      handler() {
+        return RESOLVED_VIRTUAL_MODULE_ID;
+      },
+    },
+    load: {
+      filter: {
+        id: new RegExp(`^${RESOLVED_VIRTUAL_MODULE_ID}$`),
+      },
+      handler() {
+        return `export default ${JSON.stringify({ foo: "bar" })}`
+      },
+    },
+  };
+}
+
+// ...
+hooks: {
+    "astro:config:setup": (params) => {
+        addVirtualImports(params, {
+            name,
+            imports: {
+                'virtual:my-integration/config': `export default ${JSON.stringify({ foo: "bar" })}`,
+            }
+        })
+        params.updateConfig({ vite: { plugins: [createPlugin()] } })
+}
+```
+
+Server and client restrictions can be achieved by returning different contents based on `this.environment.name`:
+
+```ts
+load: {
+  filter: {
+    id: new RegExp(`^${RESOLVED_VIRTUAL_MODULE_ID}$`),
+  },
+  handler() {
+    if (this.environment.name === "client") {
+        return "export const foo = 'client'"
+    }
+    return "export const foo = 'server'"
+  },
+},
+```
+
+## `addVitePlugin`
+
+Use `updateConfig()` instead:
+
+```ts del={1,7-9} ins={10}
+import { addVitePlugin } from "astro-integration-kit";
+import { VitePWA } from 'vite-plugin-pwa'
+
+// ...
+hooks: {
+    "astro:config:setup": (params) => {
+        addVitePlugin(params, {
+            plugin: VitePWA()
+        })
+        params.updateConfig({ vite: { plugins: [VitePWA()] }})
+    }
+}
+```
+
+## `hasVitePlugin`
+
+Replace with a check based on `config`:
+
+```ts del={1,6} ins={7}
+import { hasVitePlugin } from "astro-integration-kit";
+
+// ...
+hooks: {
+    "astro:config:setup": (params) => {
+        if (hasVitePlugin(params, { plugin: "foo" })) {
+        if (params.config.vite.plugins.some(e => e.name === "foo")) {
+            // ...
+        }
+    }
+}
+```
+
+## `hasIntegration`
+
+Replace with a check based on `config`:
+
+
+```ts del={1,6} ins={7}
+import { hasIntegration } from "astro-integration-kit";
+
+// ...
+hooks: {
+    "astro:config:setup": (params) => {
+        if (hasIntegration(params, { name: "foo" })) {
+        if (params.config.integrations.some(e => e.name === "foo")) {
+            // ...
+        }
+    }
+}
+```
+
+## `injectDevRoute`
+
+Replace with a conditional call to `injectRoute()`:
+
+```ts del={1,7} ins={6,8,12}
+import { injectDevRoute } from "astro-integration-kit";
+
+// ...
+hooks: {
+    "astro:config:setup": (params) => {
+        if (params.command === "dev") {
+            injectDevRoute(params, {
+            injectRoute({
+                pattern: "/foo",
+                entrypoint: "my-pkg/foo"
+            })
+        }
+    }
+}
+```
+
+## `watchDirectory`
+
+Remove any mention of `watchDirectory`, there is no replacement provided.

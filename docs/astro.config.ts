@@ -2,25 +2,6 @@ import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 import { version } from "../packages/astro-integration-kit/package.json";
 
-const badge = (
-	type: "new" | "updated" | "soon" | "removed" | "deprecated",
-) => ({
-	variant: {
-		new: "success" as const,
-		updated: "caution" as const,
-		soon: "tip" as const,
-		removed: "danger" as const,
-		deprecated: "caution" as const,
-	}[type],
-	text: {
-		new: "New",
-		updated: "Updated",
-		soon: "Soon",
-		removed: "Removed",
-		deprecated: "Deprecated",
-	}[type],
-});
-
 // https://astro.build/config
 export default defineConfig({
 	site: "https://astro-integration-kit.netlify.app",
@@ -47,25 +28,11 @@ export default defineConfig({
 					"https://github.com/florian-lefebvre/astro-integration-kit/edit/main/docs/",
 			},
 			customCss: ["./src/styles/main.css"],
-			head: [
-				{
-					tag: "link",
-					attrs: {
-						rel: "preconnect",
-						href: "https://rsms.me/",
-					},
-				},
-				{
-					tag: "link",
-					attrs: {
-						rel: "stylesheet",
-						href: "https://rsms.me/inter/inter.css",
-					},
-				},
-			],
 			sidebar: [
+				"migration-guide",
 				{
 					label: "Getting started",
+					collapsed: true,
 					items: [
 						{
 							label: "Installation & Usage",
@@ -87,6 +54,7 @@ export default defineConfig({
 				},
 				{
 					label: "Dev",
+					collapsed: true,
 					items: [
 						{
 							label: "hmrIntegration",
@@ -100,6 +68,7 @@ export default defineConfig({
 				},
 				{
 					label: "Core",
+					collapsed: true,
 					items: [
 						{
 							label: "defineIntegration",
@@ -125,6 +94,7 @@ export default defineConfig({
 				},
 				{
 					label: "Utilities",
+					collapsed: true,
 					items: [
 						{
 							label: "addIntegration",
@@ -154,53 +124,15 @@ export default defineConfig({
 							label: "watchDirectory",
 							link: "/utilities/watch-directory/",
 						},
-						{
-							label: "watchIntegration",
-							link: "/getting-started/breaking-changes/#0100",
-							badge: badge("removed"),
-							attrs: {
-								style: "opacity:0.5",
-							},
-						},
-						{
-							label: "addDevToolbarFrameworkApp",
-							link: "/utilities/add-devtoolbar-framework-app/",
-							badge: badge("removed"),
-							attrs: {
-								style: "opacity:0.5",
-							},
-						},
-						{
-							label: "addDts",
-							link: "/utilities/add-dts/",
-							badge: badge("removed"),
-							attrs: {
-								style: "opacity:0.5",
-							},
-						},
 					],
 				},
 				{
 					label: "Plugins",
+					collapsed: true,
 					items: [
 						{ label: "hasVitePlugin", link: "/plugins/has-vite-plugin/" },
 					],
 				},
-				// {
-				// 	label: "Guides",
-				// 	items: [
-				// 		{
-				// 			label: "Authoring an integration",
-				// 			link: "/guides/authoring-an-integration",
-				// 			badge: badge("soon"),
-				// 		},
-				// 		{
-				// 			label: "Authoring a plugin",
-				// 			link: "/guides/authoring-a-plugin",
-				// 			badge: badge("soon"),
-				// 		},
-				// 	],
-				// },
 				{
 					label: `v${version} changelog ↗`,
 					link: `https://github.com/florian-lefebvre/astro-integration-kit/blob/main/package/CHANGELOG.md#${version.replaceAll(
